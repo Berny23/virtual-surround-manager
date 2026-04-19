@@ -1,5 +1,38 @@
-add_executable(virtual-surround-manager main.cpp)
+add_executable(virtual-surround-manager)
 
-target_include_directories(virtual-surround-manager PUBLIC ${PIPEWIRE_INCLUDE_DIRS})
-target_compile_options(virtual-surround-manager PUBLIC ${PIPEWIRE_CFLAGS_OTHER})
-target_link_libraries(virtual-surround-manager PUBLIC ${PIPEWIRE_LIBRARIES})
+# Kirigami libraries, settings and links
+ecm_add_qml_module(virtual-surround-manager
+    URI
+    de.berny23.virtual-surround-manager
+)
+
+target_sources(virtual-surround-manager
+    PRIVATE
+    settings.h
+    main.cpp
+    settings.cpp
+    pipewire_manager.h
+    pipewire_manager.cpp
+)
+
+ecm_target_qml_sources(virtual-surround-manager
+    SOURCES
+    Main.qml
+)
+
+target_link_libraries(virtual-surround-manager
+    PRIVATE
+    Qt6::Quick
+    Qt6::Qml
+    Qt6::Gui
+    Qt6::QuickControls2
+    Qt6::Widgets
+    KF6::I18n
+    KF6::CoreAddons
+    KF6::IconThemes
+)
+
+# PipeWire libraries
+target_include_directories(virtual-surround-manager PRIVATE ${PIPEWIRE_INCLUDE_DIRS})
+target_compile_options(virtual-surround-manager PRIVATE ${PIPEWIRE_CFLAGS_OTHER})
+target_link_libraries(virtual-surround-manager PRIVATE ${PIPEWIRE_LIBRARIES})
