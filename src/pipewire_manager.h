@@ -25,18 +25,17 @@ class PipeWireManager : public QObject {
 
     //
     // Creates a new virtual surround module. Does nothing if a module already exists.
-    // Call this before calling enable_routing.
     //
     void create_virtual_surround_module();
 
     //
     // Removes the virtual surround module.
-    // Call this before calling disable_routing.
     //
     void remove_virtual_surround_module();
 
     //
     // Starts the PipeWire loop, enabling routing of audio data through the virtual surround node.
+    // Call this before create_virtual_surround_module().
     //
     void enable_routing();
 
@@ -64,6 +63,7 @@ class PipeWireManager : public QObject {
     // TODO: Changeable in UI
     string hrir_wav_path = "/home/berny23/Dokumente/Virtual Surround Sound/hrir_hesuvi/atmos.wav";
 
+    bool isRegistryListenerAdded = false;
     QSet<uint32_t> routed_node_ids;
     uint32_t playback_node_id;
     pw_impl_module *module = NULL;

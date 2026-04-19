@@ -25,7 +25,7 @@ class Settings : public QObject {
     void onPipeWireError(const QString &message);
 
   private:
-    bool m_virtualSurroundEnabled;
+    bool m_virtualSurroundEnabled = false;
     QString m_errorMessage;
     PipeWireManager *m_pipeWireManager;
 };
