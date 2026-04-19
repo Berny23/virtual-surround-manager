@@ -1,17 +1,126 @@
+#include "pipewire/extensions/metadata.h"
+#include "spa/utils/defs.h"
 #include <cstddef>
 #include <cstdio>
-#include <string>
+#include <cstring>
+#include <ctime>
 #include <pipewire/context.h>
 #include <pipewire/core.h>
 #include <pipewire/filter.h>
 #include <pipewire/impl-module.h>
+#include <pipewire/impl-node.h>
 #include <pipewire/keys.h>
 #include <pipewire/main-loop.h>
 #include <pipewire/pipewire.h>
 #include <pipewire/properties.h>
+#include <string>
 
 using std::string;
 
+struct pw_main_loop *loop;
+struct pw_context *context;
+struct pw_core *core;
+struct pw_registry *registry;
+struct spa_hook registry_listener;
+struct spa_hook metadata_listener;
+struct pw_metadata *metadata;
+
+const char *capture_node_name = "effect_input.virtual-surround-manager";
+const char *playback_node_name = "effect_output.virtual-surround-manager";
+
+uint32_t playback_node_id;
+
+//
+// Called when a metadata property of a node changes.
+//
+static int on_metadata_property(void *data,
+                                uint32_t subject, // Node ID
+                                const char *key,
+                                const char *type,
+                                const char *value) { // NULL if property removed
+    if (!key)
+        return 0;
+
+    // Check if the target.object property changes, but exclude our virtual surround manager source
+    if (strcmp(key, PW_KEY_TARGET_OBJECT) != 0 && strcmp(key, "target.node") != 0)
+        return 0;
+    if (value != NULL) {
+        return 0;
+    }
+    if (subject == playback_node_id)
+        return 0;
+
+    pw_metadata_set_property(metadata, subject, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", capture_node_name);
+
+    //  Debug: Print info message
+    printf("on_metadata_property: Node with ID %u routed to sink '%s'.\n", subject, capture_node_name);
+
+    return 0;
+}
+
+static const struct pw_metadata_events metadata_events = {
+    PW_VERSION_METADATA_EVENTS,
+    on_metadata_property,
+};
+
+//
+// Called when a new object (node) is created in the PipeWire registry.
+//
+static void registry_event_global(void *data,
+                                  uint32_t id,
+                                  uint32_t permissions,
+                                  const char *type,
+                                  uint32_t version,
+                                  const struct spa_dict *props) {
+    // Get the default metadata object
+    if (strcmp(type, PW_TYPE_INTERFACE_Metadata) == 0) {
+        const char *metadata_name = spa_dict_lookup(props, PW_KEY_METADATA_NAME);
+        if (metadata_name && strcmp(metadata_name, "default") == 0) {
+            metadata = (struct pw_metadata *)pw_registry_bind(registry, id, type, PW_VERSION_METADATA, 0);
+            pw_metadata_add_listener(metadata, &metadata_listener, &metadata_events, NULL);
+        }
+        return;
+    }
+
+    // Check if object is a node
+    if (strcmp(type, PW_TYPE_INTERFACE_Node) != 0)
+        return;
+
+    // Get node name and media class
+    const char *node_name = spa_dict_lookup(props, PW_KEY_NODE_NAME);
+    const char *node_media_class = spa_dict_lookup(props, PW_KEY_MEDIA_CLASS);
+    const char *node_media_role = spa_dict_lookup(props, PW_KEY_MEDIA_ROLE);
+
+    // Debug: Print object details to console.
+    // printf("object: id: %u | name: %s | type: %s/%d\n", id, node_name, type, version);
+
+    // Check if object is an audio output stream, but exclude system events and our virtual surround manager source.
+    if (!node_media_class || strcmp(node_media_class, "Stream/Output/Audio") != 0)
+        return;
+    if (node_media_role && strcmp(node_media_role, "Notification") == 0)
+       return;
+    if (node_name && strcmp(node_name, playback_node_name) == 0) {
+        playback_node_id = id;
+        return;
+    }
+
+    if (metadata) {
+        // Route the audio output node to our virtual surround manager sink
+        pw_metadata_set_property(metadata, id, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", capture_node_name);
+
+        // printf("test4");
+        //  Debug: Print info message
+        printf("registry_event_global: Node '%s' with ID %u routed to sink '%s'.\n", node_name, id, capture_node_name);
+    }
+}
+
+static const struct pw_registry_events registry_events = {
+    PW_VERSION_REGISTRY_EVENTS,
+    registry_event_global};
+
+//
+// Main function of the application.
+//
 int main(int argc, char *argv[]) {
     // Initialize PipeWire library
     pw_init(&argc, &argv);
@@ -23,25 +132,32 @@ int main(int argc, char *argv[]) {
             pw_get_headers_version(), pw_get_library_version());
 
     // Create some initial stuff for PipeWire to work
-    struct pw_main_loop *loop = pw_main_loop_new(NULL);
+    loop = pw_main_loop_new(NULL);
     if (!loop) {
         fprintf(stderr, "Failed to create PipeWire main loop\n");
         return -1;
     }
-    struct pw_context *context = pw_context_new(pw_main_loop_get_loop(loop), NULL, 0);
+    context = pw_context_new(pw_main_loop_get_loop(loop), NULL, 0);
     if (!context) {
         fprintf(stderr, "Failed to create PipeWire context\n");
         return -1;
     }
-    /*struct pw_core *core = pw_context_connect(context, NULL, 0);
+    core = pw_context_connect(context, NULL, 0);
     if (!core) {
         fprintf(stderr, "Failed to connect to PipeWire daemon\n");
         return -1;
-    }*/
+    }
+    registry = pw_core_get_registry(core, PW_VERSION_REGISTRY, 0);
+    if (!registry) {
+        fprintf(stderr, "Failed to get PipeWire registry\n");
+        return -1;
+    }
+    spa_zero(registry_listener);
+    spa_zero(metadata_listener);
 
     // Set filter graph for virtual surround module
     // TODO: Use variable for filename strings
-    const char *filter_graph = R"(
+    const string filter_graph = R"(
 {
     nodes = [
         # duplicate inputs
@@ -121,9 +237,10 @@ int main(int argc, char *argv[]) {
     )";
 
     // Set capture properties for virtual surround module
-    const char *capture_props = R"(
+    const string capture_props = R"(
 {
-    node.name = "effect_input.virtual-surround-manager"
+    node.name = )" + string(capture_node_name) +
+                                 R"(
     media.class = "Audio/Sink"
     audio.channels = 8
     audio.position = [ FL FR FC LFE RL RR SL SR ]
@@ -131,9 +248,10 @@ int main(int argc, char *argv[]) {
     )";
 
     // Set playback properties for virtual surround module
-    const char *playback_props = R"(
+    const string playback_props = R"(
 {
-    node.name = "effect_output.virtual-surround-manager"
+    node.name = )" + string(playback_node_name) +
+                                  R"(
     node.passive = true
     audio.channels = 2
     audio.position = [ FL FR ]
@@ -141,32 +259,36 @@ int main(int argc, char *argv[]) {
     )";
 
     // Combine the properites to a single JSON string
-    const string args = string(R"(
+    const string args = R"(
 {
-    node.description = "Virtual Surround Manager Sink",
-    media.name = "Virtual Surround Manager Sink",
-    filter.graph = )") + string(filter_graph) + string(R"(,
-    capture.props = )") + string(capture_props) + string(R"(,
-    playback.props = )") + string(playback_props) + string(R"(
+    node.description = "Virtual Surround Manager",
+    media.name = "Virtual Surround Manager",
+    filter.graph = )" + filter_graph +
+                        R"(,
+    capture.props = )" +
+                        capture_props + R"(,
+    playback.props = )" +
+                        playback_props + R"(
 }
-    )");
+    )";
 
     // Acutally load the module
-    pw_impl_module *mod = pw_context_load_module(
+    pw_impl_module *module = pw_context_load_module(
         context,
         "libpipewire-module-filter-chain",
         args.c_str(),
-        NULL
-    );
+        NULL);
+
+    // Route all new audio output streams to the filter chain
+    pw_registry_add_listener(registry, &registry_listener, &registry_events, NULL);
 
     // Run the main PipeWire loop
     pw_main_loop_run(loop);
 
     // TODO: Implement GUI
-    // TODO: Implement stream rule
 
     // Clean up PipeWire stuff
-    //pw_core_disconnect(core);
+    // pw_core_disconnect(core);
     pw_context_destroy(context);
     pw_main_loop_destroy(loop);
     pw_deinit();
