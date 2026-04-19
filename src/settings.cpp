@@ -15,7 +15,13 @@ void Settings::setVirtualSurroundEnabled(bool value) {
         return;
     m_virtualSurroundEnabled = value;
 
-    // TODO: Implement logic to enable or disable the virtual surround routing
+    if (m_virtualSurroundEnabled) {
+        m_pipeWireManager->create_virtual_surround_module();
+        m_pipeWireManager->enable_routing();
+    } else {
+        //m_pipeWireManager->remove_virtual_surround_module();
+        m_pipeWireManager->disable_routing();
+    }
 
     Q_EMIT virtualSurroundEnabledChanged();
 }

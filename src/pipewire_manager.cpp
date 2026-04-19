@@ -1,10 +1,14 @@
 #include "pipewire_manager.h"
+#include "pipewire/context.h"
+#include "pipewire/impl-module.h"
+#include "pipewire/thread-loop.h"
+#include "spa/utils/defs.h"
 #include <qdebug.h>
 #include <qhashfunctions.h>
 #include <qlogging.h>
 #include <qtmetamacros.h>
 
-int PipeWireManager::on_metadata_property([[maybe_unused]] void *data,
+int PipeWireManager::on_metadata_property(void *data,
                                           uint32_t subject, // Node ID
                                           const char *key,
                                           [[maybe_unused]] const char *type,
@@ -24,9 +28,10 @@ int PipeWireManager::on_metadata_property([[maybe_unused]] void *data,
         return 0;
 
     pw_metadata_set_property(manager->metadata, subject, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", manager->capture_node_name);
+    if (!manager->routed_node_ids.contains(subject))
+        manager->routed_node_ids.insert(subject);
 
-    //  Debug: Print info message
-    qInfo("on_metadata_property: Node with ID %u routed to sink '%s'.\n", subject, manager->capture_node_name);
+    qDebug("on_metadata_property: Node with ID %u routed to sink '%s'", subject, manager->capture_node_name);
 
     return 0;
 }
@@ -59,9 +64,6 @@ void PipeWireManager::registry_event_global(void *data,
     const char *node_media_class = spa_dict_lookup(props, PW_KEY_MEDIA_CLASS);
     const char *node_media_role = spa_dict_lookup(props, PW_KEY_MEDIA_ROLE);
 
-    // Debug: Print object details to console.
-    // printf("object: id: %u | name: %s | type: %s/%d\n", id, node_name, type, version);
-
     // Check if object is an audio output stream, but exclude system events and our virtual surround manager source.
     if (!node_media_class || strcmp(node_media_class, "Stream/Output/Audio") != 0)
         return;
@@ -75,14 +77,19 @@ void PipeWireManager::registry_event_global(void *data,
     if (manager->metadata) {
         // Route the audio output node to our virtual surround manager sink
         pw_metadata_set_property(manager->metadata, id, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", manager->capture_node_name);
+        if (!manager->routed_node_ids.contains(id))
+            manager->routed_node_ids.insert(id);
 
-        // printf("test4");
-        //  Debug: Print info message
-        printf("registry_event_global: Node '%s' with ID %u routed to sink '%s'.\n", node_name, id, manager->capture_node_name);
+        qDebug("registry_event_global: Node '%s' with ID %u routed to sink '%s'.\n", node_name, id, manager->capture_node_name);
     }
 }
 
-void PipeWireManager::create_virtual_surround_node() {
+void PipeWireManager::create_virtual_surround_module() {
+    if (module) {
+        qInfo("Virtual surround module already exists");
+        return;
+    }
+
     // Set filter graph for virtual surround module, automatically creating playback and capture nodes
     const string filter_graph = R"(
 {
@@ -97,41 +104,41 @@ void PipeWireManager::create_virtual_surround_node() {
         { type = builtin label = copy name = copySR  }
         { type = builtin label = copy name = copyLFE }
 
-        # apply hrir - HeSuVi 14-channel WAV (not the *-.wav variants) (note: */44/* in HeSuVi are the same, but resampled to 44100)
-        { type = builtin label = convolver name = convFL_L config = { filename = )" +
-                                hrir_wav_path + R"( channel =  0 } }
-        { type = builtin label = convolver name = convFL_R config = { filename = )" +
-                                hrir_wav_path + R"( channel =  1 } }
-        { type = builtin label = convolver name = convSL_L config = { filename = )" +
-                                hrir_wav_path + R"( channel =  2 } }
-        { type = builtin label = convolver name = convSL_R config = { filename = )" +
-                                hrir_wav_path + R"( channel =  3 } }
-        { type = builtin label = convolver name = convRL_L config = { filename = )" +
-                                hrir_wav_path + R"( channel =  4 } }
-        { type = builtin label = convolver name = convRL_R config = { filename = )" +
-                                hrir_wav_path + R"( channel =  5 } }
-        { type = builtin label = convolver name = convFC_L config = { filename = )" +
-                                hrir_wav_path + R"( channel =  6 } }
-        { type = builtin label = convolver name = convFR_R config = { filename = )" +
-                                hrir_wav_path + R"( channel =  7 } }
-        { type = builtin label = convolver name = convFR_L config = { filename = )" +
-                                hrir_wav_path + R"( channel =  8 } }
-        { type = builtin label = convolver name = convSR_R config = { filename = )" +
-                                hrir_wav_path + R"( channel =  9 } }
-        { type = builtin label = convolver name = convSR_L config = { filename = )" +
-                                hrir_wav_path + R"( channel = 10 } }
-        { type = builtin label = convolver name = convRR_R config = { filename = )" +
-                                hrir_wav_path + R"( channel = 11 } }
-        { type = builtin label = convolver name = convRR_L config = { filename = )" +
-                                hrir_wav_path + R"( channel = 12 } }
-        { type = builtin label = convolver name = convFC_R config = { filename = )" +
-                                hrir_wav_path + R"( channel = 13 } }
+        # apply hrir - HeSuVi 14-channel WAV (not the *-.wav variants) (note: 44 in HeSuVi are the same, but resampled to 44100)
+        { type = builtin label = convolver name = convFL_L config = { filename = ")" +
+                                hrir_wav_path + R"(" channel =  0 } }
+        { type = builtin label = convolver name = convFL_R config = { filename = ")" +
+                                hrir_wav_path + R"(" channel =  1 } }
+        { type = builtin label = convolver name = convSL_L config = { filename = ")" +
+                                hrir_wav_path + R"(" channel =  2 } }
+        { type = builtin label = convolver name = convSL_R config = { filename = ")" +
+                                hrir_wav_path + R"(" channel =  3 } }
+        { type = builtin label = convolver name = convRL_L config = { filename = ")" +
+                                hrir_wav_path + R"(" channel =  4 } }
+        { type = builtin label = convolver name = convRL_R config = { filename = ")" +
+                                hrir_wav_path + R"(" channel =  5 } }
+        { type = builtin label = convolver name = convFC_L config = { filename = ")" +
+                                hrir_wav_path + R"(" channel =  6 } }
+        { type = builtin label = convolver name = convFR_R config = { filename = ")" +
+                                hrir_wav_path + R"(" channel =  7 } }
+        { type = builtin label = convolver name = convFR_L config = { filename = ")" +
+                                hrir_wav_path + R"(" channel =  8 } }
+        { type = builtin label = convolver name = convSR_R config = { filename = ")" +
+                                hrir_wav_path + R"(" channel =  9 } }
+        { type = builtin label = convolver name = convSR_L config = { filename = ")" +
+                                hrir_wav_path + R"(" channel = 10 } }
+        { type = builtin label = convolver name = convRR_R config = { filename = ")" +
+                                hrir_wav_path + R"(" channel = 11 } }
+        { type = builtin label = convolver name = convRR_L config = { filename = ")" +
+                                hrir_wav_path + R"(" channel = 12 } }
+        { type = builtin label = convolver name = convFC_R config = { filename = ")" +
+                                hrir_wav_path + R"(" channel = 13 } }
 
         # treat LFE as FC
-        { type = builtin label = convolver name = convLFE_L config = { filename = )" +
-                                hrir_wav_path + R"( channel =  6 } }
-        { type = builtin label = convolver name = convLFE_R config = { filename = )" +
-                                hrir_wav_path + R"( channel = 13 } }
+        { type = builtin label = convolver name = convLFE_L config = { filename = ")" +
+                                hrir_wav_path + R"(" channel =  6 } }
+        { type = builtin label = convolver name = convLFE_R config = { filename = ")" +
+                                hrir_wav_path + R"(" channel = 13 } }
 
         # stereo output
         { type = builtin label = mixer name = mixL }
@@ -182,7 +189,7 @@ void PipeWireManager::create_virtual_surround_node() {
     // Set capture properties for virtual surround module
     const string capture_props = R"(
 {
-    node.name = )" + string(capture_node_name) +
+    node.name = )" + (string)capture_node_name +
                                  R"(
     media.class = "Audio/Sink"
     audio.channels = 8
@@ -216,11 +223,33 @@ void PipeWireManager::create_virtual_surround_node() {
     )";
 
     // Acutally load the module
-    pw_context_load_module(
+    module = pw_context_load_module(
         context,
         "libpipewire-module-filter-chain",
         args.c_str(),
         NULL);
+
+    qInfo("Created virtual surround module");
+}
+
+void PipeWireManager::remove_virtual_surround_module() {
+    // TODO: Implement this function to remove the virtual surround node
+    pw_impl_module_destroy(module);
+
+    module = NULL;
+    qInfo("Removed virtual surround module");
+}
+
+void PipeWireManager::enable_routing() {
+    pw_thread_loop_start(thread_loop);
+    qInfo("Enabled routing");
+}
+
+void PipeWireManager::disable_routing() {
+    // TODO: Iterate over all nodes with our node name set as target.object and disconnect them from the filter chain
+
+    pw_thread_loop_stop(thread_loop);
+    qInfo("Disabled routing");
 }
 
 PipeWireManager::PipeWireManager() {
@@ -233,13 +262,13 @@ PipeWireManager::PipeWireManager() {
           pw_get_headers_version(), pw_get_library_version());
 
     // Create some initial stuff for PipeWire to work
-    loop = pw_main_loop_new(NULL);
-    if (!loop) {
+    thread_loop = pw_thread_loop_new("main", NULL);
+    if (!thread_loop) {
         qFatal("Failed to create PipeWire main loop\n");
         Q_EMIT errorOccured(QStringLiteral("Error connecting to PipeWire audio service."));
         return;
     }
-    context = pw_context_new(pw_main_loop_get_loop(loop), NULL, 0);
+    context = pw_context_new(pw_thread_loop_get_loop(thread_loop), NULL, 0);
     if (!context) {
         qFatal("Failed to create PipeWire context\n");
         Q_EMIT errorOccured(QStringLiteral("Error connecting to PipeWire audio service."));
@@ -259,24 +288,16 @@ PipeWireManager::PipeWireManager() {
     }
     spa_zero(registry_listener);
     spa_zero(metadata_listener);
+    spa_zero(core_listener);
 
-    create_virtual_surround_node();
-
-    // Route all new audio output streams to the filter chain
+    // Route all new audio output streams to the filter chain, only active while the loop runs
     pw_registry_add_listener(registry, &registry_listener, &registry_events, this);
-
-    virtualSurroundEnabled = true;
-
-    // Run the main PipeWire loop
-    pw_main_loop_run(loop);
 }
 
 PipeWireManager::~PipeWireManager() {
     // Clean up PipeWire stuff
     pw_core_disconnect(core);
     pw_context_destroy(context);
-    pw_main_loop_destroy(loop);
+    pw_thread_loop_destroy(thread_loop);
     pw_deinit();
-
-    virtualSurroundEnabled = false;
 }

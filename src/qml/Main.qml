@@ -22,7 +22,7 @@ Kirigami.ApplicationWindow {
             // Global toggle for enabling or disabling the virtual surround routing
             Kirigami.Action {
                 id: toggleVirtualSurroundAction
-                text: i18nc("@label", "Toggle Virtual Surround")
+                text: i18nc("@action:toggleVirtualSurroundAction", "Toggle Virtual Surround")
                 checkable: true
                 checked: settings.virtualSurroundEnabled // TODO: Save state and reapply on start
                 onToggled: {
@@ -38,7 +38,7 @@ Kirigami.ApplicationWindow {
             id: errorMessage
             Layout.fillWidth: true
             type: Kirigami.MessageType.Error
-            text: settings.errorMessage
+            text: i18nc("@label:errorMessage", settings.errorMessage)
             visible: settings.errorMessage.length > 0
         }
     }
@@ -46,6 +46,5 @@ Kirigami.ApplicationWindow {
     // Functions
     function toggleVirtualSurround(value): void {
         settings.virtualSurroundEnabled = value;
-        console.log("Toggle Virtual Surround: " + value);
     }
 }

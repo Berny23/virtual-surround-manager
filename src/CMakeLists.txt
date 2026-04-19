@@ -15,11 +15,6 @@ target_sources(virtual-surround-manager
     pipewire_manager.cpp
 )
 
-ecm_target_qml_sources(virtual-surround-manager
-    SOURCES
-    Main.qml
-)
-
 target_link_libraries(virtual-surround-manager
     PRIVATE
     Qt6::Quick
@@ -36,3 +31,5 @@ target_link_libraries(virtual-surround-manager
 target_include_directories(virtual-surround-manager PRIVATE ${PIPEWIRE_INCLUDE_DIRS})
 target_compile_options(virtual-surround-manager PRIVATE ${PIPEWIRE_CFLAGS_OTHER})
 target_link_libraries(virtual-surround-manager PRIVATE ${PIPEWIRE_LIBRARIES})
+
+add_subdirectory(qml)
