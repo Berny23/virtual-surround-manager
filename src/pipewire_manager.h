@@ -25,17 +25,17 @@ class PipeWireManager : public QObject {
 
     //
     // Creates a new virtual surround module. Does nothing if a module already exists.
+    // Call this before enable_routing().
     //
     void create_virtual_surround_module();
 
     //
-    // Removes the virtual surround module.
+    // Removes the virtual surround module. TODO: Change to update instead
     //
     void remove_virtual_surround_module();
 
     //
     // Starts the PipeWire loop, enabling routing of audio data through the virtual surround node.
-    // Call this before create_virtual_surround_module().
     //
     void enable_routing();
 

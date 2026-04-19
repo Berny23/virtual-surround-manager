@@ -13,6 +13,8 @@ int PipeWireManager::on_metadata_property(void *data,
                                           const char *key,
                                           [[maybe_unused]] const char *type,
                                           const char *value) { // NULL if property removed
+    qDebug("on_metadata_property: subject=%u key=%s value=%s",
+           subject, key ? key : "(null)", value ? value : "(null)");
     PipeWireManager *manager = static_cast<PipeWireManager *>(data);
 
     if (!key)
@@ -27,9 +29,11 @@ int PipeWireManager::on_metadata_property(void *data,
     if (subject == manager->playback_node_id)
         return 0;
 
-    pw_metadata_set_property(manager->metadata, subject, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", manager->capture_node_name);
+    // Only reroute if node has already been routed in registry_event_global
     if (!manager->routed_node_ids.contains(subject))
-        manager->routed_node_ids.insert(subject);
+        return 0;
+
+    pw_metadata_set_property(manager->metadata, subject, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", manager->capture_node_name);
 
     qDebug("on_metadata_property: Node with ID %u routed to sink '%s'", subject, manager->capture_node_name);
 
@@ -48,9 +52,18 @@ void PipeWireManager::registry_event_global(void *data,
     if (strcmp(type, PW_TYPE_INTERFACE_Metadata) == 0) {
         const char *metadata_name = spa_dict_lookup(props, PW_KEY_METADATA_NAME);
         if (metadata_name && strcmp(metadata_name, "default") == 0) {
+            // Check if there is already a metadata object
+            if (manager->metadata) {
+                spa_hook_remove(&manager->metadata_listener);
+                pw_proxy_destroy((pw_proxy *)manager->metadata);
+                manager->metadata = NULL;
+            }
+
             // Save the metadata object for reuse later
-            manager->metadata = static_cast<pw_metadata *>(pw_registry_bind(manager->registry, id, type, PW_VERSION_METADATA, 0));
+            manager->metadata = static_cast<pw_metadata *>(
+                pw_registry_bind(manager->registry, id, type, PW_VERSION_METADATA, 0));
             // Add listener for changes to node metadata
+            spa_zero(manager->metadata_listener);
             pw_metadata_add_listener(manager->metadata, &manager->metadata_listener, &manager->metadata_events, manager);
         }
     }
@@ -245,6 +258,7 @@ void PipeWireManager::create_virtual_surround_module() {
 
 void PipeWireManager::remove_virtual_surround_module() {
     // TODO: Maybe you can just edit the properties of the existing module instead of creating a new one? With pw_impl_module_update_properties
+    // Rename to update_virtual_surround_module()?
 
     pw_thread_loop_lock(thread_loop);
 
@@ -257,31 +271,44 @@ void PipeWireManager::remove_virtual_surround_module() {
 }
 
 void PipeWireManager::enable_routing() {
-    pw_thread_loop_lock(thread_loop);
+    if (!isRegistryListenerAdded) {
+        pw_thread_loop_lock(thread_loop);
 
-    // Route all new audio output streams to the filter chain, only active while the loop runs
-    if (!isRegistryListenerAdded)
+        if (registry)
+            pw_proxy_destroy((pw_proxy *)registry);
+
+        registry = pw_core_get_registry(core, PW_VERSION_REGISTRY, 0);
+
+        spa_zero(registry_listener);
+        // Route all new audio output streams to the filter chain, only active while the loop runs
         pw_registry_add_listener(registry, &registry_listener, &registry_events, this);
 
-    pw_thread_loop_unlock(thread_loop);
+        pw_thread_loop_unlock(thread_loop);
 
-    isRegistryListenerAdded = true;
+        isRegistryListenerAdded = true;
 
-    qInfo("Enabled routing");
+        qInfo("Enabled routing");
+    }
 }
 
 void PipeWireManager::disable_routing() {
+    qDebug("disable_routing: start, routed_node_ids.size()=%d, metadata=%p, registry=%p",
+           routed_node_ids.size(), metadata, registry);
     pw_thread_loop_lock(thread_loop);
 
     spa_hook_remove(&registry_listener);
 
     // Iterate over all nodes with our node name set as target.object, then disconnect them from the filter chain
     for (uint32_t id : routed_node_ids) {
+        qDebug("disable_routing: clearing target.object for node %u", id);
         if (metadata) {
             // Remove the target object property from the node
-            pw_metadata_set_property(metadata, id, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", NULL);
+            int ret = pw_metadata_set_property(metadata, id, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", NULL);
+            qDebug("disable_routing: pw_metadata_set_property returned %d for node %u", ret, id);
 
-            qDebug("Removed target object property from node with ID %u", id);
+            qDebug("Removed target.object property from node with ID %u", id);
+        } else {
+            qDebug("disable_routing: metadata is NULL, skipping node %u", id);
         }
     }
 
@@ -290,16 +317,12 @@ void PipeWireManager::disable_routing() {
     routed_node_ids.clear();
     isRegistryListenerAdded = false;
 
-    qInfo("Disabled routing");
+    qDebug("Disabled routing");
 }
 
 PipeWireManager::PipeWireManager() {
     // Initialize PipeWire library
     pw_init(NULL, NULL);
-
-    spa_zero(registry_listener);
-    spa_zero(metadata_listener);
-    spa_zero(core_listener);
 
     // Debug: Output current version of PipeWire library
     qInfo("Compiled with libpipewire %s\n"
@@ -345,7 +368,6 @@ PipeWireManager::PipeWireManager() {
 
 PipeWireManager::~PipeWireManager() {
     // Clean up PipeWire stuff
-    pw_thread_loop_unlock(thread_loop);
     pw_thread_loop_stop(thread_loop);
     pw_core_disconnect(core);
     pw_context_destroy(context);
