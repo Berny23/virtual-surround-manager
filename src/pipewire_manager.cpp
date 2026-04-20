@@ -245,6 +245,12 @@ void PipeWireManager::create_virtual_surround_module() {
         "libpipewire-module-filter-chain",
         args.c_str(),
         NULL);
+    if (!module) {
+        pw_thread_loop_unlock(thread_loop);
+        qFatal("Failed to load module into PipeWire context");
+        Q_EMIT errorOccured(QStringLiteral("Error creating virtual surround device."));
+        return;
+    }
 
     pw_thread_loop_unlock(thread_loop);
 
