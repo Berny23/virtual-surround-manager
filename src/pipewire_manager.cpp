@@ -20,12 +20,14 @@ int PipeWireManager::on_metadata_property(void *data,
     if (!key)
         return 0;
 
-    // Check if the target.object property changes, but exclude our virtual surround manager source
+    // Check if the target.object property changes
     if (strcmp(key, PW_KEY_TARGET_OBJECT) != 0 && strcmp(key, "target.node") != 0)
         return 0;
+    // Do nothing if target.object is already assigned (no fighting with EasyEffects routing)
     if (value != NULL) {
         return 0;
     }
+    // Exclude our virtual surround manager source
     if (subject == manager->playback_node_id)
         return 0;
 
