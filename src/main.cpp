@@ -7,16 +7,15 @@
 #include <QUrl>
 #include <QtQml>
 #include "pipewire_manager.h"
-#include "settings.h"
-#include <spa/utils/defs.h>
+#include "frontend_manager.h"
 
 int main(int argc, char *argv[]) {
     KIconTheme::initTheme();
     QApplication app(argc, argv);
-    KLocalizedString::setApplicationDomain("tutorial");
-    QApplication::setOrganizationName(QStringLiteral("KDE"));
-    QApplication::setOrganizationDomain(QStringLiteral("kde.org"));
-    QApplication::setApplicationName(QStringLiteral("Kirigami Tutorial"));
+    KLocalizedString::setApplicationDomain("virtual-surround-manager");
+    QApplication::setOrganizationName(QStringLiteral("Berny23"));
+    QApplication::setOrganizationDomain(QStringLiteral("berny23.de"));
+    QApplication::setApplicationName(QStringLiteral("Virtual Surround Manager"));
     QApplication::setDesktopFileName(QStringLiteral("de.berny23.virtual-surround-manager"));
 
     QApplication::setStyle(QStringLiteral("breeze"));
@@ -25,11 +24,11 @@ int main(int argc, char *argv[]) {
     }
 
     QQmlApplicationEngine engine;
-    PipeWireManager pipeWireManager;
-    Settings *settings = new Settings(&pipeWireManager);
+    PipeWireManager pipewire_manager;
+    FrontendManager *frontend_manager = new FrontendManager(&pipewire_manager);
 
     engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
-    engine.rootContext()->setContextProperty(QStringLiteral("settings"), settings);
+    engine.rootContext()->setContextProperty(QStringLiteral("frontendManager"), frontend_manager);
     engine.loadFromModule("de.berny23.virtual-surround-manager", "Main");
 
     if (engine.rootObjects().isEmpty()) {

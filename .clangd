@@ -1,4 +1,4 @@
 CompileFlags:
-  Add: [-std=c++23, -I/usr/include/pipewire-0.3/, -I/usr/include/spa-0.2/]
+  Add: [-std=c++20, -I/usr/include/pipewire-0.3/, -I/usr/include/spa-0.2/]
   Remove:
     - -mno-direct-extern-access

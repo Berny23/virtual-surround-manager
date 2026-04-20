@@ -1,16 +1,15 @@
-#include "settings.h"
-#include "pipewire_manager.h"
+#include "frontend_manager.h"
 
-Settings::Settings(PipeWireManager *pipeWireManager, QObject *parent) : QObject(parent) {
+FrontendManager::FrontendManager(PipeWireManager *pipeWireManager, QObject *parent) : QObject(parent) {
     m_pipeWireManager = pipeWireManager;
-    connect(m_pipeWireManager, &PipeWireManager::errorOccured, this, &Settings::onPipeWireError);
+    connect(m_pipeWireManager, &PipeWireManager::errorOccured, this, &FrontendManager::onPipeWireError);
 }
 
-bool Settings::getVirtualSurroundEnabled() {
+bool FrontendManager::getVirtualSurroundEnabled() {
     return m_virtualSurroundEnabled;
 }
 
-void Settings::setVirtualSurroundEnabled(bool value) {
+void FrontendManager::setVirtualSurroundEnabled(bool value) {
     if (m_virtualSurroundEnabled == value)
         return;
     m_virtualSurroundEnabled = value;
@@ -26,11 +25,11 @@ void Settings::setVirtualSurroundEnabled(bool value) {
     Q_EMIT virtualSurroundEnabledChanged();
 }
 
-void Settings::onPipeWireError(const QString &message) {
+void FrontendManager::onPipeWireError(const QString &message) {
     m_errorMessage = message;
     Q_EMIT errorMessageChanged();
 }
 
-QString Settings::getErrorMessage() const {
+QString FrontendManager::getErrorMessage() const {
     return m_errorMessage;
 }

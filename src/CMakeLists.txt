@@ -8,9 +8,9 @@ ecm_add_qml_module(virtual-surround-manager
 
 target_sources(virtual-surround-manager
     PRIVATE
-    settings.h
+    frontend_manager.h
+    frontend_manager.cpp
     main.cpp
-    settings.cpp
     pipewire_manager.h
     pipewire_manager.cpp
 )
