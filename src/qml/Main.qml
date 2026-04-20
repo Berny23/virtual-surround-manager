@@ -32,7 +32,6 @@ Kirigami.ApplicationWindow {
                 }
                 displayComponent: Controls.Switch {
                     action: toggleVirtualSurroundAction
-                    onCheckedChanged: frontendManager.virtualSurroundEnabled = checked
                 }
             }
         ]
@@ -42,7 +41,7 @@ Kirigami.ApplicationWindow {
                 id: errorMessage
                 Layout.fillWidth: true
                 type: Kirigami.MessageType.Error
-                text: i18nc("@label:errorMessage", frontendManager.errorMessage)
+                text: i18nc("@label:errorMessage", "An error occured: %1", frontendManager.errorMessage)
                 visible: frontendManager.errorMessage.length > 0
                 showCloseButton: true
             }
