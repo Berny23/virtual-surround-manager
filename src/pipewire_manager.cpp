@@ -244,13 +244,6 @@ void PipeWireManager::create_virtual_surround_module() {
         args.c_str(),
         NULL);
 
-    if (pw_thread_loop_start(thread_loop) < 0) {
-        pw_thread_loop_unlock(thread_loop);
-        qFatal("Failed to start the thread loop.");
-        Q_EMIT errorOccured(QStringLiteral("Error connecting to PipeWire audio service."));
-        return;
-    }
-
     pw_thread_loop_unlock(thread_loop);
 
     qInfo("Created virtual surround module");
@@ -362,7 +355,14 @@ PipeWireManager::PipeWireManager() {
         Q_EMIT errorOccured(QStringLiteral("Error connecting to PipeWire audio service."));
         return;
     }
-
+    
+    if (pw_thread_loop_start(thread_loop) < 0) {
+        pw_thread_loop_unlock(thread_loop);
+        qFatal("Failed to start the thread loop.");
+        Q_EMIT errorOccured(QStringLiteral("Error connecting to PipeWire audio service."));
+        return;
+    }
+    
     pw_thread_loop_unlock(thread_loop);
 }
 
