@@ -276,9 +276,9 @@ void PipeWireManager::enable_routing() {
         // Route all new audio output streams to the filter chain, only active while the loop runs
         pw_registry_add_listener(registry, &registry_listener, &registry_events, this);
 
-        pw_thread_loop_unlock(thread_loop);
-
         isRegistryListenerAdded = true;
+      
+        pw_thread_loop_unlock(thread_loop);
 
         qInfo("Enabled routing");
     }
@@ -305,10 +305,10 @@ void PipeWireManager::disable_routing() {
         }
     }
 
-    pw_thread_loop_unlock(thread_loop);
-
     routed_node_ids.clear();
     isRegistryListenerAdded = false;
+
+    pw_thread_loop_unlock(thread_loop);
 
     qDebug("Disabled routing");
 }
