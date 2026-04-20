@@ -255,8 +255,10 @@ void PipeWireManager::remove_virtual_surround_module() {
 
     pw_thread_loop_lock(thread_loop);
 
-    pw_impl_module_destroy(module);
-    module = NULL;
+    if (module) {
+        pw_impl_module_destroy(module);
+        module = NULL;
+    }
 
     pw_thread_loop_unlock(thread_loop);
 
