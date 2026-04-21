@@ -46,7 +46,7 @@ void PipeWireManager::registry_event_global(void *data,
     if (strcmp(type, PW_TYPE_INTERFACE_Metadata) == 0) {
         const char *metadata_name = spa_dict_lookup(props, PW_KEY_METADATA_NAME);
         if (metadata_name && strcmp(metadata_name, "default") == 0) {
-            // Check if there is already a metadata object
+            // Check if there already is a metadata object
             if (manager->metadata) {
                 spa_hook_remove(&manager->metadata_listener);
                 pw_proxy_destroy((pw_proxy *)manager->metadata);
@@ -239,7 +239,7 @@ void PipeWireManager::create_virtual_surround_module() {
         nullptr);
     if (!module) {
         pw_thread_loop_unlock(thread_loop);
-        qFatal("Failed to load module into PipeWire context");
+        qWarning("Failed to load module into PipeWire context");
         Q_EMIT error_occured(QStringLiteral("Error creating virtual surround device."));
         return;
     }
@@ -324,14 +324,14 @@ PipeWireManager::PipeWireManager() {
     // Create some initial stuff for PipeWire to work
     thread_loop = pw_thread_loop_new("main", nullptr);
     if (!thread_loop) {
-        qFatal("Failed to create PipeWire thread loop");
+        qWarning("Failed to create PipeWire thread loop");
         Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
         return;
     }
     context = pw_context_new(pw_thread_loop_get_loop(thread_loop), nullptr, 0);
     if (!context) {
         pw_thread_loop_unlock(thread_loop);
-        qFatal("Failed to create PipeWire context");
+        qWarning("Failed to create PipeWire context");
         Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
         return;
     }
@@ -342,7 +342,7 @@ PipeWireManager::PipeWireManager() {
     core = pw_context_connect(context, nullptr, 0);
     if (!core) {
         pw_thread_loop_unlock(thread_loop);
-        qFatal("Failed to connect to PipeWire daemon");
+        qWarning("Failed to connect to PipeWire daemon");
         Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
         return;
     }
@@ -350,14 +350,14 @@ PipeWireManager::PipeWireManager() {
     registry = pw_core_get_registry(core, PW_VERSION_REGISTRY, 0);
     if (!registry) {
         pw_thread_loop_unlock(thread_loop);
-        qFatal("Failed to get PipeWire registry");
+        qWarning("Failed to get PipeWire registry");
         Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
         return;
     }
 
     if (pw_thread_loop_start(thread_loop) < 0) {
         pw_thread_loop_unlock(thread_loop);
-        qFatal("Failed to start the thread loop.");
+        qWarning("Failed to start the thread loop.");
         Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
         return;
     }
