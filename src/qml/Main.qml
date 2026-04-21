@@ -1,7 +1,3 @@
-// Includes relevant modules used by the QML
-
-// Prevents:
-// Unqualified access: Set "pragma ComponentBehavior: Bound" in order to use IDs from outer components in nested components.
 pragma ComponentBehavior: Bound
 
 import QtQuick
@@ -12,10 +8,9 @@ import org.kde.kirigami as Kirigami
 // Provides basic features needed for all kirigami applications
 Kirigami.ApplicationWindow {
     id: root
-
     width: 600
     height: 400
-    title: i18nc("@title:window", "Virtual Surround Manager")
+    title: i18nc("@title:window", "Virtual Surround Sound Manager")
 
     pageStack.initialPage: Kirigami.Page {
         id: mainPage
@@ -24,9 +19,10 @@ Kirigami.ApplicationWindow {
             // Global toggle for enabling or disabling the virtual surround routing
             Kirigami.Action {
                 id: toggleVirtualSurroundAction
-                text: i18nc("@action:switch", "Toggle Virtual Surround")
+                text: i18nc("@action:switch", "Enabled")
                 checkable: true
                 checked: frontendManager.virtualSurroundEnabled
+                //enabled: frontendManager.hrirFileNames.length > 0 // TODO: Implement
                 onToggled: {
                     root.toggleVirtualSurround(checked);
                 }
@@ -37,13 +33,40 @@ Kirigami.ApplicationWindow {
         ]
         ColumnLayout {
             anchors.fill: parent
+
+            // This shows error messages, normally hidden
             Kirigami.InlineMessage {
                 id: errorMessage
                 Layout.fillWidth: true
                 type: Kirigami.MessageType.Error
-                text: i18nc("@label:errorMessage", "An error occured: %1", frontendManager.errorMessage)
-                visible: frontendManager.errorMessage.length > 0
+                text: i18nc("@label", "An error occured: %1", frontendManager.errorMessage)
+                visible: true
+                //visible: frontendManager.errorMessage.length > 0
                 showCloseButton: true
+            }
+
+            Controls.ScrollView {
+                Layout.fillHeight: true
+                Kirigami.SearchField {
+                    Layout.topMargin: Kirigami.Units.smallSpacing
+                    Layout.bottomMargin: Kirigami.Units.smallSpacing
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    onTextChanged: hrirWavFileNameSelection.filterText = text
+                    KeyNavigation.tab: hrirWavFileNameSelection
+                }
+                ListView {
+                    id: hrirWavFileNameSelection
+                    model: frontendManager.hrirWavFileNames
+                }
+            }
+
+            // TODO: Replace example code with note about where to get more wav files. Also include note about EasyEffects
+            Kirigami.InlineMessage {
+                Layout.fillWidth: true
+                text: "Check out <a href=\"https://kde.org\">KDE's website!<a/>"
+                onLinkActivated: Qt.openUrlExternally(link)
+                visible: true
             }
         }
     }

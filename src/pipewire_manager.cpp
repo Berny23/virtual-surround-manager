@@ -1,18 +1,10 @@
 #include "pipewire_manager.h"
-#include "pipewire/context.h"
-#include "pipewire/impl-module.h"
-#include "pipewire/thread-loop.h"
-#include "spa/utils/defs.h"
-#include <qdebug.h>
-#include <qhashfunctions.h>
-#include <qlogging.h>
-#include <qtmetamacros.h>
 
 int PipeWireManager::on_metadata_property(void *data,
                                           uint32_t subject, // Node ID
                                           const char *key,
                                           [[maybe_unused]] const char *type,
-                                          const char *value) { // NULL if property removed
+                                          const char *value) { // nullptr if property removed
     qDebug("on_metadata_property: subject=%u key=%s value=%s",
            subject, key ? key : "(null)", value ? value : "(null)");
     PipeWireManager *manager = static_cast<PipeWireManager *>(data);
@@ -24,7 +16,7 @@ int PipeWireManager::on_metadata_property(void *data,
     if (strcmp(key, PW_KEY_TARGET_OBJECT) != 0 && strcmp(key, "target.node") != 0)
         return 0;
     // Do nothing if target.object is already assigned (no fighting with EasyEffects routing)
-    if (value != NULL) {
+    if (value != nullptr) {
         return 0;
     }
     // Exclude our virtual surround manager source
@@ -58,7 +50,7 @@ void PipeWireManager::registry_event_global(void *data,
             if (manager->metadata) {
                 spa_hook_remove(&manager->metadata_listener);
                 pw_proxy_destroy((pw_proxy *)manager->metadata);
-                manager->metadata = NULL;
+                manager->metadata = nullptr;
             }
 
             // Save the metadata object for reuse later
@@ -244,11 +236,11 @@ void PipeWireManager::create_virtual_surround_module() {
         context,
         "libpipewire-module-filter-chain",
         args.c_str(),
-        NULL);
+        nullptr);
     if (!module) {
         pw_thread_loop_unlock(thread_loop);
         qFatal("Failed to load module into PipeWire context");
-        Q_EMIT errorOccured(QStringLiteral("Error creating virtual surround device."));
+        Q_EMIT error_occured(QStringLiteral("Error creating virtual surround device."));
         return;
     }
 
@@ -258,14 +250,11 @@ void PipeWireManager::create_virtual_surround_module() {
 }
 
 void PipeWireManager::remove_virtual_surround_module() {
-    // TODO: Maybe you can just edit the properties of the existing module instead of creating a new one? With pw_impl_module_update_properties
-    // Rename to update_virtual_surround_module()?
-
     pw_thread_loop_lock(thread_loop);
 
     if (module) {
         pw_impl_module_destroy(module);
-        module = NULL;
+        module = nullptr;
     }
 
     pw_thread_loop_unlock(thread_loop);
@@ -287,7 +276,7 @@ void PipeWireManager::enable_routing() {
         pw_registry_add_listener(registry, &registry_listener, &registry_events, this);
 
         isRegistryListenerAdded = true;
-      
+
         pw_thread_loop_unlock(thread_loop);
 
         qInfo("Enabled routing");
@@ -306,12 +295,12 @@ void PipeWireManager::disable_routing() {
         qDebug("disable_routing: clearing target.object for node %u", id);
         if (metadata) {
             // Remove the target object property from the node
-            int ret = pw_metadata_set_property(metadata, id, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", NULL);
+            int ret = pw_metadata_set_property(metadata, id, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", nullptr);
             qDebug("disable_routing: pw_metadata_set_property returned %d for node %u", ret, id);
 
             qDebug("Removed target.object property from node with ID %u", id);
         } else {
-            qDebug("disable_routing: metadata is NULL, skipping node %u", id);
+            qDebug("disable_routing: metadata is nullptr, skipping node %u", id);
         }
     }
 
@@ -325,7 +314,7 @@ void PipeWireManager::disable_routing() {
 
 PipeWireManager::PipeWireManager() {
     // Initialize PipeWire library
-    pw_init(NULL, NULL);
+    pw_init(nullptr, nullptr);
 
     // Debug: Output current version of PipeWire library
     qInfo("Compiled with libpipewire %s\n"
@@ -333,28 +322,28 @@ PipeWireManager::PipeWireManager() {
           pw_get_headers_version(), pw_get_library_version());
 
     // Create some initial stuff for PipeWire to work
-    thread_loop = pw_thread_loop_new("main", NULL);
+    thread_loop = pw_thread_loop_new("main", nullptr);
     if (!thread_loop) {
         qFatal("Failed to create PipeWire thread loop");
-        Q_EMIT errorOccured(QStringLiteral("Error connecting to PipeWire audio service."));
+        Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
         return;
     }
-    context = pw_context_new(pw_thread_loop_get_loop(thread_loop), NULL, 0);
+    context = pw_context_new(pw_thread_loop_get_loop(thread_loop), nullptr, 0);
     if (!context) {
         pw_thread_loop_unlock(thread_loop);
         qFatal("Failed to create PipeWire context");
-        Q_EMIT errorOccured(QStringLiteral("Error connecting to PipeWire audio service."));
+        Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
         return;
     }
 
     // Always lock before touching loop objects from outside the thread, then unlock!
     pw_thread_loop_lock(thread_loop);
 
-    core = pw_context_connect(context, NULL, 0);
+    core = pw_context_connect(context, nullptr, 0);
     if (!core) {
         pw_thread_loop_unlock(thread_loop);
         qFatal("Failed to connect to PipeWire daemon");
-        Q_EMIT errorOccured(QStringLiteral("Error connecting to PipeWire audio service."));
+        Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
         return;
     }
 
@@ -362,17 +351,17 @@ PipeWireManager::PipeWireManager() {
     if (!registry) {
         pw_thread_loop_unlock(thread_loop);
         qFatal("Failed to get PipeWire registry");
-        Q_EMIT errorOccured(QStringLiteral("Error connecting to PipeWire audio service."));
+        Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
         return;
     }
-    
+
     if (pw_thread_loop_start(thread_loop) < 0) {
         pw_thread_loop_unlock(thread_loop);
         qFatal("Failed to start the thread loop.");
-        Q_EMIT errorOccured(QStringLiteral("Error connecting to PipeWire audio service."));
+        Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
         return;
     }
-    
+
     pw_thread_loop_unlock(thread_loop);
 }
 

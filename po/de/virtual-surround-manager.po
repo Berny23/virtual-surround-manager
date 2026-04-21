@@ -1,0 +1,27 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: virtual-surround-manager\n"
+"Last-Translator: Berny23\n"
+"Language: de\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+
+#, kde-format
+msgctxt "@title:window"
+msgid "Virtual Surround Sound Manager"
+msgstr "Verwaltung für virtuellen Raumklang"
+
+#, kde-format
+msgctxt "@page:title"
+msgid "Options"
+msgstr "Optionen"
+
+#, kde-format
+msgctxt "@action:switch"
+msgid "Enabled"
+msgstr "Aktiviert"
+
+#, kde-format
+msgctxt "@label"
+msgid "An error occured: %1"
+msgstr "Ein Fehler ist aufgetreten: %1"

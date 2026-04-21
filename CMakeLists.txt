@@ -20,7 +20,6 @@ include(ECMQmlModule)
 find_package(Qt6 REQUIRED COMPONENTS
     Core
     Quick
-    Test
     Gui
     QuickControls2
     Widgets
@@ -39,8 +38,15 @@ ecm_find_qmlmodule(org.kde.kirigami REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
 
+# Translations
+ki18n_install(po)
+
 # Include CMakeLists.txt in src directory
 add_subdirectory(src)
+
+# Prepare and install shortcut to default system application path (e.g. /usr/share/applications/)
+configure_file(de.berny23.virtual-surround-manager.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/de.berny23.virtual-surround-manager.desktop @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/de.berny23.virtual-surround-manager.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 
 # From kirigami docs
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

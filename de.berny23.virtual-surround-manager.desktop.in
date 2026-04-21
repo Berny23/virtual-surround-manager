@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Virtual Surround Sound
+Name[de]=Virtueller Raumklang
+Comment=Manage virtual 7.1 surround sound for headphones
+Comment[de]=Virtuellen 7.1-Raumklang für Kopfhörer verwalten
+Icon=virtual-surround-manager
+Type=Application
+Exec=@CMAKE_INSTALL_FULL_BINDIR@/virtual-surround-manager
+Terminal=false
+StartupNotify=true
+Categories=AudioVideo
+X-Flatpak=de.berny23.virtual-surround-manager

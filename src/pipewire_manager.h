@@ -1,4 +1,8 @@
 #pragma once
+
+#include "pipewire/context.h"
+#include "pipewire/impl-module.h"
+#include "pipewire/thread-loop.h"
 #include <QDebug>
 #include <QObject>
 #include <pipewire/context.h>
@@ -11,6 +15,9 @@
 #include <pipewire/main-loop.h>
 #include <pipewire/pipewire.h>
 #include <pipewire/properties.h>
+#include <qdebug.h>
+#include <qhashfunctions.h>
+#include <qlogging.h>
 #include <qtmetamacros.h>
 #include <string>
 
@@ -44,8 +51,7 @@ class PipeWireManager : public QObject {
     //
     void disable_routing();
 
-  Q_SIGNALS:
-    void errorOccured(const QString &message);
+    Q_SIGNAL void error_occured(const QString &message);
 
   private:
     struct pw_thread_loop *thread_loop;
@@ -66,7 +72,7 @@ class PipeWireManager : public QObject {
     bool isRegistryListenerAdded = false;
     QSet<uint32_t> routed_node_ids;
     uint32_t playback_node_id;
-    pw_impl_module *module = NULL;
+    pw_impl_module *module = nullptr;
 
     //
     // Called when a metadata property of a node changes.
@@ -96,6 +102,6 @@ class PipeWireManager : public QObject {
     const struct pw_registry_events registry_events = {
         .version = PW_VERSION_REGISTRY_EVENTS,
         .global = registry_event_global,
-        .global_remove = NULL,
+        .global_remove = nullptr,
     };
 };
