@@ -35,7 +35,9 @@ target_link_libraries(virtual-surround-manager PRIVATE ${PIPEWIRE_LIBRARIES})
 install(
     DIRECTORY assets/hrir_wav/
     DESTINATION ${KDE_INSTALL_DATADIR}/virtual-surround-manager/hrir_wav
-    FILES_MATCHING PATTERN "*.wav"
+    FILES_MATCHING
+    PATTERN "*.wav"
+    PATTERN "*.txt" # The license text for HeSuVi
 )
 
 add_subdirectory(qml)
