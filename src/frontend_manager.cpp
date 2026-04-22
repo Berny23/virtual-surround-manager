@@ -7,7 +7,6 @@ FrontendManager::FrontendManager(PipeWireManager *pipewire_manager, QObject *par
 }
 
 bool FrontendManager::does_hrir_wav_file_exist(const QString &file_path) {
-    qDebug() << file_path;
     if (!QFile(file_path).exists()) {
         qWarning("does_hrir_wav_file_exist: HRIR file does not exist: %s", file_path.toStdString().c_str());
         set_error_message(QStringLiteral("Selected HRIR file does not exist in your filesystem."));
@@ -33,10 +32,6 @@ void FrontendManager::set_virtual_surround_enabled(bool value) {
         m_pipewire_manager->enable_routing();
     } else {
         m_pipewire_manager->disable_routing();
-
-        // TEST
-        // QString path = m_hrir_wav_file_paths.value(m_hrir_wav_file_name_index);
-        // m_pipewire_manager->create_virtual_surround_module(path.toStdString());
     }
 
     Q_EMIT virtual_surround_enabled_changed();
@@ -81,6 +76,8 @@ void FrontendManager::set_hrir_wav_file_name_index(int index) {
 }
 
 void FrontendManager::load_hrir_wav_files() {
+    // TODO: Load saved name on first start
+
     // Check first if a path has already been selected by the user
     const QString old_path = m_hrir_wav_file_paths.value(m_hrir_wav_file_name_index);
 
@@ -118,5 +115,19 @@ void FrontendManager::load_hrir_wav_files() {
             Q_EMIT hrir_wav_file_name_index_changed();
             qDebug("Restored previous file selection");
         }
+    } else {
+        // Set to first entry if no selection has been made
+        m_hrir_wav_file_name_index = 0;
     }
+}
+
+void FrontendManager::openHrirWavFolder() {
+    QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + hrir_wav_subpath;
+
+    // Create user data path if not exists
+    QDir dir(path);
+    if (!dir.exists())
+        dir.mkpath(QStringLiteral("."));
+
+    QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 }

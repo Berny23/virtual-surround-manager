@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pipewire_manager.h"
+#include <QDesktopServices>
 #include <QObject>
 #include <qcontainerfwd.h>
 #include <qdebug.h>
@@ -10,6 +11,7 @@
 #include <qstandardpaths.h>
 #include <qthread.h>
 #include <qtmetamacros.h>
+#include <qurl.h>
 
 class FrontendManager : public QObject {
     Q_OBJECT
@@ -42,6 +44,9 @@ class FrontendManager : public QObject {
 
     // Load HRIR WAV files from data directory
     Q_INVOKABLE void load_hrir_wav_files();
+
+    // Open folder in default file explorer
+    Q_INVOKABLE void openHrirWavFolder();
 
   private:
     bool m_virtual_surround_enabled = false;
