@@ -91,7 +91,6 @@ Kirigami.ApplicationWindow {
                 }
             }
 
-            // TODO: Replace example code with note about where to get more wav files. Also include note about EasyEffects
             Kirigami.InlineMessage {
                 Layout.fillWidth: true
                 text: i18nc("@message", "<b>Adding more profiles</b><br>Just open the folder and place your WAV files there. You can find hundreds of these files in the <a href=\"https://airtable.com/appayGNkn3nSuXkaz/shruimhjdSakUPg2m/tbloLjoZKWJDnLtTc\">HRTF Database<a/>.")

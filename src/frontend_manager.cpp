@@ -1,4 +1,5 @@
 #include "frontend_manager.h"
+#include <qhashfunctions.h>
 
 FrontendManager::FrontendManager(PipeWireManager *pipewire_manager, QObject *parent) : QObject(parent) {
     m_pipewire_manager = pipewire_manager;
@@ -82,14 +83,25 @@ void FrontendManager::set_hrir_wav_file_name_index(int index) {
     if (m_virtual_surround_enabled)
         m_pipewire_manager->enable_routing();
 
+    // Write to config file
+    KConfig config(QStringLiteral("virtual-surround-manager"));
+    KConfigGroup group = config.group(QStringLiteral("Settings"));
+    group.writeEntry("hrir_wav_file_path", m_hrir_wav_file_paths.value(m_hrir_wav_file_name_index));
+    config.sync();
+
     Q_EMIT hrir_wav_file_name_index_changed();
 }
 
 void FrontendManager::load_hrir_wav_files() {
-    // TODO: Load saved name on first start
-
     // Check first if a path has already been selected by the user
-    const QString old_path = m_hrir_wav_file_paths.value(m_hrir_wav_file_name_index);
+    QString old_path = m_hrir_wav_file_paths.value(m_hrir_wav_file_name_index);
+
+    // Read from config file if nothing has been selected in current session
+    if (old_path.isEmpty()) {
+        KConfig config(QStringLiteral("virtual-surround-manager"));
+        KConfigGroup group = config.group(QStringLiteral("Settings"));
+        old_path = group.readEntry("hrir_wav_file_path", QString());
+    }
 
     // Get all data directories, ordered by priority, first "~/.local/share/virtual-surround-manager/", then "/usr/share/virtual-surround-manager/"
     QStringList data_dirs = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);

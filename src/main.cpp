@@ -8,6 +8,7 @@
 #include <QQuickStyle>
 #include <QUrl>
 #include <QtQml>
+#include <qhashfunctions.h>
 
 int main(int argc, char *argv[]) {
     KIconTheme::initTheme();

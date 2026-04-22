@@ -1,6 +1,8 @@
 #pragma once
 
 #include "pipewire_manager.h"
+#include <KConfig>
+#include <KConfigGroup>
 #include <QDesktopServices>
 #include <QObject>
 #include <qcontainerfwd.h>

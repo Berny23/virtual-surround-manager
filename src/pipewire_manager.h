@@ -15,9 +15,11 @@
 #include <pipewire/main-loop.h>
 #include <pipewire/pipewire.h>
 #include <pipewire/properties.h>
+#include <qcontainerfwd.h>
 #include <qdebug.h>
 #include <qhashfunctions.h>
 #include <qlogging.h>
+#include <qthread.h>
 #include <qtmetamacros.h>
 #include <string>
 
@@ -65,9 +67,6 @@ class PipeWireManager : public QObject {
 
     const char *capture_node_name = "effect_input.virtual-surround-manager";
     const char *playback_node_name = "effect_output.virtual-surround-manager";
-
-    // TODO: Changeable in UI
-    // string hrir_wav_path = "/home/berny23/Dokumente/Virtual Surround Sound/hrir_hesuvi/atmos.wav";
 
     bool is_registry_listener_added = false;
     QSet<uint32_t> routed_node_ids;

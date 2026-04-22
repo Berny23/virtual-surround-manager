@@ -1,6 +1,4 @@
 #include "pipewire_manager.h"
-#include <qcontainerfwd.h>
-#include <qhashfunctions.h>
 
 int PipeWireManager::on_metadata_property(void *data,
                                           uint32_t subject, // Node ID
@@ -376,6 +374,10 @@ PipeWireManager::PipeWireManager() {
 }
 
 PipeWireManager::~PipeWireManager() {
+    disable_routing();
+    // We need to wait a little bit or the audio just stops completely when destroying too fast
+    QThread::msleep(100);
+
     // Clean up PipeWire stuff
     pw_thread_loop_stop(thread_loop);
     pw_core_disconnect(core);

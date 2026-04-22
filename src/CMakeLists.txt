@@ -25,6 +25,7 @@ target_link_libraries(virtual-surround-manager
     KF6::I18nQml
     KF6::CoreAddons
     KF6::IconThemes
+    KF6::ConfigCore
 )
 
 # PipeWire libraries
