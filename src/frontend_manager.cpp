@@ -55,6 +55,8 @@ int FrontendManager::get_hrir_wav_file_name_index() const {
 }
 
 void FrontendManager::set_hrir_wav_file_name_index(int index) {
+    qDebug("set_hrir_wav_file_name_index: %u", index);
+
     // Check if the index is valid
     if (index < 0 || index >= m_hrir_wav_file_names.size())
         return;
@@ -62,6 +64,10 @@ void FrontendManager::set_hrir_wav_file_name_index(int index) {
         return;
 
     m_hrir_wav_file_name_index = index;
+
+    // First, disable routing to prevent disruption of playing audio if the virtual surround sound is enabled
+    if (m_virtual_surround_enabled)
+        m_pipewire_manager->disable_routing();
 
     // We need to wait a little bit or the audio just stops completely when destroying the module too fast
     QThread::msleep(100);
@@ -71,6 +77,10 @@ void FrontendManager::set_hrir_wav_file_name_index(int index) {
     if (!does_hrir_wav_file_exist(path))
         return;
     m_pipewire_manager->create_virtual_surround_module(path.toStdString());
+
+    // At last, enable routing again if the virtual surround sound is enabled
+    if (m_virtual_surround_enabled)
+        m_pipewire_manager->enable_routing();
 
     Q_EMIT hrir_wav_file_name_index_changed();
 }

@@ -269,29 +269,33 @@ void PipeWireManager::remove_virtual_surround_module() {
 }
 
 void PipeWireManager::enable_routing() {
-    if (!is_registry_listener_added) {
-        pw_thread_loop_lock(thread_loop);
+    // Do nothing if registry listener already exists
+    if (is_registry_listener_added)
+        return;
 
-        if (registry)
-            pw_proxy_destroy((pw_proxy *)registry);
+    pw_thread_loop_lock(thread_loop);
 
-        registry = pw_core_get_registry(core, PW_VERSION_REGISTRY, 0);
+    if (registry)
+        pw_proxy_destroy((pw_proxy *)registry);
 
-        spa_zero(registry_listener);
-        // Route all new audio output streams to the filter chain, only active while the loop runs
-        pw_registry_add_listener(registry, &registry_listener, &registry_events, this);
+    registry = pw_core_get_registry(core, PW_VERSION_REGISTRY, 0);
 
-        is_registry_listener_added = true;
+    spa_zero(registry_listener);
+    // Route all new audio output streams to the filter chain, only active while the loop runs
+    pw_registry_add_listener(registry, &registry_listener, &registry_events, this);
 
-        pw_thread_loop_unlock(thread_loop);
+    is_registry_listener_added = true;
 
-        qInfo("Enabled routing");
-    }
+    pw_thread_loop_unlock(thread_loop);
+
+    qInfo("Enabled routing");
 }
 
 void PipeWireManager::disable_routing() {
-    qDebug("disable_routing: start, routed_node_ids.size()=%d, metadata=%p, registry=%p",
-           routed_node_ids.size(), metadata, registry);
+    // Do nothing if registry listener does not exist
+    if (!is_registry_listener_added)
+        return;
+
     pw_thread_loop_lock(thread_loop);
 
     spa_hook_remove(&registry_listener);

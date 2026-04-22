@@ -49,6 +49,9 @@ Kirigami.ApplicationWindow {
             // Just used to group the radio buttons logically
             Controls.ButtonGroup {
                 id: hrirWavFileNamesGroup
+                onCheckedButtonChanged: {
+                    frontendManager.hrirWavFileNameIndex = buttons.indexOf(checkedButton);
+                }
             }
 
             Kirigami.Card {
