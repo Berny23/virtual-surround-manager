@@ -3,7 +3,12 @@
 #include "pipewire_manager.h"
 #include <QObject>
 #include <qcontainerfwd.h>
+#include <qdebug.h>
+#include <qdir.h>
 #include <qhashfunctions.h>
+#include <qlogging.h>
+#include <qstandardpaths.h>
+#include <qthread.h>
 #include <qtmetamacros.h>
 
 class FrontendManager : public QObject {
@@ -11,7 +16,7 @@ class FrontendManager : public QObject {
     // Whether virtual surround sound is enabled or not
     Q_PROPERTY(bool virtualSurroundEnabled READ get_virtual_surround_enabled WRITE set_virtual_surround_enabled NOTIFY virtual_surround_enabled_changed)
     // The error message to show in the UI
-    Q_PROPERTY(QString errorMessage READ get_error_message NOTIFY error_message_changed)
+    Q_PROPERTY(QString errorMessage READ get_error_message WRITE set_error_message NOTIFY error_message_changed)
     // The list of HRIR WAV file names found in the directory
     Q_PROPERTY(QStringList hrirWavFileNames READ get_hrir_wav_file_names NOTIFY hrir_wav_file_names_changed)
     // The user-selected index of the HRIR WAV file list
@@ -25,6 +30,7 @@ class FrontendManager : public QObject {
     Q_SIGNAL void virtual_surround_enabled_changed();
 
     QString get_error_message() const;
+    void set_error_message(const QString &value);
     Q_SIGNAL void error_message_changed();
 
     QStringList get_hrir_wav_file_names() const;
@@ -34,13 +40,19 @@ class FrontendManager : public QObject {
     void set_hrir_wav_file_name_index(int index);
     Q_SIGNAL void hrir_wav_file_name_index_changed();
 
-  private Q_SLOTS:
-    void on_pipewire_error(const QString &message); // TODO: Fix error messaging via slot and emit
+    // Load HRIR WAV files from data directory
+    Q_INVOKABLE void load_hrir_wav_files();
 
   private:
     bool m_virtual_surround_enabled = false;
     QString m_error_message;
     QStringList m_hrir_wav_file_names;
+    QStringList m_hrir_wav_file_paths;
     int m_hrir_wav_file_name_index = 0;
+
     PipeWireManager *m_pipewire_manager;
+
+    QString hrir_wav_subpath = QStringLiteral("/hrir_wav");
+
+    bool does_hrir_wav_file_exist(const QString &file_path);
 };

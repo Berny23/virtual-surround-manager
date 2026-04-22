@@ -52,12 +52,27 @@ Kirigami.ApplicationWindow {
                     Layout.bottomMargin: Kirigami.Units.smallSpacing
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    onTextChanged: hrirWavFileNameSelection.filterText = text
-                    KeyNavigation.tab: hrirWavFileNameSelection
+                    onTextChanged: hrirWavFileSelection.filterText = text
+                    KeyNavigation.tab: hrirWavFileSelection
                 }
+                // TODO: Fix this stuff not showing
                 ListView {
-                    id: hrirWavFileNameSelection
+                    id: hrirWavFileSelection
                     model: frontendManager.hrirWavFileNames
+                    currentIndex: frontendManager.hrirWavFileNameIndex
+                    delegate: Controls.ItemDelegate {
+                        required property int index
+                        required property string modelData
+
+                        width: hrirWavFileSelection.width
+                        text: modelData
+                        highlighted: hrirWavFileSelection.currentIndex === index
+
+                        onClicked: {
+                            hrirWavFileSelection.currentIndex = index;
+                            frontendManager.hrirWavFileNameIndex = index;
+                        }
+                    }
                 }
             }
 

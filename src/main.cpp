@@ -1,3 +1,5 @@
+#include "frontend_manager.h"
+#include "pipewire_manager.h"
 #include <KIconTheme>
 #include <KLocalizedContext>
 #include <KLocalizedString>
@@ -6,16 +8,13 @@
 #include <QQuickStyle>
 #include <QUrl>
 #include <QtQml>
-#include "pipewire_manager.h"
-#include "frontend_manager.h"
 
 int main(int argc, char *argv[]) {
     KIconTheme::initTheme();
     QApplication app(argc, argv);
     KLocalizedString::setApplicationDomain("virtual-surround-manager");
-    QApplication::setOrganizationName(QStringLiteral("Berny23"));
     QApplication::setOrganizationDomain(QStringLiteral("berny23.de"));
-    QApplication::setApplicationName(QStringLiteral("Virtual Surround Manager"));
+    QApplication::setApplicationName(QStringLiteral("virtual-surround-manager"));
     QApplication::setDesktopFileName(QStringLiteral("de.berny23.virtual-surround-manager"));
 
     QApplication::setStyle(QStringLiteral("breeze"));

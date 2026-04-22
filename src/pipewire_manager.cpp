@@ -1,4 +1,6 @@
 #include "pipewire_manager.h"
+#include <qcontainerfwd.h>
+#include <qhashfunctions.h>
 
 int PipeWireManager::on_metadata_property(void *data,
                                           uint32_t subject, // Node ID
@@ -91,9 +93,13 @@ void PipeWireManager::registry_event_global(void *data,
     }
 }
 
-void PipeWireManager::create_virtual_surround_module() {
+void PipeWireManager::create_virtual_surround_module(const string &hrir_wav_path) {
     if (module) {
-        qInfo("Virtual surround module already exists");
+        qInfo("create_virtual_surround_module: Virtual surround module already exists");
+        return;
+    }
+    if (hrir_wav_path.empty()) {
+        qWarning("create_virtual_surround_module: No HRIR file provided");
         return;
     }
 
@@ -263,7 +269,7 @@ void PipeWireManager::remove_virtual_surround_module() {
 }
 
 void PipeWireManager::enable_routing() {
-    if (!isRegistryListenerAdded) {
+    if (!is_registry_listener_added) {
         pw_thread_loop_lock(thread_loop);
 
         if (registry)
@@ -275,7 +281,7 @@ void PipeWireManager::enable_routing() {
         // Route all new audio output streams to the filter chain, only active while the loop runs
         pw_registry_add_listener(registry, &registry_listener, &registry_events, this);
 
-        isRegistryListenerAdded = true;
+        is_registry_listener_added = true;
 
         pw_thread_loop_unlock(thread_loop);
 
@@ -305,7 +311,7 @@ void PipeWireManager::disable_routing() {
     }
 
     routed_node_ids.clear();
-    isRegistryListenerAdded = false;
+    is_registry_listener_added = false;
 
     pw_thread_loop_unlock(thread_loop);
 
@@ -325,14 +331,14 @@ PipeWireManager::PipeWireManager() {
     thread_loop = pw_thread_loop_new("main", nullptr);
     if (!thread_loop) {
         qWarning("Failed to create PipeWire thread loop");
-        Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
+        Q_EMIT error_occured(QStringLiteral("Failed connecting to PipeWire audio service."));
         return;
     }
     context = pw_context_new(pw_thread_loop_get_loop(thread_loop), nullptr, 0);
     if (!context) {
         pw_thread_loop_unlock(thread_loop);
         qWarning("Failed to create PipeWire context");
-        Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
+        Q_EMIT error_occured(QStringLiteral("Failed connecting to PipeWire audio service."));
         return;
     }
 
@@ -343,7 +349,7 @@ PipeWireManager::PipeWireManager() {
     if (!core) {
         pw_thread_loop_unlock(thread_loop);
         qWarning("Failed to connect to PipeWire daemon");
-        Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
+        Q_EMIT error_occured(QStringLiteral("Failed connecting to PipeWire audio service."));
         return;
     }
 
@@ -351,14 +357,14 @@ PipeWireManager::PipeWireManager() {
     if (!registry) {
         pw_thread_loop_unlock(thread_loop);
         qWarning("Failed to get PipeWire registry");
-        Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
+        Q_EMIT error_occured(QStringLiteral("Failed connecting to PipeWire audio service."));
         return;
     }
 
     if (pw_thread_loop_start(thread_loop) < 0) {
         pw_thread_loop_unlock(thread_loop);
         qWarning("Failed to start the thread loop.");
-        Q_EMIT error_occured(QStringLiteral("Error connecting to PipeWire audio service."));
+        Q_EMIT error_occured(QStringLiteral("Failed connecting to PipeWire audio service."));
         return;
     }
 

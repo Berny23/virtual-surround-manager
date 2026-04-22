@@ -1,9 +1,19 @@
 #include "frontend_manager.h"
-#include <qtmetamacros.h>
 
 FrontendManager::FrontendManager(PipeWireManager *pipewire_manager, QObject *parent) : QObject(parent) {
     m_pipewire_manager = pipewire_manager;
-    connect(m_pipewire_manager, &PipeWireManager::error_occured, this, &FrontendManager::on_pipewire_error);
+    connect(m_pipewire_manager, &PipeWireManager::error_occured, this, &FrontendManager::set_error_message);
+    load_hrir_wav_files();
+}
+
+bool FrontendManager::does_hrir_wav_file_exist(const QString &file_path) {
+    qDebug() << file_path;
+    if (!QFile(file_path).exists()) {
+        qWarning("does_hrir_wav_file_exist: HRIR file does not exist: %s", file_path.toStdString().c_str());
+        set_error_message(QStringLiteral("Selected HRIR file does not exist in your filesystem."));
+        return false;
+    }
+    return true;
 }
 
 bool FrontendManager::get_virtual_surround_enabled() {
@@ -16,11 +26,17 @@ void FrontendManager::set_virtual_surround_enabled(bool value) {
     m_virtual_surround_enabled = value;
 
     if (m_virtual_surround_enabled) {
-        m_pipewire_manager->create_virtual_surround_module();
+        QString path = m_hrir_wav_file_paths.value(m_hrir_wav_file_name_index);
+        if (!does_hrir_wav_file_exist(path))
+            return;
+        m_pipewire_manager->create_virtual_surround_module(path.toStdString());
         m_pipewire_manager->enable_routing();
     } else {
         m_pipewire_manager->disable_routing();
-        // m_pipeWireManager->remove_virtual_surround_module();
+
+        // TEST
+        // QString path = m_hrir_wav_file_paths.value(m_hrir_wav_file_name_index);
+        // m_pipewire_manager->create_virtual_surround_module(path.toStdString());
     }
 
     Q_EMIT virtual_surround_enabled_changed();
@@ -28,6 +44,11 @@ void FrontendManager::set_virtual_surround_enabled(bool value) {
 
 QString FrontendManager::get_error_message() const {
     return m_error_message;
+}
+
+void FrontendManager::set_error_message(const QString &message) {
+    m_error_message = message;
+    Q_EMIT error_message_changed(); // TODO: Replace with thing that actually works
 }
 
 QStringList FrontendManager::get_hrir_wav_file_names() const {
@@ -47,12 +68,55 @@ void FrontendManager::set_hrir_wav_file_name_index(int index) {
 
     m_hrir_wav_file_name_index = index;
 
-    m_pipewire_manager->create_virtual_surround_module(); // TODO: Supply different path
+    // We need to wait a little bit or the audio just stops completely when destroying the module too fast
+    QThread::msleep(100);
+    m_pipewire_manager->remove_virtual_surround_module();
+
+    QString path = m_hrir_wav_file_paths.value(m_hrir_wav_file_name_index);
+    if (!does_hrir_wav_file_exist(path))
+        return;
+    m_pipewire_manager->create_virtual_surround_module(path.toStdString());
 
     Q_EMIT hrir_wav_file_name_index_changed();
 }
 
-void FrontendManager::on_pipewire_error(const QString &message) {
-    m_error_message = message;
-    Q_EMIT error_message_changed(); // TODO: Replace with thing that actually works
+void FrontendManager::load_hrir_wav_files() {
+    // Check first if a path has already been selected by the user
+    const QString old_path = m_hrir_wav_file_paths.value(m_hrir_wav_file_name_index);
+
+    // Get all data directories, ordered by priority, first "~/.local/share/virtual-surround-manager/", then "/usr/share/virtual-surround-manager/"
+    QStringList data_dirs = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+    QStringList names;
+    QStringList paths;
+
+    for (const QString &path : data_dirs) {
+        QDir dir(path + hrir_wav_subpath);
+        if (!dir.exists())
+            continue;
+
+        // Get all .wav files in the directory, skip duplicates because the priority is user-first
+        dir.setNameFilters(QStringList({QStringLiteral("*.wav")}));
+        for (const QFileInfo &file : dir.entryInfoList(QDir::Files)) {
+            if (names.contains(file.fileName()))
+                continue;
+
+            names.append(file.fileName());
+            paths.append(file.absoluteFilePath());
+        }
+    }
+
+    m_hrir_wav_file_names = names;
+    m_hrir_wav_file_paths = paths;
+
+    Q_EMIT hrir_wav_file_names_changed();
+
+    // Try to restore the old file selection if it still exists
+    if (!old_path.isEmpty()) {
+        const int new_index = m_hrir_wav_file_paths.indexOf(old_path);
+        if (new_index >= 0 && new_index != m_hrir_wav_file_name_index) {
+            m_hrir_wav_file_name_index = new_index;
+            Q_EMIT hrir_wav_file_name_index_changed();
+            qDebug("Restored previous file selection");
+        }
+    }
 }
