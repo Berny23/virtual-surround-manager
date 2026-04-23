@@ -15,6 +15,10 @@ msgctxt "@page:title"
 msgid "Options"
 msgstr "Optionen"
 
+msgctxt "@action"
+msgid "About Virtual Surround Sound"
+msgstr "Über Virtueller Raumklang"
+
 msgctxt "@action:switch"
 msgid "Enabled"
 msgstr "Aktiviert"
