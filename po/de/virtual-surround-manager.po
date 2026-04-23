@@ -5,10 +5,11 @@ msgstr ""
 "Language: de\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
+# === Main page ===
 
 msgctxt "@title:window"
-msgid "Virtual Surround Sound Manager"
-msgstr "Verwaltung für virtuellen Raumklang"
+msgid "Manager"
+msgstr "Verwaltung"
 
 msgctxt "@page:title"
 msgid "Options"
@@ -17,10 +18,6 @@ msgstr "Optionen"
 msgctxt "@action:switch"
 msgid "Enabled"
 msgstr "Aktiviert"
-
-msgctxt "@label"
-msgid "An error occured: %1"
-msgstr "Ein Fehler ist aufgetreten: %1"
 
 msgctxt "@header"
 msgid "Virtualization Profiles"
@@ -34,11 +31,32 @@ msgctxt "@action"
 msgid "Reload"
 msgstr "Neu laden"
 
+# === About page ===
+
+msgctxt "@title"
+msgid "Virtual Surround Sound"
+msgstr "Virtueller Raumklang"
+
+msgctxt "@component"
+msgid "Contains HRIR WAV files from HeSuVi. © 2021, Matt Gore. See: hesuvi_license.txt"
+msgstr "Enthält HRIR-WAV-Dateien von HeSuVi. © 2021, Matt Gore. Siehe: hesuvi_license.txt"
+
+msgctxt "@info:credit"
+msgid "Developer"
+msgstr "Entwickler"
+
+# === Error messages ===
+
+msgctxt "@label"
+msgid "An error occured: %1"
+msgstr "Ein Fehler ist aufgetreten: %1"
+
+# === Info messages ===
+
 msgctxt "@message"
 msgid "<b>Adding more profiles</b><br>Just open the folder and place your WAV files there. You can find hundreds of these files in the <a href=\"https://airtable.com/appayGNkn3nSuXkaz/shruimhjdSakUPg2m/tbloLjoZKWJDnLtTc\">HRTF Database<a/>."
-msgstr "<b>Weitere Vorlagen hinzufügen</b><br>Öffnen Sie einfach den Ordner und legen Sie Ihre WAV-Dateien dort ab. Hunderte dieser Dateien finden Sie in der <a href=\"https://airtable.com/appayGNkn3nSuXkaz/shruimhjdSakUPg2m/tbloLjoZKWJDnLtTc\">HRTF-Datenbank<a/>."
+msgstr "<b>Weitere Profile hinzufügen</b><br>Öffnen Sie einfach den Ordner und legen Sie Ihre WAV-Dateien dort ab. Hunderte dieser Dateien finden Sie in der <a href=\"https://airtable.com/appayGNkn3nSuXkaz/shruimhjdSakUPg2m/tbloLjoZKWJDnLtTc\">HRTF-Datenbank<a/>."
 
 msgctxt "@message"
 msgid "<b>Using with EasyEffects</b><br>Exclude applications in EasyEffects that use 7.1 surround sound. Apply your effects on this programm instead."
 msgstr "<b>Mit EasyEffects verwenden</b><br>Schließen Sie Anwendungen in EasyEffects aus, die 7.1-Raumklang verwenden. Wenden Sie Ihre Effekte stattdessen auf dieses Programm an."
-

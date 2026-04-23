@@ -4,14 +4,26 @@ import QtQuick
 import QtQuick.Controls as Controls
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
-import org.kde.kirigami.delegates as KirigamiDelegates
+
+import de.berny23.virtual_surround_manager
 
 // Provides basic features needed for all kirigami applications
 Kirigami.ApplicationWindow {
     id: root
     width: 550
     height: 550
-    title: i18nc("@title:window", "Virtual Surround Sound Manager")
+    title: i18nc("@title:window", "Manager")
+
+    globalDrawer: Kirigami.GlobalDrawer {
+        isMenu: true
+        actions: [
+            Kirigami.Action {
+                text: i18nc("@action", "About Virtual Surround Sound")
+                icon.name: "help-about"
+                onTriggered: pageStack.layers.push(aboutPage)
+            }
+        ]
+    }
 
     pageStack.initialPage: Kirigami.Page {
         id: mainPage
@@ -107,6 +119,15 @@ Kirigami.ApplicationWindow {
                 }
                 visible: true
             }
+        }
+    }
+
+    // This loads the about page
+    Component {
+        id: aboutPage
+
+        Kirigami.AboutPage {
+            aboutData: About
         }
     }
 }

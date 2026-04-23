@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.28)
 
-project("Virtual Surround Manager" VERSION 1.0.0 LANGUAGES CXX)
+project("Virtual Surround Manager" VERSION 1.0 LANGUAGES CXX)
+
+set(APPLICATION_ID "de.berny23.virtual_surround_manager")
+set(APPLICATION_NAME "Virtual Surround Sound")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -46,8 +49,8 @@ ki18n_install(po)
 add_subdirectory(src)
 
 # Prepare and install shortcut to default system application path (e.g. /usr/share/applications/)
-configure_file(de.berny23.virtual-surround-manager.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/de.berny23.virtual-surround-manager.desktop @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/de.berny23.virtual-surround-manager.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+configure_file(de.berny23.virtual_surround_manager.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/de.berny23.virtual_surround_manager.desktop @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/de.berny23.virtual_surround_manager.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 
 # From kirigami docs
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

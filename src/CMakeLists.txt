@@ -41,6 +41,11 @@ install(
     PATTERN "*.txt" # The license text for HeSuVi
 )
 
+install(
+    FILES assets/icons/${APPLICATION_ID}.svg
+    DESTINATION ${KDE_INSTALL_DATADIR}/icons/hicolor/scalable/apps
+)
+
 add_subdirectory(qml)
 
 # Install binary to default system path
