@@ -5,11 +5,13 @@
 #include <KLocalizedContext>
 #include <KLocalizedString>
 #include <QApplication>
+#include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QUrl>
 #include <QtQml>
 #include <kaboutdata.h>
+#include <qapplication.h>
 #include <qhashfunctions.h>
 #include <qjsengine.h>
 #include <qjsvalue.h>
@@ -64,16 +66,12 @@ int main(int argc, char *argv[]) {
     QApplication::setOrganizationDomain(QStringLiteral("berny23.de"));
     QApplication::setApplicationName(QStringLiteral("virtual-surround-manager"));
     QApplication::setDesktopFileName(QStringLiteral("de.berny23.virtual_surround_manager"));
+    QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("de.berny23.virtual_surround_manager")));
+
+    // Set theme
     QApplication::setStyle(QStringLiteral("breeze"));
     if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
         QQuickStyle::setStyle(QStringLiteral("org.kde.desktop"));
-    }
-
-    // Force single instance
-    auto lockFile = get_lock_file();
-    if (!lockFile->isLocked()) {
-        qDebug("Another instance of this application is already running");
-        return 0;
     }
 
     // Credits
@@ -85,6 +83,7 @@ int main(int argc, char *argv[]) {
                          QStringLiteral("© 2026, Berny23"));
     aboutData.setOrganizationDomain("berny23.de");
     aboutData.setDesktopFileName(QStringLiteral("de.berny23.virtual_surround_manager"));
+    aboutData.setProgramLogo(QStringLiteral("de.berny23.virtual_surround_manager"));
     aboutData.setBugAddress("https://github.com/Berny23/virtual-surround-manager/issues");
     aboutData.addComponent(KAboutComponent(
         i18nc("@component", "Contains HRIR WAV files from HeSuVi. © 2021, Matt Gore. See: hesuvi_license.txt"),
@@ -107,6 +106,13 @@ int main(int argc, char *argv[]) {
                              [](QQmlEngine *engine, QJSEngine *) -> QJSValue {
                                  return engine->toScriptValue(KAboutData::applicationData());
                              });
+
+    // Force single instance
+    auto lockFile = get_lock_file();
+    if (!lockFile->isLocked()) {
+        qDebug("Another instance of this application is already running");
+        return 0;
+    }
 
     // Create PipeWire and frontend manager
     PipeWireManager pipewire_manager;
