@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>@APPLICATION_ID@</id>
+  
+  <name>@APPLICATION_NAME@</name>
+  <name xml:lang="de">Virtueller Raumklang</name>
+  <summary>Enable virtual 7.1 surround sound for your headphones with just one click</summary>
+  <summary xml:lang="de">Aktivieren Sie virtuellen 7.1-Raumklang für Ihre Kopfhörer mit nur einem Klick</summary>
+  <url type="homepage">https://virtual-surround-manager.berny23.de</url>
+  <developer id="de.berny23">
+    <name>Berny23</name>
+  </developer>
+  
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+  
+  <content_rating type="oars-1.0" />
+
+  <description>
+    <p>
+      Features: - Enable or disable virtual surround sound seemlessly - Drop in your own <em>
+    </em>HRIR WAV files<em>
+  </em> as virtualization presets, same as <em>
+</em>HeSuVi<em>
+</em> - Profile selection is automatically saved - Compatible with <em>
+</em>EasyEffects<em>
+</em> (and probably similar apps) - Written entirely using the <em>
+</em>PipeWire C++ API<em>
+</em>, no config files are required or used - Modern user interface, built with <em>
+</em>KDE&apos;s Kirigami 6 framework<em>
+</em> - Available languages: English, German - Project is <em>
+</em>not<em>
+</em> just AI-generated, everything is written by hand or autocomplete ;)
+</p>
+</description>
+
+<releases>
+  <release version="1.0.0" date="2026-04-24">
+    <description>
+      <p>Initial release of the app.</p>
+    </description>
+  </release>
+</releases>
+
+<launchable type="desktop-id">@APPLICATION_ID@.desktop</launchable>
+</component>

@@ -49,8 +49,17 @@ ki18n_install(po)
 add_subdirectory(src)
 
 # Prepare and install shortcut to default system application path (e.g. /usr/share/applications/)
-configure_file(de.berny23.virtual_surround_manager.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/de.berny23.virtual_surround_manager.desktop @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/de.berny23.virtual_surround_manager.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+configure_file(dist/${APPLICATION_ID}.desktop.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${APPLICATION_ID}.desktop @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${APPLICATION_ID}.desktop
+    DESTINATION ${KDE_INSTALL_APPDIR})
+
+# Prepare and install MetaInfo file for app stores
+configure_file(dist/${APPLICATION_ID}.metainfo.xml.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${APPLICATION_ID}.metainfo.xml)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${APPLICATION_ID}.metainfo.xml
+    DESTINATION ${KDE_INSTALL_METAINFODIR}
+)
 
 # From kirigami docs
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
