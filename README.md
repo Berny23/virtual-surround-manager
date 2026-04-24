@@ -27,24 +27,41 @@ TODO: Add Flatpak and AppImage
 
 ## Building
 
-### Dependencies
+### Native
+
+#### Dependencies
 Arch Linux: `sudo pacman -S git ninja libpipewire base-devel extra-cmake-modules cmake kirigami ki18n kcoreaddons breeze kiconthemes qt6-base qt6-declarative qqc2-desktop-style`
 
 In case I forgot something, cmake will tell you. Please open an issue so I can add the packages here.
 
-### For users
+#### For users
 1. Clone repository: `git clone https://github.com/Berny23/virtual-surround-manager.git`
 2. Change directory: `cd virtual-surround-manager`
 3. Prepare Build directory: `cmake -B build -G Ninja`
 4. Build the project: `cmake --build build --config Release`
 5. Install the project: `sudo cmake --install build --config Release`
 
-### For developers
+#### For developers
 1. Clone repository: `git clone https://github.com/Berny23/virtual-surround-manager.git`
 2. Change directory: `cd virtual-surround-manager`
 3. Prepare Build directory and set local install path: `cmake -B build -G Ninja --install-prefix ~/.local`
 4. Build the project: `cmake --build build --config Debug`
 5. Install the project: `cmake --install build --config Debug`
+
+### Flatpak
+
+The UI, filter chain node creation and audio source node detection work fine. However, setting the metadata for actual routing does absolutely nothing and the connection is not visible in coppwr. But this should actually work, because EasyEffects and other apps also support Flatpak.
+
+**IF YOU ARE A DEVELOPER, PLEASE HELP ME WITH THE FLATPAK. THANKS!**
+
+1. Clone repository: `git clone https://github.com/Berny23/virtual-surround-manager.git`
+2. Change directory: `cd virtual-surround-manager`
+3. Build the flatpak: `flatpak-builder --force-clean --user --install-deps-from=flathub --repo=repo --install flatpak_build ./dist/flatpak/de.berny23.virtual_surround_manager.Devel.json`
+4. Run the program: `flatpak run de.berny23.virtual_surround_manager`
+
+### AppImage
+
+I don't even know how this is supposed to work. There are mutliple different builder tools with no clear documentation on which to use. I tried some, but my build just crashes when launching it.
 
 ## Acknowledgements
 
