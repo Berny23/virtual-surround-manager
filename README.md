@@ -27,7 +27,9 @@ TODO: Add Flatpak and AppImage
 
 ## Building
 
-Required packages (Arch Linux): `base-devel extra-cmake-modules cmake kirigami ki18n kcoreaddons breeze kiconthemes qt6-base qt6-declarative qqc2-desktop-style`
+### Dependencies
+Arch Linux: `sudo pacman -S git ninja libpipewire base-devel extra-cmake-modules cmake kirigami ki18n kcoreaddons breeze kiconthemes qt6-base qt6-declarative qqc2-desktop-style`
+
 In case I forgot something, cmake will tell you. Please open an issue so I can add the packages here.
 
 ### For users
