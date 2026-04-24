@@ -19,7 +19,7 @@ Enable virtual 7.1 surround sound for your headphones on Linux with just one cli
 
 ## Demo
 
-<img width="552" height="552" alt="Bildschirmfoto_20260424_171804" src="https://github.com/user-attachments/assets/fa716230-9593-437b-9bad-6ec2dd8f9d00" />
+<img width="552" height="580" alt="Bildschirmfoto_20260424_172129" src="https://github.com/user-attachments/assets/f3584099-4a28-45d5-b13a-839fa49ea62f" />
 
 ## Download
 
