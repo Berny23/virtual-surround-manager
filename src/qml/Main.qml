@@ -113,7 +113,7 @@ Kirigami.ApplicationWindow {
             }
             Kirigami.InlineMessage {
                 Layout.fillWidth: true
-                text: i18nc("@message", "<b>Using with EasyEffects</b><br>Exclude applications in EasyEffects that use 7.1 surround sound. Apply your effects on this programm instead.")
+                text: i18nc("@message", "<b>Using with EasyEffects</b><br>Exclude applications in EasyEffects that use 7.1 surround sound. Apply your effects on this program instead.")
                 onLinkActivated: function (link) {
                     Qt.openUrlExternally(link);
                 }
