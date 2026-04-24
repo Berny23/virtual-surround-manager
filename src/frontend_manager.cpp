@@ -44,7 +44,7 @@ QString FrontendManager::get_error_message() const {
 
 void FrontendManager::set_error_message(const QString &message) {
     m_error_message = message;
-    Q_EMIT error_message_changed(); // TODO: Replace with thing that actually works
+    Q_EMIT error_message_changed();
 }
 
 QStringList FrontendManager::get_hrir_wav_file_names() const {

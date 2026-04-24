@@ -56,11 +56,11 @@ class PipeWireManager : public QObject {
     Q_SIGNAL void error_occured(const QString &message);
 
   private:
-    struct pw_thread_loop *thread_loop;
-    struct pw_context *context;
-    struct pw_core *core;
-    struct pw_registry *registry;
-    struct pw_metadata *metadata;
+    struct pw_thread_loop *thread_loop = nullptr;
+    struct pw_context *context = nullptr;
+    struct pw_core *core = nullptr;
+    struct pw_registry *registry = nullptr;
+    struct pw_metadata *metadata = nullptr;
     struct spa_hook registry_listener;
     struct spa_hook metadata_listener;
     struct spa_hook core_listener;
