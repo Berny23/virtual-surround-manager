@@ -35,14 +35,14 @@ In case I forgot something, cmake will tell you. Please open an issue so I can a
 2. Change directory: `cd virtual-surround-manager`
 3. Prepare Build directory: `cmake -B build -G Ninja`
 4. Build the project: `cmake --build build --config Release`
-5. Install the project: `sudo cmake --install build`
+5. Install the project: `sudo cmake --install build --config Release`
 
 ### For developers
 1. Clone repository: `git clone https://github.com/Berny23/virtual-surround-manager.git`
 2. Change directory: `cd virtual-surround-manager`
 3. Prepare Build directory and set local install path: `cmake -B build -G Ninja --install-prefix ~/.local`
 4. Build the project: `cmake --build build --config Debug`
-5. Install the project: `cmake --install build`
+5. Install the project: `cmake --install build --config Debug`
 
 ## Acknowledgements
 
