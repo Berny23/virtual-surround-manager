@@ -2,7 +2,7 @@ add_executable(virtual-surround-manager)
 
 # Kirigami libraries, settings and links
 ecm_add_qml_module(virtual-surround-manager
-    URI de.berny23.virtual-surround-manager
+    URI de.berny23.virtual_surround_manager
 )
 
 target_sources(virtual-surround-manager

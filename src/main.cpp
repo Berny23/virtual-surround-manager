@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
     engine.rootContext()->setContextProperty(QStringLiteral("frontendManager"), frontend_manager);
-    engine.loadFromModule("de.berny23.virtual-surround-manager", "Main");
+    engine.loadFromModule("de.berny23.virtual_surround_manager", "Main");
 
     if (engine.rootObjects().isEmpty()) {
         return -1;
