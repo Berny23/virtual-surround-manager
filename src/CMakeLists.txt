@@ -33,6 +33,13 @@ target_include_directories(virtual-surround-manager PRIVATE ${PIPEWIRE_INCLUDE_D
 target_compile_options(virtual-surround-manager PRIVATE ${PIPEWIRE_CFLAGS_OTHER})
 target_link_libraries(virtual-surround-manager PRIVATE ${PIPEWIRE_LIBRARIES})
 
+# Flatpak stuff
+if(IS_FLATPAK)
+    message(STATUS "Flatpak build")
+    target_compile_definitions(virtual-surround-manager PRIVATE IS_FLATPAK=1)
+endif(IS_FLATPAK)
+
+# Install default wav files
 install(
     DIRECTORY assets/hrir_wav/
     DESTINATION ${KDE_INSTALL_DATADIR}/virtual-surround-manager/hrir_wav
@@ -41,6 +48,7 @@ install(
     PATTERN "*.txt" # The license text for HeSuVi
 )
 
+# Install icon
 install(
     FILES assets/icons/${APPLICATION_ID}.svg
     DESTINATION ${KDE_INSTALL_DATADIR}/icons/hicolor/scalable/apps

@@ -17,6 +17,7 @@
             "name": "virtual-surround-manager",
             "buildsystem": "cmake-ninja",
             "config-opts": [
+                "-DIS_FLATPAK=1",
                 "-DCMAKE_BUILD_TYPE=Debug"
             ],
             "sources": [

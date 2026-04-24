@@ -8,6 +8,8 @@ set(APPLICATION_NAME "Virtual Surround Sound")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(IS_FLATPAK "Some things need to be handled differently in C++ if running in a Flatpak" OFF)
+
 # Kirigami dependencies
 find_package(ECM 6.0.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
@@ -38,8 +40,9 @@ find_package(KF6 REQUIRED COMPONENTS
 
 ecm_find_qmlmodule(org.kde.kirigami REQUIRED)
 
-# PipeWire dependencies
 find_package(PkgConfig REQUIRED)
+
+# PipeWire dependencies
 pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
 
 # Translations

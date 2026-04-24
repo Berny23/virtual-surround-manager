@@ -91,15 +91,17 @@ void PipeWireManager::registry_event_global(void *data,
     }
 }
 
-void PipeWireManager::create_virtual_surround_module(const string &hrir_wav_path) {
+bool PipeWireManager::create_virtual_surround_module(const string &hrir_wav_path) {
     if (module) {
         qInfo("create_virtual_surround_module: Virtual surround module already exists");
-        return;
+        return true;
     }
     if (hrir_wav_path.empty()) {
         qWarning("create_virtual_surround_module: No HRIR file provided");
-        return;
+        return false;
     }
+
+    qInfo("create_virtual_surround_module: Creating module with WAV path '%s'", hrir_wav_path.c_str());
 
     // Set filter graph for virtual surround module, automatically creating playback and capture nodes
     const string filter_graph = R"(
@@ -243,14 +245,16 @@ void PipeWireManager::create_virtual_surround_module(const string &hrir_wav_path
         nullptr);
     if (!module) {
         pw_thread_loop_unlock(thread_loop);
-        qWarning("Failed to load module into PipeWire context");
+        qWarning("create_virtual_surround_module: Failed to load module into PipeWire context");
         Q_EMIT error_occured(QStringLiteral("Error creating virtual surround device."));
-        return;
+        return false;
     }
 
     pw_thread_loop_unlock(thread_loop);
 
-    qInfo("Created virtual surround module");
+    qInfo("create_virtual_surround_module: Successfully created module");
+
+    return true;
 }
 
 void PipeWireManager::remove_virtual_surround_module() {

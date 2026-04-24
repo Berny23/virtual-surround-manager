@@ -29,8 +29,8 @@ void FrontendManager::set_virtual_surround_enabled(bool value) {
         QString path = m_hrir_wav_file_paths.value(m_hrir_wav_file_name_index);
         if (!does_hrir_wav_file_exist(path))
             return;
-        m_pipewire_manager->create_virtual_surround_module(path.toStdString());
-        m_pipewire_manager->enable_routing();
+        if (m_pipewire_manager->create_virtual_surround_module(path.toStdString()))
+            m_pipewire_manager->enable_routing();
     } else {
         m_pipewire_manager->disable_routing();
     }
@@ -77,6 +77,7 @@ void FrontendManager::set_hrir_wav_file_name_index(int index) {
     QString path = m_hrir_wav_file_paths.value(m_hrir_wav_file_name_index);
     if (!does_hrir_wav_file_exist(path))
         return;
+
     m_pipewire_manager->create_virtual_surround_module(path.toStdString());
 
     // At last, enable routing again if the virtual surround sound is enabled
@@ -103,8 +104,26 @@ void FrontendManager::load_hrir_wav_files() {
         old_path = group.readEntry("hrir_wav_file_path", QString());
     }
 
-    // Get all data directories, ordered by priority, first "~/.local/share/virtual-surround-manager/", then "/usr/share/virtual-surround-manager/"
+    // Get all data directories, ordered by priority, first "~/.local/share/virtual-surround-manager", then "/usr/share/virtual-surround-manager"
+    // In Flatpak: "~/.var/app/de.berny23.virtual_surround_manager/data/virtual-surround-manager", then (the PipeWire-unusable) "/app/share/virtual-surround-manager"
     QStringList data_dirs = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+
+#ifdef IS_FLATPAK
+    // PipeWire requires an absolut path on the host for loading filter chains!
+    // The user-writable path is OK, since Qt already returns the full path, e. g. "/home/berny23/.var/app/de.berny23.virtual_surround_manager/data/virtual-surround-manager"
+    // However, the internal data folder "/app/share/virtual-surround-manager" is a flatpak-internal path, so we cannot use it.
+    // Because a Flatpak can be installed either in system or user mode, we don't know the exact host path. So we copy the file instead, without overwriting.
+    QDir flatpak_internal_dir(QStringLiteral("/app/share/virtual-surround-manager") + hrir_wav_subpath);
+    QString flatpak_writable_dir = data_dirs[0] + hrir_wav_subpath;
+    flatpak_internal_dir.setNameFilters(QStringList({QStringLiteral("*.wav")}));
+    for (const QFileInfo &file : flatpak_internal_dir.entryInfoList(QDir::Files)) {
+        if (QFile(flatpak_writable_dir + QStringLiteral("/") + file.fileName()).exists())
+            continue;
+
+        QFile::copy(file.absoluteFilePath(), flatpak_writable_dir + QStringLiteral("/") + file.fileName());
+    }
+#endif
+
     QStringList names;
     QStringList paths;
 
