@@ -19,7 +19,10 @@ Enable virtual 7.1 surround sound for your headphones on Linux with just one cli
 
 ## Demo
 
-<img width="552" height="580" alt="Bildschirmfoto_20260424_172129" src="https://github.com/user-attachments/assets/f3584099-4a28-45d5-b13a-839fa49ea62f" />
+<img width="552" height="580" alt="Screenshot of this app" src="https://github.com/user-attachments/assets/f3584099-4a28-45d5-b13a-839fa49ea62f" />
+<br>
+How audio routing works (screenshot of coppwr):
+<img width="620" height="348" alt="Screenshot of routing in coppwr" src="https://github.com/user-attachments/assets/0bb24a6b-2dab-4881-975b-0afb29728f93" />
 
 ## Download
 
