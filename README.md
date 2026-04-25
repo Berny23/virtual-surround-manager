@@ -12,7 +12,7 @@ Enable virtual 7.1 surround sound for your headphones on Linux with just one cli
 - Drop in your own **HRIR WAV files** as virtualization presets, same as **HeSuVi**
 - Profile selection is automatically saved
 - Compatible with **EasyEffects** (and probably similar apps)
-- Written entirely using the **PipeWire C++ API**, no config files are required or used
+- Written entirely using the **PipeWire C API**, no config files are required or used
 - Modern user interface, built with **KDE's Kirigami 6 framework**
 - Available languages: English, German
 - Project is **not** just AI-generated, everything is written by hand or autocomplete ;)
