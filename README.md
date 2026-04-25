@@ -25,9 +25,13 @@ How audio routing works (screenshot of coppwr):
 <br>
 <img width="620" height="348" alt="Screenshot of routing in coppwr" src="https://github.com/user-attachments/assets/0bb24a6b-2dab-4881-975b-0afb29728f93" />
 
-## Download
+## Installation
 
-TODO: Add Flatpak and AppImage
+AUR (Arch Linux and derivatives): `yay -S virtual-surround-manager`
+
+Flatpak support is planned, but currently not working correctly. **If you can help with this, please see below! :)**
+
+For other distributions, you can build it yourself.
 
 ## Building
 
@@ -36,7 +40,7 @@ TODO: Add Flatpak and AppImage
 #### Dependencies
 Arch Linux: `sudo pacman -S git ninja libpipewire base-devel extra-cmake-modules cmake kirigami ki18n kcoreaddons breeze kiconthemes qt6-base qt6-declarative qqc2-desktop-style`
 
-In case I forgot something, cmake will tell you. Please open an issue so I can add the packages here.
+In case I forgot something, cmake will tell you. Please open an issue, so I can document the packages here.
 
 #### For users
 1. Clone repository: `git clone https://github.com/Berny23/virtual-surround-manager.git`
