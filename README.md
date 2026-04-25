@@ -8,7 +8,7 @@ Enable virtual 7.1 surround sound for your headphones on Linux with just one cli
 
 ## Features
 
-- Enable or disable virtual surround sound seemlessly
+- Enable or disable virtual surround sound seemlessly, without changing your default device
 - Drop in your own **HRIR WAV files** as virtualization presets, same as **HeSuVi**
 - Profile selection is automatically saved
 - Compatible with **EasyEffects** (and probably similar apps)
