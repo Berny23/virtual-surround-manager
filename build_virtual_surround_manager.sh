@@ -4,8 +4,8 @@ set -eux
 ARCH="$(uname -m)"
 SHARUN="https://raw.githubusercontent.com/pkgforge-dev/Anylinux-AppImages/refs/heads/main/useful-tools/quick-sharun.sh"
 
-export ICON=/virtual-surround-manager/src/assets/icons/de.berny23.virtual_surround_manager.svg
-export DESKTOP=DUMMY
+export ICON=/usr/share/icons/hicolor/scalable/apps/de.berny23.virtual_surround_manager.svg
+export DESKTOP=/usr/share/applications/de.berny23.virtual_surround_manager.desktop
 export OUTPATH=./dist
 export MAIN_BIN=virtual-surround-manager
 export OUTNAME=virtual-surround-manager-"$ARCH".AppImage
