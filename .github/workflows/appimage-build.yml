@@ -9,7 +9,8 @@ on:
 
 jobs:
   build:
-    runs-on: archlinux-latest
+    runs-on: ubuntu-latest
+    container: ghcr.io/pkgforge-dev/archlinux:latest
     steps:
     - uses: actions/checkout@v2
     - name: grant execution
