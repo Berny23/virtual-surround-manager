@@ -1,0 +1,22 @@
+name: Build AppImage
+
+run-name: building appimage
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: archlinux-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: grant execution
+      run: /bin/sh chmod +x ./build_virtual_surround_manager.sh
+    - name: build appimage
+      run: /bin/sh ./build_virtual_surround_manager.sh
+    - uses: actions/upload-artifact@v4
+      with:
+        name: virtual-surround-manager-x64-86.AppImage
+        path: './dist/*.AppImage*'
