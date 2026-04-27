@@ -13,8 +13,6 @@ jobs:
     container: ghcr.io/pkgforge-dev/archlinux:latest
     steps:
     - uses: actions/checkout@v2
-    - name: grant execution
-      run: /bin/sh chmod +x ./build_virtual_surround_manager.sh
     - name: build appimage
       run: /bin/sh ./build_virtual_surround_manager.sh
     - uses: actions/upload-artifact@v4
