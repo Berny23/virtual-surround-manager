@@ -28,7 +28,7 @@ jobs:
       - name: Install Dependencies
         run: /bin/sh ./dist/appimage/install_dependencies.sh
       - name: Build AppImage
-        run: /bin/sh ‎./dist/appimage/build_virtual_surround_manager.sh
+        run: /bin/sh ./dist/appimage/build_virtual_surround_manager.sh
       - uses: actions/upload-artifact@v7
         with:
           name: AppImage-${{ matrix.arch }}
