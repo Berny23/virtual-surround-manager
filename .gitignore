@@ -1,2 +1,7 @@
 build
 .vscode
+AppDir
+build_appimage
+build_install
+.cache
+quick-sharun.sh

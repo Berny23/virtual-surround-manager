@@ -39,6 +39,12 @@ if(IS_FLATPAK)
     target_compile_definitions(virtual-surround-manager PRIVATE IS_FLATPAK=1)
 endif(IS_FLATPAK)
 
+# AppImage stuff
+if(IS_APPIMAGE)
+    message(STATUS "AppImage build")
+    target_compile_definitions(virtual-surround-manager PRIVATE IS_APPIMAGE=1)
+endif(IS_APPIMAGE)
+
 # Install default wav files
 install(
     DIRECTORY assets/hrir_wav/

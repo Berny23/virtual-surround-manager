@@ -109,18 +109,35 @@ void FrontendManager::load_hrir_wav_files() {
     QStringList data_dirs = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
 
 #ifdef IS_FLATPAK
+    QDir internal_path(QStringLiteral("/app/share/virtual-surround-manager") + hrir_wav_subpath);
+#endif
+
+#ifdef IS_APPIMAGE
+    // Read path from data_dirs variable because files are in a random folder inside /tmp
+    QDir internal_path(data_dirs.value(1) + hrir_wav_subpath);
+#endif
+
+#if defined(IS_FLATPAK) || defined(IS_APPIMAGE)
     // PipeWire requires an absolut path on the host for loading filter chains!
     // The user-writable path is OK, since Qt already returns the full path, e. g. "/home/berny23/.var/app/de.berny23.virtual_surround_manager/data/virtual-surround-manager"
-    // However, the internal data folder "/app/share/virtual-surround-manager" is a flatpak-internal path, so we cannot use it.
-    // Because a Flatpak can be installed either in system or user mode, we don't know the exact host path. So we copy the file instead, without overwriting.
-    QDir flatpak_internal_dir(QStringLiteral("/app/share/virtual-surround-manager") + hrir_wav_subpath);
-    QString flatpak_writable_dir = data_dirs[0] + hrir_wav_subpath;
-    flatpak_internal_dir.setNameFilters(QStringList({QStringLiteral("*.wav")}));
-    for (const QFileInfo &file : flatpak_internal_dir.entryInfoList(QDir::Files)) {
-        if (QFile(flatpak_writable_dir + QStringLiteral("/") + file.fileName()).exists())
-            continue;
+    // However, internal AppImage or Flatpak data folders like "/app/share/virtual-surround-manager" either cannot be used here at all or are temporary.
+    // Because a Flatpak can be installed either in system or user mode, we don't know the exact host path. AppImages generally use temporary folders.
+    // So we copy the files to the user-writable folder instead, without overwriting.
+    if (internal_path.exists()) {
+        QString writable_path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + hrir_wav_subpath;
 
-        QFile::copy(file.absoluteFilePath(), flatpak_writable_dir + QStringLiteral("/") + file.fileName());
+        QDir dir(writable_path);
+        if (!dir.exists())
+            dir.mkpath(QStringLiteral("."));
+
+        internal_path.setNameFilters(QStringList({QStringLiteral("*.wav")}));
+        for (const QFileInfo &file : internal_path.entryInfoList(QDir::Files)) {
+            if (QFile(writable_path + QStringLiteral("/") + file.fileName()).exists())
+                continue;
+
+            QFile::copy(file.absoluteFilePath(), writable_path + QStringLiteral("/") + file.fileName());
+        }
+        qDebug("load_hrir_wav_files: Copied files from '%s' to '%s'", internal_path.absolutePath().toStdString().c_str(), writable_path.toStdString().c_str());
     }
 #endif
 
