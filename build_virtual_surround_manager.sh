@@ -6,7 +6,7 @@ SHARUN="https://raw.githubusercontent.com/pkgforge-dev/Anylinux-AppImages/refs/h
 
 export ICON=/usr/share/icons/hicolor/scalable/apps/de.berny23.virtual_surround_manager.svg
 export DESKTOP=/usr/share/applications/de.berny23.virtual_surround_manager.desktop
-export OUTPATH=./distapp
+export OUTPATH=/dist
 export MAIN_BIN=virtual-surround-manager
 export OUTNAME=virtual-surround-manager-"$ARCH".AppImage
 
