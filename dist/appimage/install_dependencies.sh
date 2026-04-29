@@ -18,8 +18,13 @@ pacman -Syu --noconfirm \
 	qt6-base \
 	qt6-declarative \
 	qqc2-desktop-style \
+	qt6-wayland \
+	wayland \
 	qt6ct \
 	kvantum \
 	lxqt-qtplugin \
 	vulkan-headers \
-	appstream-qt
+	vulkan-tools \
+	appstream-qt \
+	pipewire \
+	pipewire-audio
