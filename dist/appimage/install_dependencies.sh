@@ -21,4 +21,5 @@ pacman -Syu --noconfirm \
 	qt6ct \
 	kvantum \
 	lxqt-qtplugin \
-	pipewire
+	vulkan-headers \
+	appstream-qt
