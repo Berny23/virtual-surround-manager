@@ -23,6 +23,7 @@ pacman -Syu --noconfirm \
 	qt6ct \
 	kvantum \
 	lxqt-qtplugin \
+	plasma-integration \
 	vulkan-headers \
 	vulkan-tools \
 	appstream-qt \
