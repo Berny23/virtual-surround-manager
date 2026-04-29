@@ -17,4 +17,8 @@ pacman -Syu --noconfirm \
 	kiconthemes \
 	qt6-base \
 	qt6-declarative \
-	qqc2-desktop-style
+	qqc2-desktop-style \
+	qt6ct \
+	kvantum \
+	lxqt-qtplugin \
+	pipewire
