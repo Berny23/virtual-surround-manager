@@ -11,6 +11,7 @@ export DESKTOP=./build_install/share/applications/de.berny23.virtual_surround_ma
 export OUTPATH=./build_appimage
 export MAIN_BIN=virtual-surround-manager
 export OUTNAME=virtual-surround-manager-"$ARCH".AppImage
+export DEBLOAT_LOCALE=0
 
 echo "Building Application"
 echo "---------------------------------------------------------------"
