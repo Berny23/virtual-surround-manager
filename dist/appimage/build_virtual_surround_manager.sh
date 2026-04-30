@@ -26,4 +26,8 @@ wget --retry-connrefused --tries=30 "$SHARUN" -O ./quick-sharun.sh
 chmod +x ./quick-sharun.sh
 ./quick-sharun.sh ./build_install/bin/virtual-surround-manager
 
+# Copy files that are not auto-detected
+cp -r ./build_install/share/virtual-surround-manager ./AppDir/share/
+cp -r ./build_install/share/locale                   ./AppDir/share/
+
 ./quick-sharun.sh --make-appimage
