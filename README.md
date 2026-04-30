@@ -27,11 +27,18 @@ How audio routing works (screenshot of coppwr):
 
 ## Installation
 
-AUR (Arch Linux and derivatives): `yay -S virtual-surround-manager`
+### AppImage
+
+Compatible with any distribution.
+Just [Download](https://github.com/Berny23/virtual-surround-manager/releases/latest/download/virtual-surround-manager-x86_64.AppImage) and run
+
+### AUR
+
+For Arch Linux and derivatives. Install with your AUR manager, like: `yay -S virtual-surround-manager`
+
+### Flatpak
 
 Flatpak support is planned, but currently not working correctly. **If you can help with this, please see below! :)**
-
-For other distributions, you can build it yourself.
 
 ## Building
 
