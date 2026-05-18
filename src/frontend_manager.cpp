@@ -207,10 +207,35 @@ void FrontendManager::set_autostart_enabled(bool value) {
         return;
     m_autostart_enabled = value;
 
+    // Get source and destination path for desktop file (only used for native installation and AppImage)
+    // Source can either be /usr/share/applications or ~/.local/share/applications, when installed natively
+    QString source = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation).value(2) + QStringLiteral("/de.berny23.virtual_surround_manager.desktop");
+    if (!QFile::exists(source))
+        source = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation).value(0) + QStringLiteral("/de.berny23.virtual_surround_manager.desktop");
+    const QString destination = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).value(0) + QStringLiteral("/autostart/de.berny23.virtual_surround_manager.desktop");
+
+#ifdef IS_FLATPAK
+// TODO: Use portal with option autostart like this: https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.Background.html
+// This can be called with the variable m_autostart_enabled directly, outside if.
+#endif
+
     if (m_autostart_enabled) {
-        // TODO:
+#ifdef IS_APPIMAGE
+        // TODO: Copy desktop file from APPDIR path and replace the exec line with the path from the env variable APPIMAGE
+        source = QStringLiteral("/usr/share/applications/de.berny23.virtual_surround_manager.desktop");
+
+        QFile::copy(source, destination);
+#endif
+
+#if !defined(IS_FLATPAK) && !defined(IS_APPIMAGE)
+        // Native or AppImage: Just copy the desktop file to the user's autostart folder (e. g. ~/.config/autostart)
+        QFile::copy(source, destination);
+#endif
     } else {
-        // TODO:
+#if !defined(IS_FLATPAK)
+        // Native or AppImage: Remove the desktop file from the user's autostart folder (e. g. ~/.config/autostart)
+        QFile::remove(destination);
+#endif
     }
 
     Q_EMIT autostart_enabled_changed();
