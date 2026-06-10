@@ -12,6 +12,8 @@ target_sources(virtual-surround-manager
     main.cpp
     pipewire_manager.h
     pipewire_manager.cpp
+    tray_icon.h
+    tray_icon.cpp
 )
 
 target_link_libraries(virtual-surround-manager

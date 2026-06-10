@@ -1,5 +1,6 @@
 #include "frontend_manager.h"
 #include "pipewire_manager.h"
+#include "tray_icon.h"
 #include <KAboutData>
 #include <KIconTheme>
 #include <KLocalizedContext>
@@ -119,14 +120,29 @@ int main(int argc, char *argv[]) {
     KConfig config(QStringLiteral("virtual-surround-manager"));
     FrontendManager *frontend_manager = new FrontendManager(&pipewire_manager, &config);
 
+    // Create TrayIcon and expose to QML
+    auto tray_icon = new TrayIcon(&app);
+    tray_icon->set_frontend_manager(frontend_manager);
+    tray_icon->setup(QStringLiteral("de.berny23.virtual_surround_manager"));
+
+    // Connect the virtual_surround_enabled_changed signal to update the tray icon state
+    QObject::connect(frontend_manager, &FrontendManager::virtual_surround_enabled_changed, tray_icon, &TrayIcon::update_toggle_action_state);
+
     // Add main page and supply context
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
     engine.rootContext()->setContextProperty(QStringLiteral("frontendManager"), frontend_manager);
+    engine.rootContext()->setContextProperty(QStringLiteral("trayIcon"), tray_icon);
     engine.loadFromModule("de.berny23.virtual_surround_manager", "Main");
 
     if (engine.rootObjects().isEmpty()) {
         return -1;
+    }
+
+    // Set the main QML window pointer to the TrayIcon
+    auto *root_object = engine.rootObjects().value(0);
+    if (auto *main_window = qobject_cast<QQuickWindow *>(root_object)) {
+        tray_icon->set_main_window(main_window);
     }
 
     // Show GUI

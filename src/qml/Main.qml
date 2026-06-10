@@ -14,6 +14,18 @@ Kirigami.ApplicationWindow {
     height: 550
     title: i18nc("@title:window", "Manager")
 
+    // Intercept close event to minimize to tray instead of quitting
+    // This prevents the application from exiting when the user closes the window
+    onClosing: {
+        event.accepted = false;
+        
+        // Minimize to system tray instead of quitting
+        // Only attempt if trayIcon is available and properly initialized
+        if (trayIcon !== null && trayIcon.hide_main_window !== undefined) {
+            trayIcon.hide_main_window();
+        }
+    }
+
     // This loads the settings page
     Component {
         id: settingsPage
