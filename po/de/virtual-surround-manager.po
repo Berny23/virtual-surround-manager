@@ -83,6 +83,24 @@ msgctxt "@info:credit"
 msgid "Developer"
 msgstr "Entwickler"
 
+# === Tray icon menu ===
+
+msgctxt "@action"
+msgid "Open"
+msgstr "Öffnen"
+
+msgctxt "@action"
+msgid "Profiles"
+msgstr "Profile"
+
+msgctxt "@label"
+msgid "No profiles available"
+msgstr "Keine Profile verfügbar"
+
+msgctxt "@action"
+msgid "Quit"
+msgstr "Beenden"
+
 # === Error messages ===
 
 msgctxt "@label"

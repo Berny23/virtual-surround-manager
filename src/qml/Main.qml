@@ -16,7 +16,7 @@ Kirigami.ApplicationWindow {
 
     // Intercept close event to minimize to tray instead of quitting
     // This prevents the application from exiting when the user closes the window
-    onClosing: {
+    onClosing: event => {
         event.accepted = false;
         
         // Minimize to system tray instead of quitting

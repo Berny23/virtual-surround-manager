@@ -1,22 +1,16 @@
 #include "tray_icon.h"
 
-#include <QAction>
-#include <QApplication>
-#include <QIcon>
-#include <QMenu>
-#include <QSystemTrayIcon>
-
 TrayIcon::TrayIcon(QObject *parent) : QObject(parent) {
     m_tray_icon = new QSystemTrayIcon(this);
     m_menu = new QMenu(nullptr);
 
     // Build context menu
-    auto *open_action = m_menu->addAction(QStringLiteral("Open"));
-    m_toggle_action = m_menu->addAction(QStringLiteral("Enable Virtual Surround"));
+    auto *open_action = m_menu->addAction(i18nc("@action", "Open"));
+    m_toggle_action = m_menu->addAction(i18nc("@action:switch", "Enabled"));
     m_toggle_action->setCheckable(true);
-    m_profile_menu = m_menu->addMenu(QStringLiteral("Change Profile"));
+    m_profile_menu = m_menu->addMenu(i18nc("@action", "Profiles"));
     m_menu->addSeparator();
-    auto *quit_action = m_menu->addAction(QStringLiteral("Quit"));
+    auto *quit_action = m_menu->addAction(i18nc("@action", "Quit"));
 
     // Connect actions
     QObject::connect(open_action, &QAction::triggered, this, &TrayIcon::show_main_window);
@@ -25,11 +19,11 @@ TrayIcon::TrayIcon(QObject *parent) : QObject(parent) {
 
     // Double-click / middle-click on tray icon shows main window
     QObject::connect(m_tray_icon, &QSystemTrayIcon::activated, this,
-        [this](QSystemTrayIcon::ActivationReason reason) {
-            if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::MiddleClick) {
-                show_main_window();
-            }
-        });
+                     [this](QSystemTrayIcon::ActivationReason reason) {
+                         if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::MiddleClick) {
+                             show_main_window();
+                         }
+                     });
 }
 
 void TrayIcon::set_frontend_manager(FrontendManager *frontend_manager) {
@@ -39,7 +33,7 @@ void TrayIcon::set_frontend_manager(FrontendManager *frontend_manager) {
 
 void TrayIcon::setup(const QString &icon_name) {
     m_tray_icon->setIcon(QIcon::fromTheme(icon_name));
-    m_tray_icon->setToolTip(QStringLiteral("Virtual Surround Manager"));
+    m_tray_icon->setToolTip(i18nc("@title", "Virtual Surround Sound"));
     m_tray_icon->setContextMenu(m_menu);
     m_tray_icon->show();
 }
@@ -92,8 +86,6 @@ void TrayIcon::update_ui_state() {
 
     const bool enabled = m_frontend_manager->get_virtual_surround_enabled();
     m_toggle_action->setChecked(enabled);
-    m_toggle_action->setText(enabled ? QStringLiteral("Disable Virtual Surround")
-                                    : QStringLiteral("Enable Virtual Surround"));
 }
 
 void TrayIcon::update_profile_menu() {
@@ -112,7 +104,7 @@ void TrayIcon::update_profile_menu() {
     const int current_index = m_frontend_manager->get_hrir_wav_file_name_index();
 
     if (profiles.isEmpty()) {
-        auto *no_profiles_action = m_profile_menu->addAction(QStringLiteral("No profiles available"));
+        auto *no_profiles_action = m_profile_menu->addAction(i18nc("@label", "No profiles available"));
         no_profiles_action->setEnabled(false);
         return;
     }

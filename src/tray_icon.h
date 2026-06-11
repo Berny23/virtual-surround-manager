@@ -2,6 +2,9 @@
 
 #include "frontend_manager.h"
 
+#include <KLocalizedString>
+#include <QAction>
+#include <QApplication>
 #include <QIcon>
 #include <QMenu>
 #include <QObject>
