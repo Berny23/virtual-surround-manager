@@ -125,6 +125,7 @@ int main(int argc, char *argv[]) {
     auto tray_icon = new TrayIcon(&app);
     tray_icon->set_frontend_manager(frontend_manager);
     tray_icon->setup(QStringLiteral("de.berny23.virtual_surround_manager"));
+    // Update state in case the user set up auto-enabling virtual surround sound on startup
     tray_icon->update_toggle_action_state();
 
     // Set tray icon visibility depending on user setting
@@ -132,7 +133,7 @@ int main(int argc, char *argv[]) {
 
     // Connect some frontend manager signals for updating the tray icon ui state
     QObject::connect(frontend_manager, &FrontendManager::virtual_surround_enabled_changed, tray_icon, &TrayIcon::update_toggle_action_state);
-    // QObject::connect(frontend_manager, &FrontendManager::hrir_wav_file_names_changed, tray_icon, &TrayIcon::update_profile_menu);
+    QObject::connect(frontend_manager, &FrontendManager::hrir_wav_file_names_changed, tray_icon, &TrayIcon::update_profile_menu);
     QObject::connect(frontend_manager, &FrontendManager::hrir_wav_file_name_index_changed, tray_icon, &TrayIcon::update_profile_menu);
 
     // Add main page and supply context

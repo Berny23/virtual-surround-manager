@@ -62,8 +62,8 @@ msgid "Show system tray icon"
 msgstr "Zeige Kontrollleistensymbol"
 
 msgctxt "@option"
-msgid "Show system tray icon & hide window"
-msgstr "Zeige Kontrollleistensymbol & verstecke Fenster"
+msgid "Show system tray icon & hide window on startup"
+msgstr "Zeige Kontrollleistensymbol & verstecke Fenster beim Start"
 
 msgctxt "@option"
 msgid "Hide system tray icon"

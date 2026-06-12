@@ -43,7 +43,7 @@ FormCard.FormCardPage {
                     key: "showTray"
                 },
                 {
-                    label: i18nc("@option", "Show system tray icon & hide window"),
+                    label: i18nc("@option", "Show system tray icon & hide window on startup"),
                     key: "showTrayHideWindow"
                 },
                                 {
