@@ -25,11 +25,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.2
+        with:
+          fetch-tags: true
+          fetch-depth: 0
+      - name: Get version from tag
+        id: get_version
+        run: echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
       - name: Install Dependencies
         run: /bin/sh ./dist/appimage/install_dependencies.sh
       - name: Build AppImage
+        env:
+          VERSION: ${{ steps.get_version.outputs.version }}
         run: /bin/sh ./dist/appimage/build_virtual_surround_manager.sh
       - uses: actions/upload-artifact@v7
         with:
-          name: AppImage-${{ matrix.arch }}
+          name: AppImage-${{ steps.get_version.outputs.version }}-${{ matrix.arch }}
           path: ./build_appimage
