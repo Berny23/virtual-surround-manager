@@ -1,6 +1,7 @@
 #!/bin/sh
 
 pacman -Syu --noconfirm \
+	git \
 	curl \
 	wget \
 	xorg-server-xvfb \

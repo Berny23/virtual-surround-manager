@@ -3,15 +3,17 @@
 set -eu
 
 ARCH=$(uname -m)
+VERSION=$(git describe --tags --abbrev=0)
 SHARUN="https://raw.githubusercontent.com/pkgforge-dev/Anylinux-AppImages/refs/heads/main/useful-tools/quick-sharun.sh"
 
 export ARCH
+export VERSION
 export ICON=./build_install/share/icons/hicolor/scalable/apps/de.berny23.virtual_surround_manager.svg
 export DESKTOP=./build_install/share/applications/de.berny23.virtual_surround_manager.desktop
 export OUTPATH=./build_appimage
 export MAIN_BIN=virtual-surround-manager
 export OUTNAME=virtual-surround-manager-"$ARCH".AppImage
-export DEBLOAT_LOCALE=0
+export DEBLOAT_LOCALE=1
 
 echo "Building Application"
 echo "---------------------------------------------------------------"
