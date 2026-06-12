@@ -10,7 +10,7 @@ export ICON=./build_install/share/icons/hicolor/scalable/apps/de.berny23.virtual
 export DESKTOP=./build_install/share/applications/de.berny23.virtual_surround_manager.desktop
 export OUTPATH=./build_appimage
 export MAIN_BIN=virtual-surround-manager
-export OUTNAME=virtual-surround-manager-"$ARCH".AppImage
+export OUTNAME=virtual-surround-manager-"$VERSION"-"$ARCH".AppImage
 export DEBLOAT_LOCALE=1
 
 echo "Building Application"
