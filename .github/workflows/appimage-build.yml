@@ -30,14 +30,11 @@ jobs:
           fetch-depth: 0
       - name: Install Dependencies
         run: /bin/sh ./dist/appimage/install_dependencies.sh
-      - name: Get version from tag
-        id: get_version
-        run: echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
       - name: Build AppImage
         env:
-          VERSION: ${{ steps.get_version.outputs.version }}
+          VERSION: ${{ github.ref_name }}
         run: /bin/sh ./dist/appimage/build_virtual_surround_manager.sh
       - uses: actions/upload-artifact@v7
         with:
-          name: AppImage-${{ steps.get_version.outputs.version }}-${{ matrix.arch }}
+          name: AppImage-${{ github.ref_name }}-${{ matrix.arch }}
           path: ./build_appimage
