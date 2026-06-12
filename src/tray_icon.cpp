@@ -32,7 +32,12 @@ void TrayIcon::set_frontend_manager(FrontendManager *frontend_manager) {
 }
 
 void TrayIcon::setup(const QString &icon_name) {
-    m_tray_icon->setIcon(QIcon::fromTheme(icon_name));
+    QIcon icon = QIcon::fromTheme(icon_name);
+#ifdef IS_APPIMAGE
+    // Using QIcon::fromTheme in an AppImage, like with all other app icons, does NOT work for system tray icons for unknown reasons!
+    icon.setFallbackSearchPaths(QIcon::fallbackSearchPaths() << qEnvironmentVariable("APPDIR"));
+#endif
+    m_tray_icon->setIcon(icon);
     m_tray_icon->setToolTip(i18nc("@title", "Virtual Surround Sound"));
     m_tray_icon->setContextMenu(m_menu);
 }

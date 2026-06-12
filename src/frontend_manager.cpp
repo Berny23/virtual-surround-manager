@@ -242,8 +242,7 @@ void FrontendManager::set_autostart_enabled(bool value) {
 
     if (m_autostart_enabled) {
 #ifdef IS_APPIMAGE
-        // TODO: Copy desktop file from APPDIR path and replace the exec line with the path from the env variable APPIMAGE
-        // source = QStringLiteral("/usr/share/applications/de.berny23.virtual_surround_manager.desktop");
+        // Copy desktop file from extraced AppImage folder that is automatically created under /tmp and randomly named. The APPDIR variable contains the path.
         source = qEnvironmentVariable("APPDIR") + QStringLiteral("/de.berny23.virtual_surround_manager.desktop");
 #endif
 
