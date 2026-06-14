@@ -30,7 +30,7 @@ How audio routing works (screenshot of coppwr):
 ### AppImage
 
 Compatible with any distribution.
-Just [Download](https://github.com/Berny23/virtual-surround-manager/releases/latest/download/virtual-surround-manager-x86_64.AppImage) and run
+Just [Download](https://github.com/Berny23/virtual-surround-manager/releases/latest) and run. Use the "x86_64" file if you're unsure.
 
 ### AUR
 
@@ -39,6 +39,14 @@ For Arch Linux and derivatives. Install with your AUR manager, like: `yay -S vir
 ### Flatpak
 
 Flatpak support is planned, but currently not working correctly. **If you can help with this, please see below! :)**
+
+### Third-party packages
+
+These packages are maintained and provided by community members.
+
+- [Fedora](https://software.opensuse.org/download/package?package=virtual-surround-manager&project=home%3AAndnoVember%3AFedora) (by AndnoVember)
+- [OpenSUSE](https://software.opensuse.org/download/package?package=virtual-surround-manager&project=home%3AAndnoVember%3ALXQt%3AQt6) (by AndnoVember)
+- [Arch Linux](https://software.opensuse.org/download/package?package=virtual-surround-manager&project=home%3AAndnoVember%3AArch) (by AndnoVember)
 
 ## Building
 
