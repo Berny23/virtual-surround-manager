@@ -1,13 +1,8 @@
-# Compatibility with older Qt versions (on Debian etc.)
-qt_add_executable(virtual-surround-manager MANUAL_FINALIZATION)
+add_executable(virtual-surround-manager)
 
 # Kirigami libraries, settings and links
 ecm_add_qml_module(virtual-surround-manager
     URI de.berny23.virtual_surround_manager
-    NO_PLUGIN
-    QML_FILES
-        qml/Main.qml
-        qml/Settings.qml
 )
 
 target_sources(virtual-surround-manager
@@ -67,8 +62,7 @@ install(
     DESTINATION ${KDE_INSTALL_DATADIR}/icons/hicolor/scalable/apps
 )
 
-# Compatibility with older Qt versions (on Debian etc.)
-qt_finalize_target(virtual-surround-manager)
+add_subdirectory(qml)
 
 # Install binary to default system path
 install(TARGETS virtual-surround-manager ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
