@@ -2,9 +2,10 @@ name: Build AppImage
 
 run-name: Building AppImage
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on pushes with a tag
   push:
-    branches: ["main"]
+    tags:
+      - '*'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
