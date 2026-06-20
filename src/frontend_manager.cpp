@@ -248,6 +248,8 @@ void FrontendManager::set_autostart_enabled(bool value) {
 
 #if !defined(IS_FLATPAK)
         // Native or AppImage: Just copy the desktop file to the user's autostart folder (e. g. ~/.config/autostart)
+        // Creates directory with all parents, mkpath skips existing folders
+        QDir().mkpath(QFileInfo(destination).path());
         QFile::copy(source, destination);
         qDebug("set_autostart_enabled: Copied desktop file from '%s' to '%s'", source.toStdString().c_str(), destination.toStdString().c_str());
 #endif

@@ -41,6 +41,14 @@
 </description>
 
 <releases>
+  <release version="1.1.1" date="2026-06-20">
+    <description>
+      <ul>
+        <li>Fixed autostart and system tray icon on systems where the default directories are missing</li>
+        <li>Added Russian translation</li>
+      </ul>
+    </description>
+  </release>
   <release version="1.1.0" date="2026-06-12">
     <description>
       <ul>

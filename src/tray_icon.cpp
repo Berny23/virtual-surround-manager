@@ -34,19 +34,21 @@ void TrayIcon::set_frontend_manager(FrontendManager *frontend_manager) {
 
 void TrayIcon::setup(const QString &icon_name) {
     QIcon icon = QIcon::fromTheme(icon_name);
-#ifdef IS_APPIMAGE
+    // #ifdef IS_APPIMAGE
     if (icon.isNull()) {
         // The tray icon does NOT work automatically in an AppImage for unknown reasons!
         // Both fromTheme and addFile are not working, so the svg file just gets copied to ~/.local/share/icons/hicolor/scalable/apps/
         QString source = qEnvironmentVariable("APPDIR") + QStringLiteral("/") + icon_name + QStringLiteral(".svg");
         QString destination = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QStringLiteral("/icons/hicolor/scalable/apps/") + icon_name + QStringLiteral(".svg");
-        if (!QFile::exists(destination)) {
+        if (!QFile(destination).exists()) {
+            // Creates directory with all parents, mkpath skips existing folders
+            QDir().mkpath(QFileInfo(destination).path());
             QFile::copy(source, destination);
             qDebug("TrayIcon::setup: Copied icon file from '%s' to '%s'.", source.toStdString().c_str(), destination.toStdString().c_str());
         }
         icon.addFile(destination);
     }
-#endif
+    // #endif
     m_tray_icon->setIcon(icon);
     m_tray_icon->setToolTip(i18nc("@title", "Virtual Surround Sound"));
     m_tray_icon->setContextMenu(m_menu);
