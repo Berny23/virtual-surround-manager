@@ -5,3 +5,6 @@ build_appimage
 build_install
 .cache
 quick-sharun.sh
+.flatpak-builder
+flatpak-build
+repo
