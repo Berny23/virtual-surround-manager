@@ -9,7 +9,8 @@
         "--socket=fallback-x11",
         "--socket=wayland",
         "--device=dri",
-        "--filesystem=xdg-run/pipewire-0"
+        "--filesystem=xdg-run/pipewire-0",
+        "--talk-name=org.kde.StatusNotifierWatcher"
     ],
     "modules": [
         {
