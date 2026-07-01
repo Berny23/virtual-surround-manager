@@ -20,10 +20,6 @@ Enable virtual 7.1 surround sound for your headphones on Linux with just one cli
 ## Demo
 
 <img width="552" height="580" alt="Screenshot of this app" src="https://github.com/user-attachments/assets/f3584099-4a28-45d5-b13a-839fa49ea62f" />
-<br>
-How audio routing works (screenshot of coppwr):
-<br>
-<img width="620" height="348" alt="Screenshot of routing in coppwr" src="https://github.com/user-attachments/assets/0bb24a6b-2dab-4881-975b-0afb29728f93" />
 
 ## Installation
 
@@ -48,6 +44,16 @@ These packages are maintained and provided by community members.
 - [Ubuntu/Debian](https://software.opensuse.org/download.html?package=virtual-surround-manager&project=home%3AAndnoVember%3ADebian) (by AndnoVember)
 - [OpenSUSE](https://software.opensuse.org/download/package?package=virtual-surround-manager&project=home%3AAndnoVember%3ALXQt%3AQt6) (by AndnoVember)
 - [Arch Linux](https://software.opensuse.org/download/package?package=virtual-surround-manager&project=home%3AAndnoVember%3AArch) (by AndnoVember)
+
+## How it works
+
+Just enable the virtual surround sound and enjoy your favorite games and movies in very realistic simulated surround sound.
+
+Please don't forget to open the settings of your game or media player and select real 7.1 or 5.1 audio (do not use any "headphone" profile or in-game 3D audio)!
+
+To check if everything is working correctly, this is how audio routing should look like in [coppwr](https://flathub.org/de/apps/io.github.dimtpap.coppwr):
+<br>
+<img width="377" height="400" alt="grafik" src="https://github.com/user-attachments/assets/90ea2864-3b54-4398-b724-a55065f3b5a6" />
 
 ## Building
 
