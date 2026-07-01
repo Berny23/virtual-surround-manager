@@ -340,7 +340,15 @@ PipeWireManager::PipeWireManager() {
         Q_EMIT error_occured(QStringLiteral("Failed connecting to PipeWire audio service."));
         return;
     }
-    context = pw_context_new(pw_thread_loop_get_loop(thread_loop), nullptr, 0);
+
+    pw_properties *props = pw_properties_new(nullptr, nullptr);
+    pw_properties_set(props, PW_KEY_MEDIA_TYPE, "Audio");
+    pw_properties_set(props, PW_KEY_MEDIA_ROLE, "Music");
+
+    // Required for Flatpak, otherwise it cannot write PipeWire metadata! Also nice to have for native packaging
+    pw_properties_set(props, PW_KEY_MEDIA_CATEGORY, "Manager");
+
+    context = pw_context_new(pw_thread_loop_get_loop(thread_loop), props, 0);
     if (!context) {
         pw_thread_loop_unlock(thread_loop);
         qWarning("Failed to create PipeWire context");
