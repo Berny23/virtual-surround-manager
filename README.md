@@ -38,7 +38,7 @@ For Arch Linux and derivatives. Install with your AUR manager, like: `yay -S vir
 
 ### Flatpak
 
-Flatpak support is planned, but currently not working correctly. **If you can help with this, please see below! :)**
+FlatHub is planned.
 
 ### Third-party packages
 
@@ -53,19 +53,22 @@ These packages are maintained and provided by community members.
 
 ### Native
 
-#### Dependencies
+#### Dependencies for building the native package or AppImage
+
 Arch Linux: `sudo pacman -S git ninja libpipewire base-devel extra-cmake-modules cmake kirigami ki18n kcoreaddons breeze kiconthemes qt6-base qt6-declarative qqc2-desktop-style`
 
-In case I forgot something, cmake will tell you. Please open an issue, so I can document the packages here.
+For other distributions, just look up how the packages are called in your distro: https://pkgs.org
 
-#### For users
+#### Native (for users)
+
 1. Clone repository: `git clone https://github.com/Berny23/virtual-surround-manager.git`
 2. Change directory: `cd virtual-surround-manager`
 3. Prepare Build directory: `cmake -B build -G Ninja`
 4. Build the project: `cmake --build build --config Release`
 5. Install the project: `sudo cmake --install build --config Release`
 
-#### For developers
+#### Native (for developers)
+
 1. Clone repository: `git clone https://github.com/Berny23/virtual-surround-manager.git`
 2. Change directory: `cd virtual-surround-manager`
 3. Prepare Build directory and set local install path: `cmake -B build -G Ninja --install-prefix ~/.local`
@@ -74,10 +77,6 @@ In case I forgot something, cmake will tell you. Please open an issue, so I can 
 
 ### Flatpak
 
-The UI, filter chain node creation and audio source node detection work fine. However, setting the metadata for actual routing does absolutely nothing and the connection is not visible in coppwr. But this should actually work, because EasyEffects and other apps also support Flatpak.
-
-**IF YOU ARE A DEVELOPER, PLEASE HELP ME WITH THE FLATPAK. THANKS!**
-
 1. Clone repository: `git clone https://github.com/Berny23/virtual-surround-manager.git`
 2. Change directory: `cd virtual-surround-manager`
 3. Build the flatpak: `flatpak-builder --force-clean --user --install-deps-from=flathub --repo=repo --install flatpak_build ./dist/flatpak/de.berny23.virtual_surround_manager.Devel.json`
@@ -85,7 +84,11 @@ The UI, filter chain node creation and audio source node detection work fine. Ho
 
 ### AppImage
 
-I don't even know how this is supposed to work. There are mutliple different builder tools with no clear documentation on which to use. I tried some, but my build just crashes when launching it.
+1. Clone repository: `git clone https://github.com/Berny23/virtual-surround-manager.git`
+2. Change directory: `cd virtual-surround-manager`
+3. Build the AppImage: `./dist/appimage/build_virtual_surround_manager.sh`
+4. Make executable: `chmod +x ./build_appimage/virtual-surround-manager-unknown-x86_64.AppImage`
+5. Run the program: `./build_appimage/virtual-surround-manager-unknown-x86_64.AppImage`
 
 ## Acknowledgements
 
