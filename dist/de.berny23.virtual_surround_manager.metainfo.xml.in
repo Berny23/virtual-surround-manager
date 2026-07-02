@@ -36,6 +36,15 @@
   </description>
 
   <releases>
+    <release version="1.1.2" date="2026-07-02">
+      <description>
+        <ul>
+          <li>Fixed the permissions for PipeWire when running in a Flatpak, making this the very first Flatpak release</li>
+          <li>Fixed system tray icon for Flatpak</li>
+          <li>Added autostart feature for Flatpak</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.1.1" date="2026-06-20">
       <description>
         <ul>
