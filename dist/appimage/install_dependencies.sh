@@ -10,6 +10,7 @@ pacman -Syu --noconfirm \
 	base-devel \
 	extra-cmake-modules \
 	cmake \
+	patchelf \
 	kirigami \
 	ki18n \
 	kcoreaddons \
