@@ -15,6 +15,13 @@
 #include <qtmetamacros.h>
 #include <qurl.h>
 
+#ifdef IS_FLATPAK
+#include <glib.h>
+#include <glibconfig.h>
+#include <libportal-qt6/portal-qt6.h>
+#include <libportal/background.h>
+#endif
+
 class FrontendManager : public QObject {
     Q_OBJECT
     // Whether virtual surround sound is enabled or not

@@ -236,8 +236,10 @@ void FrontendManager::set_autostart_enabled(bool value) {
     const QString destination = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).value(0) + QStringLiteral("/autostart/de.berny23.virtual_surround_manager.desktop");
 
 #ifdef IS_FLATPAK
-// TODO: Use portal with option autostart like this: https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.Background.html
-// This can be called with the variable m_autostart_enabled directly, outside if.
+    // Use libportal to request Flatpak autostart
+    g_autoptr(GPtrArray) cmd = nullptr;
+    XdpBackgroundFlags flags = value ? XDP_BACKGROUND_FLAG_AUTOSTART : XDP_BACKGROUND_FLAG_NONE;
+    xdp_portal_request_background(XdpQt::globalPortalObject(), nullptr, const_cast<char *>("Autostart"), cmd, flags, nullptr, nullptr, this);
 #endif
 
     if (m_autostart_enabled) {

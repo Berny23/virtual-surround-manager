@@ -45,6 +45,12 @@ find_package(PkgConfig REQUIRED)
 # PipeWire dependencies
 pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
 
+# Flatpak stuff
+if(IS_FLATPAK)
+    pkg_check_modules(LIBPORTAL IMPORTED_TARGET REQUIRED libportal)
+    pkg_check_modules(LIBPORTALQT IMPORTED_TARGET REQUIRED libportal-qt6)
+endif(IS_FLATPAK)
+
 # Translations
 ki18n_install(po)
 

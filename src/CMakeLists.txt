@@ -39,6 +39,11 @@ target_link_libraries(virtual-surround-manager PRIVATE ${PIPEWIRE_LIBRARIES})
 if(IS_FLATPAK)
     message(STATUS "Flatpak build")
     target_compile_definitions(virtual-surround-manager PRIVATE IS_FLATPAK=1)
+    target_link_libraries(virtual-surround-manager
+        PRIVATE
+        PkgConfig::LIBPORTAL
+        PkgConfig::LIBPORTALQT
+    )
 endif(IS_FLATPAK)
 
 # AppImage stuff
