@@ -23,16 +23,20 @@
   <content_rating type="oars-1.0" />
 
   <description>
+    <p>Enable virtual 7.1 surround sound for your headphones with just one click!</p>
+    <p>Enjoy your favorite games and movies in very realistic simulated surround sound. Please don’t forget to open the settings of your game or media player and select real 7.1 or 5.1 audio (do not use any “headphone” profile or in-game 3D audio).</p>
+    <p>Features:</p>
     <ul>
       <li>Enable or disable virtual surround sound seemlessly, without changing your default device</li>
-      <li>Drop in your own <b>HRIR WAV files</b> as virtualization presets, same as <b>HeSuVi</b> on Windows</li>
+      <li>Drop in your own <em>HRIR WAV files</em> as virtualization presets, same as <em>HeSuVi</em> on Windows</li>
       <li>Can be run in the background with a system tray icon</li>
-      <li>Compatible with <b>EasyEffects</b> (and most similar apps)</li>
-      <li>Written entirely using the <b>PipeWire C API</b>, so no config files or service restarts are required</li>
-      <li>Modern user interface, built with <b>KDE's Kirigami 6 framework</b></li>
+      <li>Compatible with <em>EasyEffects</em> (and most similar apps)</li>
+      <li>Written entirely using the <em>PipeWire C API</em>, so no config files or service restarts are required</li>
+      <li>Modern user interface, built with <em>KDE's Kirigami 6 framework</em></li>
       <li>Available languages: English, German, Russian</li>
-      <li>This project is <b>not using</b> vibe coding, AI agents or similar tools for generating unmaintainable slop</li>
+      <li>This project is <em>not using</em> vibe coding, AI agents or similar tools for generating unmaintainable slop</li>
     </ul>
+    <p>Please note: This app requires the PipeWire audio system. Recent Linux distributions use this by default, so don't worry about it.</p>
   </description>
 
   <releases>
