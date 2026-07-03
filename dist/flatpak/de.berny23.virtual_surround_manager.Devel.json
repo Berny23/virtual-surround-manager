@@ -12,6 +12,18 @@
         "--filesystem=xdg-run/pipewire-0",
         "--talk-name=org.kde.StatusNotifierWatcher"
     ],
+    "//": "The file /share/pipewire/client.conf must NOT be cleaned!",
+    "cleanup": [
+        "/include",
+        "/lib/pkgconfig",
+        "/etc/security",
+        "/share/pipewire/filter-chain",
+        "/share/pipewire/*.conf.avail",
+        "/share/pipewire/filter-chain.conf",
+        "/share/pipewire/jack.conf",
+        "/share/pipewire/minimal.conf",
+        "/share/pipewire/pipewire*.conf"
+    ],
     "modules": [
         {
             "name": "virtual-surround-manager",
@@ -30,9 +42,11 @@
                 {
                     "name": "pipewire",
                     "buildsystem": "meson",
+                    "//": "Available options: https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/meson_options.txt",
                     "//": "sndfile is required for reading WAV files when creating the filter chain!",
                     "config-opts": [
                         "-Dsndfile=enabled",
+                        "-Dsession-managers=[]",
                         "-Dpw-cat=disabled",
                         "-Daudiotestsrc=disabled",
                         "-Dvideotestsrc=disabled",
@@ -42,19 +56,44 @@
                         "-Dman=disabled",
                         "-Dlibcamera=disabled",
                         "-Dlibsystemd=disabled",
-                        "-Dalsa=enabled",
+                        "-Dalsa=disabled",
                         "-Dpipewire-alsa=disabled",
-                        "-Djack=enabled",
+                        "-Djack=disabled",
                         "-Dpipewire-jack=disabled",
+                        "-Dv4l2=disabled",
+                        "-Dpipewire-v4l2=disabled",
+                        "-Daudiomixer=disabled",
+                        "-Dvideoconvert=disabled",
                         "-Dudev=disabled",
-                        "-Dudevrulesdir=/app/lib/udev/rules.d/",
                         "-Dbluez5=disabled",
+                        "-Dcontrol=disabled",
                         "-Dgstreamer=disabled",
-                        "-Dsession-managers=[]",
+                        "-Dgstreamer-device-provider=disabled",
                         "-Dexamples=disabled",
                         "-Dtests=disabled",
-                        "-Draop=enabled",
-                        "-Decho-cancel-webrtc=enabled"
+                        "-Draop=disabled",
+                        "-Dsdl2=disabled",
+                        "-Dlibpulse=disabled",
+                        "-Droc=disabled",
+                        "-Davahi=disabled",
+                        "-Decho-cancel-webrtc=disabled",
+                        "-Dlibusb=disabled",
+                        "-Dlv2=disabled",
+                        "-Dx11=disabled",
+                        "-Dx11-xfixes=disabled",
+                        "-Dlibcanberra=disabled",
+                        "-Davb=disabled",
+                        "-Dreadline=disabled",
+                        "-Dgsettings=disabled",
+                        "-Dcompress-offload=disabled",
+                        "-Dopus=disabled",
+                        "-Dlibffado=disabled",
+                        "-Dsnap=disabled",
+                        "-Debur128=disabled",
+                        "-Dfftw=disabled",
+                        "-Donnxruntime=disabled",
+                        "-Drlimits-install=false",
+                        "-Dlegacy-rtkit=false"
                     ],
                     "cleanup": [
                         "/bin",
@@ -72,10 +111,16 @@
                 {
                     "name": "libportal",
                     "buildsystem": "meson",
+                    "//": "Available options: https://github.com/flatpak/libportal/blob/main/meson_options.txt",
                     "config-opts": [
-                        "-Ddocs=false",
+                        "-Dbackend-qt6=enabled",
+                        "-Dbackend-qt5=disabled",
+                        "-Dbackend-gtk3=disabled",
+                        "-Dbackend-gtk4=disabled",
+                        "-Dintrospection=false",
                         "-Dvapi=false",
-                        "-Dbackend-qt6=enabled"
+                        "-Ddocs=false",
+                        "-Dtests=false"
                     ],
                     "sources": [
                         {
