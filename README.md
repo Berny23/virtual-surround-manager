@@ -12,9 +12,9 @@ Enable virtual 7.1 surround sound for your headphones on Linux with just one cli
 - Drop in your own **HRIR WAV files** as virtualization presets, same as **HeSuVi** on Windows
 - Can be run in the background with a system tray icon
 - Compatible with **EasyEffects** (and most similar apps)
-- Written entirely using the **PipeWire C API**, so no config files or service restarts are required
+- Written entirely using the **PipeWire C API**, so no config files or annoying service restarts are required
 - Modern user interface, built with **KDE's Kirigami 6 framework**
-- Available languages: English, German, Russian
+- Available languages are English, German and Russian
 - This project is **not using** vibe coding, AI agents or similar tools for generating unmaintainable slop
 
 ## Demo
@@ -45,11 +45,13 @@ These packages are maintained and provided by community members.
 - [OpenSUSE](https://software.opensuse.org/download/package?package=virtual-surround-manager&project=home%3AAndnoVember%3ALXQt%3AQt6) (by AndnoVember)
 - [Arch Linux](https://software.opensuse.org/download/package?package=virtual-surround-manager&project=home%3AAndnoVember%3AArch) (by AndnoVember)
 
-## How it works
+## Usage
 
-Just enable the virtual surround sound and enjoy your favorite games and movies in very realistic simulated surround sound.
+Enjoy your favorite games and movies in very realistic simulated surround sound!
 
-Please don't forget to open the settings of your game or media player and select real 7.1 or 5.1 audio (do not use any "headphone" profile or in-game 3D audio). Tested with modern Resident Evil games, Overwatch, Minecraft and more.
+Please don’t forget to open the settings of your game or media player and select real 7.1 or 5.1 audio output. Do not use any additional in-game virtualization setting (like a “headphone” or "3D audio" profile).
+
+Please note: This app requires the PipeWire audio system. Recent Linux distributions use this by default, so don't worry about it.
 
 To check if everything is working correctly, this is how audio routing should look like in [coppwr](https://flathub.org/de/apps/io.github.dimtpap.coppwr):
 <br>
