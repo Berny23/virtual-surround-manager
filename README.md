@@ -49,7 +49,7 @@ These packages are maintained and provided by community members.
 
 Just enable the virtual surround sound and enjoy your favorite games and movies in very realistic simulated surround sound.
 
-Please don't forget to open the settings of your game or media player and select real 7.1 or 5.1 audio (do not use any "headphone" profile or in-game 3D audio)!
+Please don't forget to open the settings of your game or media player and select real 7.1 or 5.1 audio (do not use any "headphone" profile or in-game 3D audio). Tested with modern Resident Evil games, Overwatch, Minecraft and more.
 
 To check if everything is working correctly, this is how audio routing should look like in [coppwr](https://flathub.org/de/apps/io.github.dimtpap.coppwr):
 <br>
