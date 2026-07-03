@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
   <id>@APPLICATION_ID@</id>
-  
   <name>@APPLICATION_NAME@</name>
-  <name xml:lang="de">Virtueller Raumklang</name>
   <summary>Enable virtual 7.1 surround sound for your headphones with just one click</summary>
-  <summary xml:lang="de">Aktivieren Sie virtuellen 7.1-Raumklang für Ihre Kopfhörer mit nur einem Klick</summary>
-  <url type="homepage">https://virtual-surround-manager.berny23.de</url>
+  
+  <url type="homepage">https://github.com/Berny23/virtual-surround-manager</url>
+  <url type="vcs-browser">https://github.com/Berny23/virtual-surround-manager</url>
+  <url type="bugtracker">https://github.com/Berny23/virtual-surround-manager/issues</url>
+  <url type="donation">https://www.buymeacoffee.com/Berny23</url>
   <developer id="de.berny23">
-    <name>Berny23</name>
+    <name translate="no">Berny23</name>
   </developer>
   
   <metadata_license>MIT</metadata_license>
@@ -20,7 +21,28 @@
     <control>touch</control>
   </supports>
   
-  <content_rating type="oars-1.0" />
+  <content_rating type="oars-1.1" />
+
+  <launchable type="desktop-id">@APPLICATION_ID@.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Main window</caption>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/main/dist/flatpak/screenshots/main-window.webp</image>
+    </screenshot>
+    <screenshot>
+      <caption>Main window (dark mode)</caption>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/main/dist/flatpak/screenshots/main-window-dark.webp</image>
+    </screenshot>
+    <screenshot>
+      <caption>Settings page</caption>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/main/dist/flatpak/screenshots/settings-page.webp</image>
+    </screenshot>
+    <screenshot>
+      <caption>About page</caption>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/main/dist/flatpak/screenshots/about-page.webp</image>
+    </screenshot>
+  </screenshots>
 
   <description>
     <p>Enjoy your favorite games and movies in very realistic simulated surround sound!</p>
@@ -73,6 +95,4 @@
       </description>
     </release>
   </releases>
-
-  <launchable type="desktop-id">@APPLICATION_ID@.desktop</launchable>
 </component>
