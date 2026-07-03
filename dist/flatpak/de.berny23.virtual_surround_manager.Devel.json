@@ -30,9 +30,10 @@
                 {
                     "name": "pipewire",
                     "buildsystem": "meson",
+                    "//": "sndfile is required for reading WAV files when creating the filter chain!",
                     "config-opts": [
+                        "-Dsndfile=enabled",
                         "-Dpw-cat=disabled",
-                        "-Dsndfile=disabled",
                         "-Daudiotestsrc=disabled",
                         "-Dvideotestsrc=disabled",
                         "-Dvolume=disabled",
