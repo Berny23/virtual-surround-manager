@@ -14,8 +14,11 @@ FrontendManager::FrontendManager(PipeWireManager *pipewire_manager, KConfig *con
     m_startup_ui = m_config_settings.readEntry("startup_ui", QString());
     // Fallback for malformed config value
     QStringList allowed_startup_ui_values = {QStringLiteral("showTray"), QStringLiteral("showTrayHideWindow"), QStringLiteral("hideTray")};
-    if (!allowed_startup_ui_values.contains(m_startup_ui))
-        m_startup_ui = QStringLiteral("showTray"); // Default value
+    if (!allowed_startup_ui_values.contains(m_startup_ui)) {
+        m_startup_ui = QStringLiteral("hideTray"); // Hide by default because not all desktop environments support tray icons out of the box
+        m_config_settings.writeEntry("startup_ui", m_startup_ui);
+        m_config->sync();
+    }
 
     m_autostart_enabled = m_config_settings.readEntry("autostart_enabled", bool());
 
