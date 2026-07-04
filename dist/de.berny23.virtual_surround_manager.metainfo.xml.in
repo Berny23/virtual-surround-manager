@@ -41,19 +41,19 @@
   <screenshots>
     <screenshot type="default">
       <caption>Main window</caption>
-      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.1.3/dist/flatpak/screenshots/main-window.webp</image>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.2.0/dist/flatpak/screenshots/main-window.webp</image>
     </screenshot>
     <screenshot>
       <caption>Main window (dark mode)</caption>
-      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.1.3/dist/flatpak/screenshots/main-window-dark.webp</image>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.2.0/dist/flatpak/screenshots/main-window-dark.webp</image>
     </screenshot>
     <screenshot>
       <caption>Settings page</caption>
-      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.1.3/dist/flatpak/screenshots/settings-page.webp</image>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.2.0/dist/flatpak/screenshots/settings-page.webp</image>
     </screenshot>
     <screenshot>
       <caption>About page</caption>
-      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.1.3/dist/flatpak/screenshots/about-page.webp</image>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.2.0/dist/flatpak/screenshots/about-page.webp</image>
     </screenshot>
   </screenshots>
 
@@ -70,9 +70,10 @@
   </description>
 
   <releases>
-    <release version="1.1.3" date="2026-07-04">
+    <release version="1.2.0" date="2026-07-04">
       <description>
         <ul>
+          <li>New icon design</li>
           <li>Disabled tray icon by default, because some desktop environments don't support these out of the box (you can enable it in the app's settings)</li>
           <li>Fixed PipeWire being unable to read WAV files</li>
           <li>Added Italian translation</li>

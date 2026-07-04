@@ -1,7 +1,6 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import org.kde.kirigami as Kirigami
 import org.kde.kirigamiaddons.formcard as FormCard
 
 FormCard.FormCardPage {
@@ -46,7 +45,7 @@ FormCard.FormCardPage {
                     label: i18nc("@option", "Show system tray icon & hide window on startup"),
                     key: "showTrayHideWindow"
                 },
-                                {
+                {
                     label: i18nc("@option", "Hide system tray icon"),
                     key: "hideTray"
                 }
