@@ -10,7 +10,7 @@ Enable virtual 7.1 surround sound for your headphones on Linux with just one cli
 
 - Enable or disable virtual surround sound seemlessly, without changing your default device
 - Drop in your own **HRIR WAV files** as virtualization presets, same as **HeSuVi** on Windows
-- Can be run in the background with a system tray icon
+- Can be run in the background with a **system tray icon** (check the app's settings)
 - Compatible with **EasyEffects** (and most similar apps)
 - Written entirely using the **PipeWire C API**, so no config files or annoying service restarts are required
 - Modern user interface, built with **KDE's Kirigami 6 framework**

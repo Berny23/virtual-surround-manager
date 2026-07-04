@@ -51,7 +51,7 @@
     <ul>
       <li>Enable or disable virtual surround sound seemlessly, without changing your default device</li>
       <li>Drop in your own <em>HRIR WAV files</em> as virtualization presets, same as <em>HeSuVi</em> on Windows</li>
-      <li>Can be run in the background with a system tray icon</li>
+      <li>Can be run in the background with a <em>system tray icon</em> (check the app's settings)</li>
       <li>Compatible with <em>EasyEffects</em> (and most similar apps)</li>
       <li>Written entirely using the <em>PipeWire C API</em>, so no config files or annoying service restarts are required</li>
       <li>Modern user interface, built with <em>KDE's Kirigami 6 framework</em></li>
@@ -62,9 +62,10 @@
   </description>
 
   <releases>
-    <release version="1.1.3" date="2026-07-03">
+    <release version="1.1.3" date="2026-07-04">
       <description>
         <ul>
+          <li>Disabled tray icon by default, because some desktop environments don't support these out of the box (you can enable it in the app's settings)</li>
           <li>Added some links to the metainfo file and improved app description</li>
           <li>Added screenshots for FlatHub</li>
           <li>Fixed PipeWire Flatpak build missing sndfile support</li>
