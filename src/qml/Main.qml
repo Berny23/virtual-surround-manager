@@ -11,7 +11,7 @@ import de.berny23.virtual_surround_manager
 Kirigami.ApplicationWindow {
     id: root
     width: 550
-    height: 550
+    height: 570
     title: i18nc("@title:window", "Manager")
 
     // Intercept close event to minimize to tray instead of quitting
