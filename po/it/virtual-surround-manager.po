@@ -1,0 +1,118 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: virtual-surround-manager\n"
+"Last-Translator: Berny23\n"
+"Language: it\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+# === Main page ===
+
+msgctxt "@title:window"
+msgid "Manager"
+msgstr "Gestore"
+
+msgctxt "@page:title"
+msgid "Quick Settings"
+msgstr "Impostazioni rapide"
+
+msgctxt "@action"
+msgid "About Virtual Surround Sound"
+msgstr "Informazioni su Suono Surround Virtuale"
+
+msgctxt "@action:switch"
+msgid "Enabled"
+msgstr "Abilitato"
+
+msgctxt "@header"
+msgid "Virtualization Profiles"
+msgstr "Profili di virtualizzazione"
+
+msgctxt "@action"
+msgid "Open folder"
+msgstr "Apri cartella"
+
+msgctxt "@action"
+msgid "Reload"
+msgstr "Ricarica"
+
+# === Settings page ===
+
+msgctxt "@title:window"
+msgid "Settings"
+msgstr "Impostazioni"
+
+msgctxt "@label:switch"
+msgid "Automatically start application on login"
+msgstr "Avvia automaticamente l'applicazione all'accesso"
+
+msgctxt "@label:switch"
+msgid "Automatically enable virtual surround sound"
+msgstr "Abilita automaticamente il suono surround virtuale"
+
+msgctxt "@label:combobox"
+msgid "Application behavior"
+msgstr "Comportamento dell'applicazione"
+
+msgctxt "@info:description"
+msgid "How the application should start and run.<br>Restart the program to apply."
+msgstr "Come l'applicazione deve avviarsi ed essere eseguita.<br>Riavvia il programma per applicare le modifiche."
+
+msgctxt "@option"
+msgid "Show system tray icon"
+msgstr "Mostra l'icona nel vassoio di sistema"
+
+msgctxt "@option"
+msgid "Show system tray icon & hide window on startup"
+msgstr "Mostra l'icona nel vassoio di sistema e nascondi la finestra all'avvio"
+
+msgctxt "@option"
+msgid "Hide system tray icon"
+msgstr "Nascondi l'icona nel vassoio di sistema"
+
+# === About page ===
+
+msgctxt "@title"
+msgid "Virtual Surround Sound"
+msgstr "Suono Surround Virtuale"
+
+msgctxt "@component"
+msgid "Contains HRIR WAV files from HeSuVi. © 2021, Matt Gore. See: hesuvi_license.txt"
+msgstr "Contiene file WAV HRIR di HeSuVi. © 2021, Matt Gore. Vedi: hesuvi_license.txt"
+
+msgctxt "@info:credit"
+msgid "Developer"
+msgstr "Sviluppatore"
+
+# === Tray icon menu ===
+
+msgctxt "@action"
+msgid "Open"
+msgstr "Apri"
+
+msgctxt "@action"
+msgid "Profiles"
+msgstr "Profili"
+
+msgctxt "@label"
+msgid "No profiles available"
+msgstr "Nessun profilo disponibile"
+
+msgctxt "@action"
+msgid "Quit"
+msgstr "Esci"
+
+# === Error messages ===
+
+msgctxt "@label"
+msgid "An error occured: %1"
+msgstr "Si è verificato un errore: %1"
+
+# === Info messages ===
+
+msgctxt "@message"
+msgid "<b>Adding more profiles</b><br>Just open the folder and place your WAV files there. You can find hundreds of these files in the <a href=\"https://airtable.com/appayGNkn3nSuXkaz/shruimhjdSakUPg2m/tbloLjoZKWJDnLtTc\">HRTF Database<a/>."
+msgstr "<b>Aggiungere altri profili</b><br>Basta aprire la cartella e inserire qui i file WAV. Puoi trovare centinaia di questi file nel <a href=\"https://airtable.com/appayGNkn3nSuXkaz/shruimhjdSakUPg2m/tbloLjoZKWJDnLtTc\">Database HRTF<a/>."
+
+msgctxt "@message"
+msgid "<b>Using with EasyEffects</b><br>Exclude applications in EasyEffects that use 7.1 surround sound. Apply your effects on this program instead."
+msgstr "<b>Uso con EasyEffects</b><br>Escludi in EasyEffects le applicazioni che usano il suono surround 7.1. Applica invece i tuoi effetti a questo programma."
