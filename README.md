@@ -1,4 +1,4 @@
-<img src="src/assets/icons/de.berny23.virtual_surround_manager.svg" alt="Virtual Surround Manager icon" width="100" height="100"/>
+<img src="src/assets/icons/de.berny23.virtual_surround_manager.svg" alt="Virtual Surround Manager icon" width="160" height="160"/>
 
 # Virtual Surround Manager
 
