@@ -1,35 +1,127 @@
 #include "pipewire_manager.h"
 
+namespace {
+
+// Parses the node name out of the default.audio.sink metadata value, e.g. {"name":"alsa_output..."}.
+string parse_default_sink_name(const char *value) {
+    if (!value)
+        return {};
+    const string json(value);
+    const size_t key = json.find("\"name\"");
+    if (key == string::npos)
+        return json;
+    const size_t colon = json.find(':', key);
+    if (colon == string::npos)
+        return {};
+    const size_t start = json.find('"', colon);
+    if (start == string::npos)
+        return {};
+    const size_t end = json.find('"', start + 1);
+    if (end == string::npos)
+        return {};
+    return json.substr(start + 1, end - start - 1);
+}
+
+} // namespace
+
+string PipeWireManager::resolve_sink_name(const string &key) const {
+    if (key.empty())
+        return {};
+    for (auto it = sinks.cbegin(); it != sinks.cend(); ++it)
+        if (it.value().node_name == key || it.value().serial == key)
+            return it.value().node_name;
+    return {};
+}
+
+bool PipeWireManager::stream_follows_default(uint32_t id, const string &props_target) const {
+    // The metadata target takes precedence over the node's own props target
+    string target = metadata_targets.value(id, string());
+    if (target.empty())
+        target = props_target;
+
+    if (target.empty())
+        return true;
+
+    const string sink = resolve_sink_name(target);
+    if (sink.empty())
+        return false;
+    return sink == default_sink_name;
+}
+
+void PipeWireManager::decide_stream(uint32_t id, const string &props_target) {
+    if (!metadata || decided_streams.contains(id))
+        return;
+
+    decided_streams.insert(id);
+
+    if (stream_follows_default(id, props_target)) {
+        pw_metadata_set_property(metadata, id, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", capture_node_name);
+        routed_node_ids.insert(id);
+        qDebug("decide_stream: Node %u routed to sink '%s'", id, capture_node_name);
+    } else {
+        qDebug("decide_stream: Node %u left alone (assigned to another device)", id);
+    }
+}
+
+void PipeWireManager::on_node_info(void *data, const struct pw_node_info *info) {
+    NodeBinding *binding = static_cast<NodeBinding *>(data);
+    PipeWireManager *manager = binding->manager;
+
+    if (!info || !info->props)
+        return;
+
+    const char *target = spa_dict_lookup(info->props, PW_KEY_TARGET_OBJECT);
+    if (!target)
+        target = spa_dict_lookup(info->props, "target.node");
+    const string props_target = (target && strlen(target) > 0) ? target : "";
+    manager->decide_stream(binding->id, props_target);
+}
+
 int PipeWireManager::on_metadata_property(void *data,
                                           uint32_t subject, // Node ID
                                           const char *key,
                                           [[maybe_unused]] const char *type,
                                           const char *value) { // nullptr if property removed
-    qDebug("on_metadata_property: subject=%u key=%s value=%s",
-           subject, key ? key : "(null)", value ? value : "(null)");
     PipeWireManager *manager = static_cast<PipeWireManager *>(data);
 
     if (!key)
         return 0;
 
-    // Check if the target.object property changes
-    if (strcmp(key, PW_KEY_TARGET_OBJECT) != 0 && strcmp(key, "target.node") != 0)
-        return 0;
-    // Do nothing if target.object is already assigned (no fighting with EasyEffects routing)
-    if (value != nullptr) {
+    // Track the default sink so we know which streams follow it
+    if (strcmp(key, "default.audio.sink") == 0) {
+        const string new_default = parse_default_sink_name(value);
+        if (new_default != manager->default_sink_name) {
+            manager->default_sink_name = new_default;
+            qDebug("on_metadata_property: Default sink is now '%s'", new_default.c_str());
+        }
         return 0;
     }
-    // Exclude our virtual surround manager source
+
+    if (strcmp(key, PW_KEY_TARGET_OBJECT) != 0 && strcmp(key, "target.node") != 0)
+        return 0;
     if (subject == manager->playback_node_id)
         return 0;
 
-    // Only reroute if node has already been routed in registry_event_global
-    if (!manager->routed_node_ids.contains(subject))
+    // Ignore the echo of our own routing writes
+    if (value && strcmp(value, manager->capture_node_name) == 0)
         return 0;
 
-    pw_metadata_set_property(manager->metadata, subject, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", manager->capture_node_name);
+    // WirePlumber uses "-1" to mean "no explicit target, follow the default sink"
+    const bool no_target = !value || strlen(value) == 0 || strcmp(value, "-1") == 0;
+    if (no_target)
+        manager->metadata_targets.remove(subject);
+    else
+        manager->metadata_targets[subject] = value;
 
-    qDebug("on_metadata_property: Node with ID %u routed to sink '%s'", subject, manager->capture_node_name);
+    if (value == nullptr && manager->routed_node_ids.contains(subject)) {
+        // Re-assert routing if a stream we virtualize had its target cleared
+        pw_metadata_set_property(manager->metadata, subject, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", manager->capture_node_name);
+        qDebug("on_metadata_property: Node %u re-routed to sink '%s'", subject, manager->capture_node_name);
+    } else if (!no_target && manager->routed_node_ids.contains(subject)) {
+        // The stream was explicitly moved to another device, so it is no longer ours
+        manager->routed_node_ids.remove(subject);
+        qDebug("on_metadata_property: Node %u released to target '%s'", subject, value);
+    }
 
     return 0;
 }
@@ -71,8 +163,20 @@ void PipeWireManager::registry_event_global(void *data,
     const char *node_media_class = spa_dict_lookup(props, PW_KEY_MEDIA_CLASS);
     const char *node_media_role = spa_dict_lookup(props, PW_KEY_MEDIA_ROLE);
 
+    if (!node_media_class)
+        return;
+
+    // Track output sinks to resolve stream targets to a device
+    if (strcmp(node_media_class, "Audio/Sink") == 0 || strcmp(node_media_class, "Audio/Duplex") == 0) {
+        if (node_name && strcmp(node_name, manager->capture_node_name) != 0) {
+            const char *serial = spa_dict_lookup(props, PW_KEY_OBJECT_SERIAL);
+            manager->sinks[id] = SinkInfo{node_name, serial ? serial : ""};
+        }
+        return;
+    }
+
     // Check if object is an audio output stream, but exclude system events and our virtual surround manager source.
-    if (!node_media_class || strcmp(node_media_class, "Stream/Output/Audio") != 0)
+    if (strcmp(node_media_class, "Stream/Output/Audio") != 0)
         return;
     if (node_media_role && strcmp(node_media_role, "Notification") == 0)
         return;
@@ -81,14 +185,38 @@ void PipeWireManager::registry_event_global(void *data,
         return;
     }
 
-    if (manager->metadata) {
-        // Route the audio output node to our virtual surround manager sink
-        pw_metadata_set_property(manager->metadata, id, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", manager->capture_node_name);
-        if (!manager->routed_node_ids.contains(id))
-            manager->routed_node_ids.insert(id);
+    if (manager->node_bindings.contains(id))
+        return;
 
-        qDebug("registry_event_global: Node '%s' with ID %u routed to sink '%s'.", node_name, id, manager->capture_node_name);
+    // Bind the node to read target.object, which the registry global does not include
+    NodeBinding *binding = new NodeBinding{manager, id, nullptr, {}};
+    binding->proxy = static_cast<pw_proxy *>(pw_registry_bind(manager->registry, id, PW_TYPE_INTERFACE_Node, PW_VERSION_NODE, 0));
+    spa_zero(binding->listener);
+    pw_node_add_listener(reinterpret_cast<pw_node *>(binding->proxy), &binding->listener, &manager->node_events, binding);
+    manager->node_bindings.insert(id, binding);
+
+    qDebug("registry_event_global: Tracking output stream '%s' with ID %u", node_name ? node_name : "(null)", id);
+}
+
+void PipeWireManager::registry_event_global_remove(void *data, uint32_t id) {
+    PipeWireManager *manager = static_cast<PipeWireManager *>(data);
+
+    manager->sinks.remove(id);
+    manager->metadata_targets.remove(id);
+    manager->routed_node_ids.remove(id);
+    manager->decided_streams.remove(id);
+
+    auto binding = manager->node_bindings.find(id);
+    if (binding != manager->node_bindings.end()) {
+        manager->destroy_binding(binding.value());
+        manager->node_bindings.erase(binding);
     }
+}
+
+void PipeWireManager::destroy_binding(NodeBinding *binding) {
+    spa_hook_remove(&binding->listener);
+    pw_proxy_destroy(binding->proxy);
+    delete binding;
 }
 
 bool PipeWireManager::create_virtual_surround_module(const string &hrir_wav_path) {
@@ -317,6 +445,14 @@ void PipeWireManager::disable_routing() {
     }
 
     routed_node_ids.clear();
+
+    for (auto it = node_bindings.begin(); it != node_bindings.end(); ++it)
+        destroy_binding(it.value());
+    node_bindings.clear();
+    metadata_targets.clear();
+    sinks.clear();
+    decided_streams.clear();
+
     is_registry_listener_added = false;
 
     pw_thread_loop_unlock(thread_loop);
