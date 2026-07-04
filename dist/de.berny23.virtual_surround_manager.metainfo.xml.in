@@ -75,6 +75,7 @@
         <ul>
           <li>Disabled tray icon by default, because some desktop environments don't support these out of the box (you can enable it in the app's settings)</li>
           <li>Fixed PipeWire being unable to read WAV files</li>
+          <li>Added Italian translation</li>
           <li>Added some web links, screenshots, brand colors, keywords and a better app description</li>
         </ul>
       </description>
