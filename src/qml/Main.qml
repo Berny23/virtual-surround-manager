@@ -105,7 +105,7 @@ Kirigami.ApplicationWindow {
                     },
                     Kirigami.Action {
                         text: i18nc("@action", "Reload")
-                        icon.name: "object-rotate-right"
+                        icon.name: "view-refresh"
                         onTriggered: frontendManager.load_hrir_wav_files()
                     }
                 ]
