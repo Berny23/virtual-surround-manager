@@ -17,9 +17,9 @@ Enable virtual 7.1 surround sound for your headphones on Linux with just one cli
 - Available languages are English, German and Russian
 - This project is **not using** vibe coding, AI agents or similar tools for generating unmaintainable slop
 
-## Demo
+## Screenshot
 
-<img width="552" height="580" alt="Screenshot of this app" src="https://github.com/user-attachments/assets/f3584099-4a28-45d5-b13a-839fa49ea62f" />
+<img width="552" height="580" alt="Screenshot of this app" src="dist/flatpak/screenshots/main-window-dark.webp" />
 
 ## Installation
 
