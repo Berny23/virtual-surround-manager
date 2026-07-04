@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
   <id>@APPLICATION_ID@</id>
-  <name>@APPLICATION_NAME@</name>
-  <summary>Enable virtual 7.1 surround sound for your headphones with just one click</summary>
+  <name>Virtual Surround</name>
+  <summary>3D sound for headphones</summary>
   
   <url type="homepage">https://github.com/Berny23/virtual-surround-manager</url>
   <url type="vcs-browser">https://github.com/Berny23/virtual-surround-manager</url>
@@ -11,6 +11,14 @@
   <developer id="de.berny23">
     <name translate="no">Berny23</name>
   </developer>
+
+  <keywords>
+    <keyword translate="no">Kirigami</keyword>
+    <keyword translate="no">PipeWire</keyword>
+    <keyword translate="no">HRIR</keyword>
+    <keyword translate="no">HRTF</keyword>
+    <keyword translate="no">HeSuVi</keyword>
+  </keywords>
   
   <metadata_license>MIT</metadata_license>
   <project_license>MIT</project_license>
@@ -24,6 +32,11 @@
   <content_rating type="oars-1.1" />
 
   <launchable type="desktop-id">@APPLICATION_ID@.desktop</launchable>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#988dfa</color>
+    <color type="primary" scheme_preference="dark">#433990</color>
+  </branding>
 
   <screenshots>
     <screenshot type="default">
@@ -45,18 +58,13 @@
   </screenshots>
 
   <description>
-    <p>Enjoy your favorite games and movies in very realistic simulated surround sound!</p>
-    <p>Please don’t forget to open the settings of your game or media player and select real 7.1 or 5.1 audio output. Do not use any additional in-game virtualization setting (like a “headphone” or "3D audio" profile).</p>
+    <p>Just open the settings of your favorite game or media player and select real 7.1 or 5.1 audio output. Do not use any additional in-game virtualization setting (like a “headphone” or "3D audio" profile).</p>
     <p>Features:</p>
     <ul>
-      <li>Enable or disable virtual surround sound seemlessly, without changing your default device</li>
+      <li>Enable/Disable seemlessly, <em>without</em> changing your default device, writing config files or restarting the audio service</li>
       <li>Drop in your own <em>HRIR WAV files</em> as virtualization presets, same as <em>HeSuVi</em> on Windows</li>
-      <li>Can be run in the background with a <em>system tray icon</em> (check the app's settings)</li>
-      <li>Compatible with <em>EasyEffects</em> (and most similar apps)</li>
-      <li>Written entirely using the <em>PipeWire C API</em>, so no config files or annoying service restarts are required</li>
-      <li>Modern user interface, built with <em>KDE's Kirigami 6 framework</em></li>
-      <li>Available languages are English, German and Russian</li>
-      <li>This project is <em>not using</em> vibe coding, AI agents or similar tools for generating unmaintainable slop</li>
+      <li>Run it in the background with a <em>system tray icon</em> (enable it in the app's settings)</li>
+      <li>Compatible with <em>EasyEffects</em> and most similar apps</li>
     </ul>
     <p>Please note: This app requires the PipeWire audio system. Recent Linux distributions use this by default, so don't worry about it.</p>
   </description>
@@ -66,9 +74,8 @@
       <description>
         <ul>
           <li>Disabled tray icon by default, because some desktop environments don't support these out of the box (you can enable it in the app's settings)</li>
-          <li>Added some links to the metainfo file and improved app description</li>
-          <li>Added screenshots for FlatHub</li>
-          <li>Fixed PipeWire Flatpak build missing sndfile support</li>
+          <li>Fixed PipeWire being unable to read WAV files</li>
+          <li>Added some web links, screenshots, brand colors, keywords and a better app description</li>
         </ul>
       </description>
     </release>
