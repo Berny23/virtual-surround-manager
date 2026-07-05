@@ -29,6 +29,12 @@
 
 ## Installation
 
+### Flatpak (Recommended)
+
+Compatible with any distribution.
+
+<a href='https://flathub.org/en/apps/de.berny23.virtual_surround_manager'><img width='240' alt='Get Virtual Surround Manager on Flathub' src='https://flathub.org/api/badge?svg&locale=en'/></a>
+
 ### AppImage
 
 Compatible with any distribution.
@@ -37,10 +43,6 @@ Just [Download](https://github.com/Berny23/virtual-surround-manager/releases/lat
 ### AUR
 
 For Arch Linux and derivatives. Install with your AUR manager, like: `yay -S virtual-surround-manager`
-
-### Flatpak
-
-FlatHub is planned.
 
 ### Third-party packages
 
