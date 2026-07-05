@@ -4,6 +4,7 @@
 #include "pipewire/impl-module.h"
 #include "pipewire/thread-loop.h"
 #include <QDebug>
+#include <QMap>
 #include <QObject>
 #include <pipewire/context.h>
 #include <pipewire/core.h>
@@ -13,6 +14,7 @@
 #include <pipewire/impl-node.h>
 #include <pipewire/keys.h>
 #include <pipewire/main-loop.h>
+#include <pipewire/node.h>
 #include <pipewire/pipewire.h>
 #include <pipewire/properties.h>
 #include <qcontainerfwd.h>
@@ -70,8 +72,53 @@ class PipeWireManager : public QObject {
 
     bool is_registry_listener_added = false;
     QSet<uint32_t> routed_node_ids;
-    uint32_t playback_node_id;
+    QSet<uint32_t> decided_streams;
+    uint32_t playback_node_id = SPA_ID_INVALID;
     pw_impl_module *module = nullptr;
+
+    string default_sink_name;
+
+    QMap<uint32_t, string> metadata_targets;
+
+    struct SinkInfo {
+        string node_name;
+        string serial;
+    };
+    QMap<uint32_t, SinkInfo> sinks;
+
+    struct NodeBinding {
+        PipeWireManager *manager;
+        uint32_t id;
+        struct pw_proxy *proxy;
+        struct spa_hook listener;
+    };
+    QMap<uint32_t, NodeBinding *> node_bindings;
+
+    //
+    // Parses the node name out of the default.audio.sink metadata value, e.g. {"name":"alsa_output..."}.
+    //
+    static string parse_default_sink_name(const char *value);
+
+    //
+    // Removes a node binding's listener and destroys its proxy.
+    //
+    void destroy_binding(NodeBinding *binding);
+
+    //
+    // Resolves a target (node name or object serial) to a known sink's node name.
+    //
+    string resolve_sink_name(const string &key) const;
+
+    //
+    // Returns true if a stream has no explicit target or targets the default sink.
+    //
+    bool stream_follows_default(uint32_t id, const string &props_target) const;
+
+    //
+    // Decides once whether to virtualize a stream, then routes it if so.
+    // Deciding only once avoids fighting with apps that toggle their own target repeatedly.
+    //
+    void decide_stream(uint32_t id, const string &props_target);
 
     //
     // Called when a metadata property of a node changes.
@@ -98,9 +145,22 @@ class PipeWireManager : public QObject {
                                       [[maybe_unused]] uint32_t version,
                                       const struct spa_dict *props);
 
+    static void registry_event_global_remove(void *data, uint32_t id);
+
     const struct pw_registry_events registry_events = {
         .version = PW_VERSION_REGISTRY_EVENTS,
         .global = registry_event_global,
-        .global_remove = nullptr,
+        .global_remove = registry_event_global_remove,
+    };
+
+    //
+    // Called with a bound output node's info; reads target.object from its full props.
+    //
+    static void on_node_info(void *data, const struct pw_node_info *info);
+
+    const struct pw_node_events node_events = {
+        .version = PW_VERSION_NODE_EVENTS,
+        .info = on_node_info,
+        .param = nullptr,
     };
 };
