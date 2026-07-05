@@ -95,6 +95,11 @@ class PipeWireManager : public QObject {
     QMap<uint32_t, NodeBinding *> node_bindings;
 
     //
+    // Parses the node name out of the default.audio.sink metadata value, e.g. {"name":"alsa_output..."}.
+    //
+    static string parse_default_sink_name(const char *value);
+
+    //
     // Removes a node binding's listener and destroys its proxy.
     //
     void destroy_binding(NodeBinding *binding);

@@ -1,9 +1,6 @@
 #include "pipewire_manager.h"
 
-namespace {
-
-// Parses the node name out of the default.audio.sink metadata value, e.g. {"name":"alsa_output..."}.
-string parse_default_sink_name(const char *value) {
+string PipeWireManager::parse_default_sink_name(const char *value) {
     if (!value)
         return {};
     const string json(value);
@@ -21,8 +18,6 @@ string parse_default_sink_name(const char *value) {
         return {};
     return json.substr(start + 1, end - start - 1);
 }
-
-} // namespace
 
 string PipeWireManager::resolve_sink_name(const string &key) const {
     if (key.empty())
