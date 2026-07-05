@@ -55,9 +55,7 @@ These packages are maintained and provided by community members.
 
 ## Usage
 
-Enjoy your favorite games and movies in very realistic simulated surround sound!
-
-Please don’t forget to open the settings of your game or media player and select real 7.1 or 5.1 audio output. Do not use any additional in-game virtualization setting (like a “headphone” or "3D audio" profile).
+Just open the settings of your favorite game or media player and select real 7.1 or 5.1 audio output. Do not use any additional in-game virtualization setting (like a “headphone” or "3D audio" profile).
 
 Please note: This app requires the PipeWire audio system. Recent Linux distributions use this by default, so don't worry about it.
 
