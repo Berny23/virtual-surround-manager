@@ -1,20 +1,26 @@
-<img src="src/assets/icons/de.berny23.virtual_surround_manager.svg" alt="Virtual Surround Manager icon" width="160" height="160"/>
+<h2 align="center">
+  <img src="src/assets/icons/de.berny23.virtual_surround_manager.svg" alt="Virtual Surround Manager icon" width="160" height="160"/>
+  <br>
+  Virtual Surround Manager
+</h2>
 
-# Virtual Surround Manager
+<p align="center">
+  <strong>Virtual 3D sound for headphones on Linux</strong>
+</p>
 
+<p align="center">
 <a href="https://www.buymeacoffee.com/Berny23" title="Donate to this project using Buy Me A Coffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-yellow.svg" alt="Buy Me A Coffee donate button" /></a>
-
-Enable virtual 7.1 surround sound for your headphones on Linux with just one click.
+</p>
 
 ## Features
 
-- Enable or disable virtual surround sound seemlessly, without changing your default device
+- Enable or disable seemlessly, without changing your default device
 - Drop in your own **HRIR WAV files** as virtualization presets, same as **HeSuVi** on Windows
 - Can be run in the background with a **system tray icon** (check the app's settings)
 - Compatible with **EasyEffects** (and most similar apps)
 - Written entirely using the **PipeWire C API**, so no config files or annoying service restarts are required
 - Modern user interface, built with **KDE's Kirigami 6 framework**
-- Available languages are English, German and Russian
+- Available languages are English, German, Russian and Italian
 - This project is **not using** vibe coding, AI agents or similar tools for generating unmaintainable slop
 
 ## Screenshot
