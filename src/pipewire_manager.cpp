@@ -114,7 +114,8 @@ int PipeWireManager::on_metadata_property(void *data,
         manager->metadata_targets[subject] = value;
 
     if (value == nullptr && manager->routed_node_ids.contains(subject)) {
-        // Re-assert routing if a stream we virtualize had its target cleared
+        // Re-assert routing if a stream we virtualize had its target cleared.
+        // Only react to a full removal, re-asserting on "-1" could start a write battle with WirePlumber.
         pw_metadata_set_property(manager->metadata, subject, PW_KEY_TARGET_OBJECT, "Spa:String:JSON", manager->capture_node_name);
         qDebug("on_metadata_property: Node %u re-routed to sink '%s'", subject, manager->capture_node_name);
     } else if (!no_target && manager->routed_node_ids.contains(subject)) {
@@ -189,8 +190,13 @@ void PipeWireManager::registry_event_global(void *data,
         return;
 
     // Bind the node to read target.object, which the registry global does not include
-    NodeBinding *binding = new NodeBinding{manager, id, nullptr, {}};
-    binding->proxy = static_cast<pw_proxy *>(pw_registry_bind(manager->registry, id, PW_TYPE_INTERFACE_Node, PW_VERSION_NODE, 0));
+    pw_proxy *proxy = static_cast<pw_proxy *>(pw_registry_bind(manager->registry, id, PW_TYPE_INTERFACE_Node, PW_VERSION_NODE, 0));
+    if (!proxy) {
+        qWarning("registry_event_global: Failed to bind node with ID %u", id);
+        return;
+    }
+
+    NodeBinding *binding = new NodeBinding{manager, id, proxy, {}};
     spa_zero(binding->listener);
     pw_node_add_listener(reinterpret_cast<pw_node *>(binding->proxy), &binding->listener, &manager->node_events, binding);
     manager->node_bindings.insert(id, binding);

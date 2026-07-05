@@ -73,7 +73,7 @@ class PipeWireManager : public QObject {
     bool is_registry_listener_added = false;
     QSet<uint32_t> routed_node_ids;
     QSet<uint32_t> decided_streams;
-    uint32_t playback_node_id;
+    uint32_t playback_node_id = SPA_ID_INVALID;
     pw_impl_module *module = nullptr;
 
     string default_sink_name;
@@ -111,6 +111,7 @@ class PipeWireManager : public QObject {
 
     //
     // Decides once whether to virtualize a stream, then routes it if so.
+    // Deciding only once avoids fighting with apps that toggle their own target repeatedly.
     //
     void decide_stream(uint32_t id, const string &props_target);
 
