@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: virtual-surround-manager\n"
-"Last-Translator: Berny23\n"
+"Last-Translator: Todry542\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
