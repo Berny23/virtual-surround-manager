@@ -70,6 +70,15 @@
   </description>
 
   <releases>
+      <release version="1.2.1" date="2026-07-07">
+      <description>
+        <ul>
+          <li>Now re-routing only those streams intended for the default audio device. Leaving all other devices unaffected. This is useful if you use a separate one for Discord, game chats etc.</li>
+          <li>Added French translation</li>
+          <li>Fixed problems with selecting WAV files after scrolling the list</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.2.0" date="2026-07-04">
       <description>
         <ul>
