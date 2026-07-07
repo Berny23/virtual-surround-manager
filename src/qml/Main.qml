@@ -121,10 +121,11 @@ Kirigami.ApplicationWindow {
                         required property string modelData
                         required property int index
 
-                        width: parent.width
+                        width: parent ? parent.width : 0
                         text: modelData
+                        autoExclusive: false
                         checked: index == frontendManager.hrirWavFileNameIndex
-                        Controls.ButtonGroup.group: hrirWavFileNamesGroup
+                        onClicked: frontendManager.hrirWavFileNameIndex = index
                     }
                 }
             }
