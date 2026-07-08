@@ -69,6 +69,8 @@ class PipeWireManager : public QObject {
 
     const char *capture_node_name = "effect_input.virtual-surround-manager";
     const char *playback_node_name = "effect_output.virtual-surround-manager";
+    // Thanks to EasyEffects for the list
+    constexpr static auto ignored_node_names = std::to_array<std::string_view>({"libcanberra", "org.gnome.VolumeControl", "GNOME Shell", "Mutter", "gsd-media-keys"});
 
     bool is_registry_listener_added = false;
     QSet<uint32_t> routed_node_ids;

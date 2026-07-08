@@ -162,6 +162,10 @@ void PipeWireManager::registry_event_global(void *data,
     if (!node_media_class)
         return;
 
+    // Ignore system notification sounds, they are very short and can cause crackling or even a crash
+    if (std::ranges::find(ignored_node_names, node_name) != ignored_node_names.end())
+        return;
+
     // Track output sinks to resolve stream targets to a device
     if (strcmp(node_media_class, "Audio/Sink") == 0 || strcmp(node_media_class, "Audio/Duplex") == 0) {
         if (node_name && strcmp(node_name, manager->capture_node_name) != 0) {
