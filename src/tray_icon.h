@@ -4,6 +4,7 @@
 
 #include <KLocalizedString>
 #include <QAction>
+#include <QActionGroup>
 #include <QApplication>
 #include <QIcon>
 #include <QMenu>
@@ -39,6 +40,7 @@ class TrayIcon : public QObject {
     QSystemTrayIcon *m_tray_icon = nullptr;
     QMenu *m_menu = nullptr;
     QMenu *m_profile_menu = nullptr;
+    QActionGroup *m_profile_action_group = nullptr;
     QAction *m_toggle_action = nullptr;
     bool m_called_update_profile_menu = false;
 

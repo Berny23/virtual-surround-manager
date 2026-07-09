@@ -135,6 +135,11 @@ void TrayIcon::update_profile_menu() {
         delete action;
     }
 
+    // Use action group to enable only one selection and prevent removing the checkmark
+    delete m_profile_action_group;
+    m_profile_action_group = new QActionGroup(this);
+    m_profile_action_group->setExclusive(true);
+
     const auto profiles = m_frontend_manager->get_hrir_wav_file_names();
     const int current_index = m_frontend_manager->get_hrir_wav_file_name_index();
 
@@ -149,6 +154,7 @@ void TrayIcon::update_profile_menu() {
         action->setCheckable(true);
         action->setData(i);
         action->setChecked(i == current_index);
+        m_profile_action_group->addAction(action);
         QObject::connect(action, &QAction::triggered, this, &TrayIcon::on_profile_selected);
     }
 }

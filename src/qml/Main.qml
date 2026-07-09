@@ -123,7 +123,6 @@ Kirigami.ApplicationWindow {
 
                         width: parent ? parent.width : 0
                         text: modelData
-                        autoExclusive: false
                         checked: index == frontendManager.hrirWavFileNameIndex
                         onClicked: frontendManager.hrirWavFileNameIndex = index
                     }
