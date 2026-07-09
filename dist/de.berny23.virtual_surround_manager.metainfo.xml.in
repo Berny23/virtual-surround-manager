@@ -41,19 +41,19 @@
   <screenshots>
     <screenshot type="default">
       <caption>Main window</caption>
-      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.2.1/dist/flatpak/screenshots/main-window.webp</image>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.2.2/dist/flatpak/screenshots/main-window.webp</image>
     </screenshot>
     <screenshot>
       <caption>Main window (dark mode)</caption>
-      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.2.1/dist/flatpak/screenshots/main-window-dark.webp</image>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.2.2/dist/flatpak/screenshots/main-window-dark.webp</image>
     </screenshot>
     <screenshot>
       <caption>Settings page</caption>
-      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.2.1/dist/flatpak/screenshots/settings-page.webp</image>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.2.2/dist/flatpak/screenshots/settings-page.webp</image>
     </screenshot>
     <screenshot>
       <caption>About page</caption>
-      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.2.1/dist/flatpak/screenshots/about-page.webp</image>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.2.2/dist/flatpak/screenshots/about-page.webp</image>
     </screenshot>
   </screenshots>
 
@@ -70,7 +70,16 @@
   </description>
 
   <releases>
-      <release version="1.2.1" date="2026-07-07">
+    <release version="1.2.2" date="2026-07-09">
+      <description>
+        <ul>
+          <li>Ignore notification sounds to prevent crackling and potential crashes</li>
+          <li>Fixed an issue with the profile selection</li>
+          <li>Use radio buttons instead of checkboxes in the system tray menu</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.2.1" date="2026-07-07">
       <description>
         <ul>
           <li>Now re-routing only those streams intended for the default audio device. Leaving all other devices unaffected. This is useful if you use a separate one for Discord, game chats etc.</li>
