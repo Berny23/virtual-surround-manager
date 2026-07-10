@@ -15,29 +15,23 @@ Kirigami.ApplicationWindow {
     title: i18nc("@title:window", "Manager")
 
     // Intercept close event to minimize to tray instead of quitting
-    // This prevents the application from exiting when the user closes the window
     onClosing: event => {
         // Only intercept if tray icon is visible, to prevent being unable to close app after changing tray icon setting from hidden to visible
         if (trayIcon.is_visible()) {
             event.accepted = false;
-
-            // Minimize to system tray instead of quitting
-            // Only attempt if trayIcon is available and properly initialized
             if (trayIcon !== null && trayIcon.hide_main_window !== undefined) {
                 trayIcon.hide_main_window();
             }
         }
     }
 
-    // This loads the settings page
+    // Load the additional pages
     Component {
         id: settingsPage
         Settings {}
     }
-    // This loads the about page
     Component {
         id: aboutPage
-
         Kirigami.AboutPage {
             aboutData: About
         }
@@ -88,12 +82,6 @@ Kirigami.ApplicationWindow {
                 text: i18nc("@label", "An error occured: %1", frontendManager.errorMessage)
                 visible: frontendManager.errorMessage.length > 0
                 showCloseButton: true
-            }
-
-            // Just used to group the radio buttons logically
-            Controls.ButtonGroup {
-                id: hrirWavFileNamesGroup
-                onCheckedButtonChanged: frontendManager.hrirWavFileNameIndex = buttons.indexOf(checkedButton)
             }
 
             Kirigami.Card {

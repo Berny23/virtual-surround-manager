@@ -314,6 +314,7 @@ void FrontendManager::set_autostart_enabled(bool value) {
 #if !defined(IS_FLATPAK)
         // Native or AppImage: Remove the desktop file from the user's autostart folder (e. g. ~/.config/autostart)
         QFile::remove(destination);
+        qDebug("set_autostart_enabled: Removed desktop file from '%s'", destination.toStdString().c_str());
 #endif
     }
 
