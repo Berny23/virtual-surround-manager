@@ -71,11 +71,11 @@ msgstr "Убрать значок из системного лотка"
 
 msgctxt "@label:combobox"
 msgid "Virtual channels"
-msgstr "Virtual channels"
+msgstr "Виртуальные каналы"
 
 msgctxt "@info:description"
 msgid "Useful for games that only support 5.1 surround sound. Applied instantly."
-msgstr "Useful for games that only support 5.1 surround sound. Applied instantly."
+msgstr "Полезно для игр, поддерживающих только объёмный звук 5.1. Применяется сразу."
 
 # === About page ===
 
