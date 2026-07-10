@@ -46,7 +46,7 @@ Kirigami.ApplicationWindow {
                 onTriggered: pageStack.layers.push(settingsPage)
             },
             Kirigami.Action {
-                text: i18nc("@action", "About Virtual Surround Sound")
+                text: i18nc("@action", "About Virtual Surround")
                 icon.name: "help-about"
                 onTriggered: pageStack.layers.push(aboutPage)
             }
@@ -124,11 +124,13 @@ Kirigami.ApplicationWindow {
                     Qt.openUrlExternally(link);
                 }
                 visible: true
+                showCloseButton: true
             }
             Kirigami.InlineMessage {
                 Layout.fillWidth: true
-                text: i18nc("@message", "<b>Using with EasyEffects</b><br>Exclude applications in EasyEffects that use 7.1 surround sound. Apply your effects on this program instead.")
+                text: i18nc("@message", "<b>Using with EasyEffects</b><br>Exclude applications in EasyEffects that use surround sound. Apply your effects on this program instead.")
                 visible: true
+                showCloseButton: true
             }
         }
     }

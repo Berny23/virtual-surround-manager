@@ -1,8 +1,14 @@
 [Desktop Entry]
 Name=@APPLICATION_NAME@
 Name[de]=Virtueller Raumklang
-Comment=Manage virtual 7.1 surround sound for headphones
-Comment[de]=Virtuellen 7.1-Raumklang für Kopfhörer verwalten
+Name[ru]=Виртуальный объёмный
+Name[it]=Surround Virtuale
+Name[fr]=Surround virtuel
+Comment=3D sound for headphones
+Comment[de]=3D-Sound für Kopfhörer
+Comment[ru]=3D-звук для наушников
+Comment[it]=Suono 3D per cuffie
+Comment[fr]=Son 3D pour casque
 Icon=@APPLICATION_ID@
 Type=Application
 Exec=virtual-surround-manager

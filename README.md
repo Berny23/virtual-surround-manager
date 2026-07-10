@@ -1,11 +1,11 @@
 <h2 align="center">
-  <img src="src/assets/icons/de.berny23.virtual_surround_manager.svg" alt="Virtual Surround Manager icon" width="160" height="160"/>
+  <img src="src/assets/icons/de.berny23.virtual_surround_manager.svg" alt="Virtual Surround icon" width="160" height="160"/>
   <br>
-  Virtual Surround Manager
+  Virtual Surround
 </h2>
 
 <p align="center">
-  <strong>Virtual 3D sound for headphones on Linux</strong>
+  <strong>3D sound for headphones on Linux</strong>
 </p>
 
 <p align="center">
@@ -33,7 +33,7 @@
 
 Compatible with any distribution.
 
-<a href='https://flathub.org/en/apps/de.berny23.virtual_surround_manager'><img width='240' alt='Get Virtual Surround Manager on Flathub' src='https://flathub.org/api/badge?svg&locale=en'/></a>
+<a href='https://flathub.org/en/apps/de.berny23.virtual_surround_manager'><img width='240' alt='Get Virtual Surround on Flathub' src='https://flathub.org/api/badge?svg&locale=en'/></a>
 
 ### AppImage
 

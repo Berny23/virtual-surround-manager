@@ -50,7 +50,7 @@ void TrayIcon::setup(const QString &icon_name) {
     }
     // #endif
     m_tray_icon->setIcon(icon);
-    m_tray_icon->setToolTip(i18nc("@title", "Virtual Surround Sound"));
+    m_tray_icon->setToolTip(i18nc("@title", "Virtual Surround"));
     m_tray_icon->setContextMenu(m_menu);
 }
 

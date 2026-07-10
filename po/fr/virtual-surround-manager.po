@@ -16,8 +16,8 @@ msgid "Quick Settings"
 msgstr "Paramètrage rapides"
 
 msgctxt "@action"
-msgid "About Virtual Surround Sound"
-msgstr "À propos de Virtual Surround Sound"
+msgid "About Virtual Surround"
+msgstr "À propos de Virtual Surround"
 
 msgctxt "@action:switch"
 msgid "Enabled"
@@ -80,8 +80,12 @@ msgstr "Utile pour les jeux supportant uniquement le son 5.1. Application instan
 # === About page ===
 
 msgctxt "@title"
-msgid "Virtual Surround Sound"
-msgstr "Son surround virtuel"
+msgid "Virtual Surround"
+msgstr "Surround virtuel"
+
+msgctxt "@subtitle"
+msgid "3D sound for headphones"
+msgstr "Son 3D pour casque"
 
 msgctxt "@component"
 msgid "Contains HRIR WAV files from HeSuVi. © 2021, Matt Gore. See: hesuvi_license.txt"
@@ -122,5 +126,5 @@ msgid "<b>Adding more profiles</b><br>Just open the folder and place your WAV fi
 msgstr "<b>Ajouter plus de profils</b><br>Ouvrez simplement le dossier et placez-y vos fichiers WAV. Vous pouvez trouver des centaines de ces fichiers dans la <a href=\"https://airtable.com/appayGNkn3nSuXkaz/shruimhjdSakUPg2m/tbloLjoZKWJDnLtTc\">base de données HRTF<a/>."
 
 msgctxt "@message"
-msgid "<b>Using with EasyEffects</b><br>Exclude applications in EasyEffects that use 7.1 surround sound. Apply your effects on this program instead."
-msgstr "<b>Utilisation avec EasyEffects</b><br>Excluez les applications dans EasyEffects qui utilisent le son surround 7.1. Appliquez vos effets sur ce programme à la place."
+msgid "<b>Using with EasyEffects</b><br>Exclude applications in EasyEffects that use surround sound. Apply your effects on this program instead."
+msgstr "<b>Utilisation avec EasyEffects</b><br>Excluez les applications dans EasyEffects qui utilisent le son surround. Appliquez vos effets sur ce programme à la place."

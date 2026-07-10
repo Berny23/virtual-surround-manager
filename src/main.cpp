@@ -77,9 +77,9 @@ int main(int argc, char *argv[]) {
 
     // Credits
     KAboutData aboutData(QStringLiteral("virtual-surround-manager"),
-                         i18nc("@title", "Virtual Surround Sound"),
+                         i18nc("@title", "Virtual Surround"),
                          QStringLiteral("1.3"),
-                         i18nc("@title:window", "Virtual Surround Sound Manager"),
+                         i18nc("@subtitle", "3D sound for headphones"),
                          KAboutLicense::MIT,
                          QStringLiteral("© 2026, Berny23"));
     aboutData.setOrganizationDomain("berny23.de");
