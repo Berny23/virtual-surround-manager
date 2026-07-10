@@ -38,7 +38,7 @@ class PipeWireManager : public QObject {
     // Creates a new virtual surround module. Does nothing if a module already exists.
     // Call this before enable_routing().
     //
-    bool create_virtual_surround_module(const string &hrir_wav_path);
+    bool create_virtual_surround_module(const string &hrir_wav_path, const string &channels);
 
     //
     // Removes the virtual surround module.

@@ -69,6 +69,14 @@ msgctxt "@option"
 msgid "Hide system tray icon"
 msgstr "Verstecke Kontrollleistensymbol"
 
+msgctxt "@label:combobox"
+msgid "Virtual channels"
+msgstr "Virtuelle Kanäle"
+
+msgctxt "@info:description"
+msgid "Useful for games that only support 5.1 surround sound. Applied instantly."
+msgstr "Sinnvoll für Spiele, die nur 5.1-Raumklang unterstützen. Wird sofort angewendet."
+
 # === About page ===
 
 msgctxt "@title"

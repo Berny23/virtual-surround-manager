@@ -24,6 +24,8 @@
 
 class FrontendManager : public QObject {
     Q_OBJECT
+    // The amount of channels to create
+    Q_PROPERTY(QString channels READ get_channels WRITE set_channels NOTIFY channels_changed)
     // Whether virtual surround sound is enabled or not
     Q_PROPERTY(bool virtualSurroundEnabled READ get_virtual_surround_enabled WRITE set_virtual_surround_enabled NOTIFY virtual_surround_enabled_changed)
     // The error message to show in the UI
@@ -42,6 +44,10 @@ class FrontendManager : public QObject {
 
   public:
     explicit FrontendManager(PipeWireManager *pipewire_manager, KConfig *config, QObject *parent = nullptr);
+
+    QString get_channels() const;
+    void set_channels(const QString &value);
+    Q_SIGNAL void channels_changed();
 
     bool get_virtual_surround_enabled();
     void set_virtual_surround_enabled(bool value);
@@ -78,6 +84,7 @@ class FrontendManager : public QObject {
 
   private:
     bool m_virtual_surround_enabled = false;
+    QString m_channels;
     QString m_error_message;
     QStringList m_hrir_wav_file_names;
     QStringList m_hrir_wav_file_paths;

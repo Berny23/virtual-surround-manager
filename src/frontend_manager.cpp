@@ -11,6 +11,15 @@ FrontendManager::FrontendManager(PipeWireManager *pipewire_manager, KConfig *con
 
     load_hrir_wav_files();
 
+    m_channels = m_config_settings.readEntry("channels", QString());
+    // Fallback for malformed config value
+    QStringList allowed_channels_values = {QStringLiteral("5.1"), QStringLiteral("7.1")};
+    if (!allowed_channels_values.contains(m_channels)) {
+        m_channels = QStringLiteral("7.1");
+        m_config_settings.writeEntry("channels", m_channels);
+        m_config->sync();
+    }
+
     m_startup_ui = m_config_settings.readEntry("startup_ui", QString());
     // Fallback for malformed config value
     QStringList allowed_startup_ui_values = {QStringLiteral("showTray"), QStringLiteral("showTrayHideWindow"), QStringLiteral("hideTray")};
@@ -38,6 +47,38 @@ bool FrontendManager::does_hrir_wav_file_exist(const QString &file_path) {
     return true;
 }
 
+QString FrontendManager::get_channels() const {
+    return m_channels;
+}
+
+void FrontendManager::set_channels(const QString &value) {
+    m_channels = value;
+
+    // First, disable routing to prevent disruption of playing audio if the virtual surround sound is enabled
+    if (m_virtual_surround_enabled)
+        m_pipewire_manager->disable_routing();
+
+    // We need to wait a little bit or the audio just stops completely when destroying the module too fast
+    QThread::msleep(100);
+    m_pipewire_manager->remove_virtual_surround_module();
+
+    QString path = m_hrir_wav_file_paths.value(m_hrir_wav_file_name_index);
+    if (!does_hrir_wav_file_exist(path))
+        return;
+
+    m_pipewire_manager->create_virtual_surround_module(path.toStdString(), m_channels.toStdString());
+
+    // At last, enable routing again if the virtual surround sound is enabled
+    if (m_virtual_surround_enabled)
+        m_pipewire_manager->enable_routing();
+
+    // Write to config file
+    m_config_settings.writeEntry("channels", m_channels);
+    m_config->sync();
+
+    Q_EMIT channels_changed();
+}
+
 bool FrontendManager::get_virtual_surround_enabled() {
     return m_virtual_surround_enabled;
 }
@@ -51,7 +92,7 @@ void FrontendManager::set_virtual_surround_enabled(bool value) {
         QString path = m_hrir_wav_file_paths.value(m_hrir_wav_file_name_index);
         if (!does_hrir_wav_file_exist(path))
             return;
-        if (m_pipewire_manager->create_virtual_surround_module(path.toStdString()))
+        if (m_pipewire_manager->create_virtual_surround_module(path.toStdString(), m_channels.toStdString()))
             m_pipewire_manager->enable_routing();
     } else {
         m_pipewire_manager->disable_routing();
@@ -100,7 +141,7 @@ void FrontendManager::set_hrir_wav_file_name_index(int index) {
     if (!does_hrir_wav_file_exist(path))
         return;
 
-    m_pipewire_manager->create_virtual_surround_module(path.toStdString());
+    m_pipewire_manager->create_virtual_surround_module(path.toStdString(), m_channels.toStdString());
 
     // At last, enable routing again if the virtual surround sound is enabled
     if (m_virtual_surround_enabled)

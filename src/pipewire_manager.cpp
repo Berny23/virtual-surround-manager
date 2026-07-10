@@ -224,7 +224,7 @@ void PipeWireManager::destroy_binding(NodeBinding *binding) {
     delete binding;
 }
 
-bool PipeWireManager::create_virtual_surround_module(const string &hrir_wav_path) {
+bool PipeWireManager::create_virtual_surround_module(const string &hrir_wav_path, const string &channels) {
     if (module) {
         qInfo("create_virtual_surround_module: Virtual surround module already exists");
         return true;
@@ -234,10 +234,13 @@ bool PipeWireManager::create_virtual_surround_module(const string &hrir_wav_path
         return false;
     }
 
-    qInfo("create_virtual_surround_module: Creating module with WAV path '%s'", hrir_wav_path.c_str());
+    qInfo("create_virtual_surround_module: Creating module with %s channels and WAV path '%s'", channels.c_str(), hrir_wav_path.c_str());
 
-    // Set filter graph for virtual surround module, automatically creating playback and capture nodes
-    const string filter_graph = R"(
+    string args = "";
+
+    // Set 7.1 filter graph for virtual surround module, automatically creating playback and capture nodes
+    if (channels == "7.1") {
+        const string filter_graph_7_1 = R"(
 {
     nodes = [
         # duplicate inputs
@@ -252,39 +255,39 @@ bool PipeWireManager::create_virtual_surround_module(const string &hrir_wav_path
 
         # apply hrir - HeSuVi 14-channel WAV (not the *-.wav variants) (note: 44 in HeSuVi are the same, but resampled to 44100)
         { type = builtin label = convolver name = convFL_L config = { filename = ")" +
-                                hrir_wav_path + R"(" channel =  0 } }
+                                        hrir_wav_path + R"(" channel =  0 } }
         { type = builtin label = convolver name = convFL_R config = { filename = ")" +
-                                hrir_wav_path + R"(" channel =  1 } }
+                                        hrir_wav_path + R"(" channel =  1 } }
         { type = builtin label = convolver name = convSL_L config = { filename = ")" +
-                                hrir_wav_path + R"(" channel =  2 } }
+                                        hrir_wav_path + R"(" channel =  2 } }
         { type = builtin label = convolver name = convSL_R config = { filename = ")" +
-                                hrir_wav_path + R"(" channel =  3 } }
+                                        hrir_wav_path + R"(" channel =  3 } }
         { type = builtin label = convolver name = convRL_L config = { filename = ")" +
-                                hrir_wav_path + R"(" channel =  4 } }
+                                        hrir_wav_path + R"(" channel =  4 } }
         { type = builtin label = convolver name = convRL_R config = { filename = ")" +
-                                hrir_wav_path + R"(" channel =  5 } }
+                                        hrir_wav_path + R"(" channel =  5 } }
         { type = builtin label = convolver name = convFC_L config = { filename = ")" +
-                                hrir_wav_path + R"(" channel =  6 } }
+                                        hrir_wav_path + R"(" channel =  6 } }
         { type = builtin label = convolver name = convFR_R config = { filename = ")" +
-                                hrir_wav_path + R"(" channel =  7 } }
+                                        hrir_wav_path + R"(" channel =  7 } }
         { type = builtin label = convolver name = convFR_L config = { filename = ")" +
-                                hrir_wav_path + R"(" channel =  8 } }
+                                        hrir_wav_path + R"(" channel =  8 } }
         { type = builtin label = convolver name = convSR_R config = { filename = ")" +
-                                hrir_wav_path + R"(" channel =  9 } }
+                                        hrir_wav_path + R"(" channel =  9 } }
         { type = builtin label = convolver name = convSR_L config = { filename = ")" +
-                                hrir_wav_path + R"(" channel = 10 } }
+                                        hrir_wav_path + R"(" channel = 10 } }
         { type = builtin label = convolver name = convRR_R config = { filename = ")" +
-                                hrir_wav_path + R"(" channel = 11 } }
+                                        hrir_wav_path + R"(" channel = 11 } }
         { type = builtin label = convolver name = convRR_L config = { filename = ")" +
-                                hrir_wav_path + R"(" channel = 12 } }
+                                        hrir_wav_path + R"(" channel = 12 } }
         { type = builtin label = convolver name = convFC_R config = { filename = ")" +
-                                hrir_wav_path + R"(" channel = 13 } }
+                                        hrir_wav_path + R"(" channel = 13 } }
 
         # treat LFE as FC
         { type = builtin label = convolver name = convLFE_L config = { filename = ")" +
-                                hrir_wav_path + R"(" channel =  6 } }
+                                        hrir_wav_path + R"(" channel =  6 } }
         { type = builtin label = convolver name = convLFE_R config = { filename = ")" +
-                                hrir_wav_path + R"(" channel = 13 } }
+                                        hrir_wav_path + R"(" channel = 13 } }
 
         # stereo output
         { type = builtin label = mixer name = mixL }
@@ -330,43 +333,153 @@ bool PipeWireManager::create_virtual_surround_module(const string &hrir_wav_path
     inputs  = [ "copyFL:In" "copyFR:In" "copyFC:In" "copyLFE:In" "copyRL:In" "copyRR:In", "copySL:In", "copySR:In" ]
     outputs = [ "mixL:Out" "mixR:Out" ]
 }
-    )";
+        )";
 
-    // Set capture properties for virtual surround module
-    const string capture_props = R"(
+        // Set capture properties for virtual surround module
+        const string capture_props_7_1 = R"(
 {
     node.name = )" + (string)capture_node_name +
-                                 R"(
+                                         R"(
     media.class = "Audio/Sink"
     audio.channels = 8
     audio.position = [ FL FR FC LFE RL RR SL SR ]
 }
-    )";
+        )";
 
-    // Set playback properties for virtual surround module
-    const string playback_props = R"(
+        // Set playback properties for virtual surround module
+        const string playback_props_7_1 = R"(
 {
     node.name = )" + string(playback_node_name) +
-                                  R"(
+                                          R"(
     node.passive = true
     audio.channels = 2
     audio.position = [ FL FR ]
 }
-    )";
+        )";
 
-    // Combine the properites to a single JSON string
-    const string args = R"(
+        // Combine the properites to a single JSON string
+        args = R"(
 {
     node.description = "Virtual Surround Manager",
     media.name = "Virtual Surround Manager",
-    filter.graph = )" + filter_graph +
-                        R"(,
+    filter.graph = )" +
+               filter_graph_7_1 +
+               R"(,
     capture.props = )" +
-                        capture_props + R"(,
+               capture_props_7_1 + R"(,
     playback.props = )" +
-                        playback_props + R"(
+               playback_props_7_1 + R"(
 }
-    )";
+        )";
+    }
+    // Set 5.1 filter graph for virtual surround module, automatically creating playback and capture nodes
+    else if (channels == "5.1") {
+        const string filter_graph_5_1 = R"(
+{
+    nodes = [
+        # duplicate inputs
+        { type = builtin label = copy name = copyFL  }
+        { type = builtin label = copy name = copyFR  }
+        { type = builtin label = copy name = copySL  }
+        { type = builtin label = copy name = copySR  }
+
+        # apply hrir - HeSuVi 14-channel WAV (not the *-.wav variants) (note: 44 in HeSuVi are the same, but resampled to 44100)
+        { type = builtin label = convolver name = convFL_L config = { filename = ")" +
+                                        hrir_wav_path + R"(" channel =  0 } }
+        { type = builtin label = convolver name = convFR_R config = { filename = ")" +
+                                        hrir_wav_path + R"(" channel =  0 } }
+        { type = builtin label = convolver name = convFL_R config = { filename = ")" +
+                                        hrir_wav_path + R"(" channel =  1 } }
+        { type = builtin label = convolver name = convFR_L config = { filename = ")" +
+                                        hrir_wav_path + R"(" channel =  1 } }
+        { type = builtin label = convolver name = convFC config = { filename = ")" +
+                                        hrir_wav_path + R"(" channel =  2 } }
+        { type = builtin label = convolver name = convLFE config = { filename = ")" +
+                                        hrir_wav_path + R"(" channel =  3 } }
+        { type = builtin label = convolver name = convSL_L config = { filename = ")" +
+                                        hrir_wav_path + R"(" channel =  4 } }
+        { type = builtin label = convolver name = convSR_R config = { filename = ")" +
+                                        hrir_wav_path + R"(" channel =  4 } }
+        { type = builtin label = convolver name = convSL_R config = { filename = ")" +
+                                        hrir_wav_path + R"(" channel =  5 } }
+        { type = builtin label = convolver name = convSR_L config = { filename = ")" +
+                                        hrir_wav_path + R"(" channel =  5 } }
+
+        # stereo output
+        { type = builtin label = mixer name = mixL }
+        { type = builtin label = mixer name = mixR }
+    ]
+    links = [
+        # input
+        { output = "copyFL:Out"  input="convFL_L:In"  }
+        { output = "copyFL:Out"  input="convFL_R:In"  }
+        { output = "copyFR:Out"  input="convFR_R:In"  }
+        { output = "copyFR:Out"  input="convFR_L:In"  }
+        { output = "copySL:Out"  input="convSL_L:In"  }
+        { output = "copySL:Out"  input="convSL_R:In"  }
+        { output = "copySR:Out"  input="convSR_R:In"  }
+        { output = "copySR:Out"  input="convSR_L:In"  }
+
+        # output
+        { output = "convFL_L:Out"  input="mixL:In 1" }
+        { output = "convFL_R:Out"  input="mixR:In 1" }
+        { output = "convFR_L:Out"  input="mixL:In 2" }
+        { output = "convFR_R:Out"  input="mixR:In 2" }
+        { output = "convFC:Out"    input="mixL:In 3" }
+        { output = "convFC:Out"    input="mixR:In 3" }
+        { output = "convLFE:Out"   input="mixL:In 4" }
+        { output = "convLFE:Out"   input="mixR:In 4" }
+        { output = "convSL_L:Out"  input="mixL:In 5" }
+        { output = "convSL_R:Out"  input="mixR:In 5" }
+        { output = "convSR_L:Out"  input="mixL:In 6" }
+        { output = "convSR_R:Out"  input="mixR:In 6" }
+    ]
+    inputs  = [ "copyFL:In" "copyFR:In" "convFC:In" "convLFE:In" "copySL:In" "copySR:In" ]
+    outputs = [ "mixL:Out" "mixR:Out" ]
+}
+        )";
+
+        // Set capture properties for virtual surround module
+        const string capture_props_5_1 = R"(
+{
+    node.name = )" + (string)capture_node_name +
+                                         R"(
+    media.class = "Audio/Sink"
+    audio.channels = 6
+    audio.position = [ FL FR FC LFE SL SR ]
+}
+        )";
+
+        // Set playback properties for virtual surround module
+        const string playback_props_5_1 = R"(
+{
+    node.name = )" + string(playback_node_name) +
+                                          R"(
+    node.passive = true
+    audio.channels = 2
+    audio.position = [ FL FR ]
+}
+        )";
+
+        // Combine the properites to a single JSON string
+        args = R"(
+{
+    node.description = "Virtual Surround Manager",
+    media.name = "Virtual Surround Manager",
+    filter.graph = )" +
+               filter_graph_5_1 +
+               R"(,
+    capture.props = )" +
+               capture_props_5_1 + R"(,
+    playback.props = )" +
+               playback_props_5_1 + R"(
+}
+        )";
+    } else {
+        qWarning("create_virtual_surround_module: Invalid channels");
+        Q_EMIT error_occured(QStringLiteral("Error creating virtual surround device. Invalid channels."));
+        return false;
+    }
 
     pw_thread_loop_lock(thread_loop);
 

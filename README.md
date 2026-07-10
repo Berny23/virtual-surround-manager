@@ -20,7 +20,7 @@
 - Compatible with **EasyEffects** (and most similar apps)
 - Written entirely using the **PipeWire C API**, so no config files or annoying service restarts are required
 - Modern user interface, built with **KDE's Kirigami 6 framework**
-- Available languages are English, German, Russian and Italian
+- Available languages are English, German, Russian, Italian and French
 - This project is **not using** vibe coding, AI agents or similar tools for generating unmaintainable slop
 
 ## Screenshot

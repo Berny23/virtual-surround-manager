@@ -54,4 +54,20 @@ FormCard.FormCardPage {
             onCurrentValueChanged: frontendManager.startupUi = currentValue
         }
     }
+
+    FormCard.FormHeader {
+        title: i18nc("@title:group", "Audio")
+    }
+
+    FormCard.FormCard {
+        FormCard.FormComboBoxDelegate {
+            id: channels
+            text: i18nc("@label:combobox", "Virtual channels")
+            description: i18nc("@info:description", "Useful for games that only support 5.1 surround sound. Applied instantly.")
+            displayMode: FormCard.FormComboBoxDelegate.ComboBox
+            model: ["7.1", "5.1"]
+            Component.onCompleted: currentIndex = indexOfValue(frontendManager.channels)
+            onCurrentValueChanged: frontendManager.channels = currentValue
+        }
+    }
 }

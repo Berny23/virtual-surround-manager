@@ -6,6 +6,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 # === Main page ===
+
 msgctxt "@title:window"
 msgid "Manager"
 msgstr "Менеджер"
@@ -35,6 +36,7 @@ msgid "Reload"
 msgstr "Перезагрузить"
 
 # === Settings page ===
+
 msgctxt "@title:window"
 msgid "Settings"
 msgstr "Настройки"
@@ -67,7 +69,16 @@ msgctxt "@option"
 msgid "Hide system tray icon"
 msgstr "Убрать значок из системного лотка"
 
+msgctxt "@label:combobox"
+msgid "Virtual channels"
+msgstr "Virtual channels"
+
+msgctxt "@info:description"
+msgid "Useful for games that only support 5.1 surround sound. Applied instantly."
+msgstr "Useful for games that only support 5.1 surround sound. Applied instantly."
+
 # === About page ===
+
 msgctxt "@title"
 msgid "Virtual Surround Sound"
 msgstr "Виртуальный объёмный звук"
@@ -81,6 +92,7 @@ msgid "Developer"
 msgstr "Разработчик"
 
 # === Tray icon menu ===
+
 msgctxt "@action"
 msgid "Open"
 msgstr "Открыть"
@@ -98,11 +110,13 @@ msgid "Quit"
 msgstr "Выйти"
 
 # === Error messages ===
+
 msgctxt "@label"
 msgid "An error occured: %1"
 msgstr "Произошла ошибка: %1"
 
 # === Info messages ===
+
 msgctxt "@message"
 msgid "<b>Adding more profiles</b><br>Just open the folder and place your WAV files there. You can find hundreds of these files in the <a href=\"https://airtable.com/appayGNkn3nSuXkaz/shruimhjdSakUPg2m/tbloLjoZKWJDnLtTc\">HRTF Database<a/>."
 msgstr "<b>Добавление дополнительных профилей</b><br>Просто откройте папку и поместите туда файлы WAV. Вы можете найти сотни таких файлов в <a href=\"https://airtable.com/appayGNkn3nSuXkaz/shruimhjdSakUPg2m/tbloLjoZKWJDnLtTc\">База данных HRTF<a/>."
