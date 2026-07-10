@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 
-project("Virtual Surround Manager" VERSION 1.2.2 LANGUAGES CXX)
+project("Virtual Surround Manager" VERSION 1.3.0 LANGUAGES CXX)
 
 set(APPLICATION_ID "de.berny23.virtual_surround_manager")
 set(APPLICATION_NAME "Virtual Surround Sound")

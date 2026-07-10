@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     // Credits
     KAboutData aboutData(QStringLiteral("virtual-surround-manager"),
                          i18nc("@title", "Virtual Surround Sound"),
-                         QStringLiteral("1.2"),
+                         QStringLiteral("1.3"),
                          i18nc("@title:window", "Virtual Surround Sound Manager"),
                          KAboutLicense::MIT,
                          QStringLiteral("© 2026, Berny23"));
