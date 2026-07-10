@@ -71,11 +71,11 @@ msgstr "Nascondi l'icona nel vassoio di sistema"
 
 msgctxt "@label:combobox"
 msgid "Virtual channels"
-msgstr "Virtual channels"
+msgstr "Canali virtuali"
 
 msgctxt "@info:description"
 msgid "Useful for games that only support 5.1 surround sound. Applied instantly."
-msgstr "Useful for games that only support 5.1 surround sound. Applied instantly."
+msgstr "Utile per i giochi che supportano solo l'audio surround 5.1. Applicazione istantanea."
 
 # === About page ===
 
