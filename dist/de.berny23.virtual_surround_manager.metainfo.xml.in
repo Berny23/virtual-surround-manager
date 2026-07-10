@@ -74,7 +74,9 @@
       <description>
         <ul>
           <li>New setting to select the number of virtual channels (7.1 or 5.1), useful for games that only support 5.1 surround sound</li>
-          <li>Updated translations</li>
+          <li>Changed app name and subtitle in the app itself and its metadata to match FlatHub</li>
+          <li>Made the info boxes closeable</li>
+          <li>Added desktop file translations</li>
         </ul>
       </description>
     </release>
