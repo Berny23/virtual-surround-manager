@@ -59,9 +59,31 @@ Just open the settings of your favorite game or media player and select real 7.1
 
 Please note: This app requires the PipeWire audio system. Recent Linux distributions use this by default, so don't worry about it.
 
-To check if everything is working correctly, this is how audio routing should look like in [coppwr](https://flathub.org/de/apps/io.github.dimtpap.coppwr):
+### Usage with EasyEffects and similar apps
+
+**TL;DR:**
 <br>
-<img width="377" height="400" alt="grafik" src="https://github.com/user-attachments/assets/90ea2864-3b54-4398-b724-a55065f3b5a6" />
+In EasyEffects:
+- Tick "Enable" for Virtual Surround Manager
+- Tick "Exclude" for the actual game/app
+
+Detailed explanation:
+
+Both EasyEffects and Virtual Surround do essentially the same thing, they re-route audio. Meaning, **you must exclude the actual 7.1/5.1 game from routing in EasyEffects**, so my app can process it first!
+
+**How routing works with EasyEffects for example:**
+Game "Overwatch" (7.1/5.1 channels) → Virtual Surround Sink (7.1/5.1 channels) → Virtual Surround Source (2 channels) → Easy Effects Sink (2 channels) → All your EasyEffects plugins → Headphones (2 channels)
+
+Note: The spatial virtualization and conversion to stereo happens between "Virtual Surround Sink" and "Virtual Surround Source".
+
+**Apply all your effects on Virtual Surround in EasyEffects, not the game itself!**
+If you want to exclude one app from Virtual Surround (like a music player or Discord), just tick "Enabled" for the specific app to route it directly through EasyEffects and not Virtual Surround.
+
+### Check internal connections
+
+To check if everything is working correctly, this is how audio routing should look like in [coppwr](https://flathub.org/de/apps/io.github.dimtpap.coppwr). If you don't use EasyEffects, the "Virtual Surround Source" should be directly connected to your headphones.
+<br>
+<img width="3401" height="849" alt="Bildschirmfoto_20260712_182628" src="https://github.com/user-attachments/assets/1bdb0cec-f318-4f50-9469-1ef502a2bc19" />
 
 ## Building
 
