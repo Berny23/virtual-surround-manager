@@ -272,13 +272,6 @@ void FrontendManager::set_autostart_enabled(bool value) {
         return;
     m_autostart_enabled = value;
 
-    // Get source and destination path for desktop file (only used for native installation and AppImage)
-    // Source can either be /usr/share/applications or ~/.local/share/applications, when installed natively
-    QString source = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation).value(2) + QStringLiteral("/de.berny23.virtual_surround_manager.desktop");
-    if (!QFile::exists(source))
-        source = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation).value(0) + QStringLiteral("/de.berny23.virtual_surround_manager.desktop");
-    const QString destination = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).value(0) + QStringLiteral("/autostart/de.berny23.virtual_surround_manager.desktop");
-
 #ifdef IS_FLATPAK
     // Use libportal to request Flatpak autostart
     g_autoptr(GPtrArray) cmd = nullptr;
@@ -286,7 +279,18 @@ void FrontendManager::set_autostart_enabled(bool value) {
     xdp_portal_request_background(XdpQt::globalPortalObject(), nullptr, const_cast<char *>("Autostart"), cmd, flags, nullptr, nullptr, this);
 #endif
 
+#if !defined(IS_FLATPAK)
+    // Get destination path for desktop file (only used for native installation and AppImage)
+    const QString destination = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).value(0) + QStringLiteral("/autostart/de.berny23.virtual_surround_manager.desktop");
+#endif
+
     if (m_autostart_enabled) {
+        // Get source path for desktop file (only used for native installation and AppImage)
+        // Source can either be /usr/share/applications or ~/.local/share/applications, when installed natively
+        QString source = QStringLiteral("/usr/share/applications/de.berny23.virtual_surround_manager.desktop");
+        if (!QFile::exists(source))
+            source = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation).value(0) + QStringLiteral("/de.berny23.virtual_surround_manager.desktop");
+
 #ifdef IS_APPIMAGE
         // Copy desktop file from extraced AppImage folder that is automatically created under /tmp and randomly named. The APPDIR variable contains the path.
         source = qEnvironmentVariable("APPDIR") + QStringLiteral("/de.berny23.virtual_surround_manager.desktop");
