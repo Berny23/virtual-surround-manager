@@ -41,19 +41,19 @@
   <screenshots>
     <screenshot type="default">
       <caption>Main window</caption>
-      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.3.0/dist/flatpak/screenshots/main-window.webp</image>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.3.1/dist/flatpak/screenshots/main-window.webp</image>
     </screenshot>
     <screenshot>
       <caption>Main window (dark mode)</caption>
-      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.3.0/dist/flatpak/screenshots/main-window-dark.webp</image>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.3.1/dist/flatpak/screenshots/main-window-dark.webp</image>
     </screenshot>
     <screenshot>
       <caption>Settings page</caption>
-      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.3.0/dist/flatpak/screenshots/settings-page.webp</image>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.3.1/dist/flatpak/screenshots/settings-page.webp</image>
     </screenshot>
     <screenshot>
       <caption>About page</caption>
-      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.3.0/dist/flatpak/screenshots/about-page.webp</image>
+      <image>https://raw.githubusercontent.com/Berny23/virtual-surround-manager/refs/tags/v1.3.1/dist/flatpak/screenshots/about-page.webp</image>
     </screenshot>
   </screenshots>
 
@@ -70,6 +70,13 @@
   </description>
 
   <releases>
+    <release version="1.3.1" date="2026-07-13">
+      <description>
+        <ul>
+          <li>Fixed enabling autostart for native packages</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3.0" date="2026-07-11">
       <description>
         <ul>
