@@ -1,0 +1,135 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: virtual-surround-manager\n"
+"PO-Revision-Date: 2026-10-28 00:00+0800\n"
+"Last-Translator: NuoFang6\n"
+"Language-Team: Simplified Chinese\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# === Main page ===
+
+msgctxt "@title:window"
+msgid "Manager"
+msgstr "管理器"
+
+msgctxt "@page:title"
+msgid "Quick Settings"
+msgstr "快速设置"
+
+msgctxt "@action"
+msgid "About Virtual Surround"
+msgstr "关于虚拟环绕声"
+
+msgctxt "@action:switch"
+msgid "Enabled"
+msgstr "启用"
+
+msgctxt "@header"
+msgid "Virtualization Profiles"
+msgstr "虚拟化预设"
+
+msgctxt "@action"
+msgid "Open folder"
+msgstr "打开文件夹"
+
+msgctxt "@action"
+msgid "Reload"
+msgstr "重新加载"
+
+# === Settings page ===
+
+msgctxt "@title:window"
+msgid "Settings"
+msgstr "设置"
+
+msgctxt "@label:switch"
+msgid "Automatically start application on login"
+msgstr "登录时自动启动"
+
+msgctxt "@label:switch"
+msgid "Automatically enable virtual surround sound"
+msgstr "自动启用虚拟环绕声"
+
+msgctxt "@label:combobox"
+msgid "Application behavior"
+msgstr "应用行为"
+
+msgctxt "@info:description"
+msgid "How the application should start and run.<br>Restart the program to apply."
+msgstr "应用的启动与运行方式。<br>重启程序后生效。"
+
+msgctxt "@option"
+msgid "Show system tray icon"
+msgstr "显示系统托盘图标"
+
+msgctxt "@option"
+msgid "Show system tray icon & hide window on startup"
+msgstr "显示系统托盘图标并在启动时隐藏窗口"
+
+msgctxt "@option"
+msgid "Hide system tray icon"
+msgstr "隐藏系统托盘图标"
+
+msgctxt "@label:combobox"
+msgid "Virtual channels"
+msgstr "虚拟声道"
+
+msgctxt "@info:description"
+msgid "Useful for games that only support 5.1 surround sound. Applied instantly."
+msgstr "适用于仅支持 5.1 环绕声的游戏。立即生效。"
+
+# === About page ===
+
+msgctxt "@title"
+msgid "Virtual Surround"
+msgstr "虚拟环绕声"
+
+msgctxt "@subtitle"
+msgid "3D sound for headphones"
+msgstr "为耳机带来 3D 音效"
+
+msgctxt "@component"
+msgid "Contains HRIR WAV files from HeSuVi. © 2021, Matt Gore. See: hesuvi_license.txt"
+msgstr "包含来自 HeSuVi 的 HRIR WAV 文件。© 2021, Matt Gore。参见：hesuvi_license.txt"
+
+msgctxt "@info:credit"
+msgid "Developer"
+msgstr "开发者"
+
+# === Tray icon menu ===
+
+msgctxt "@action"
+msgid "Open"
+msgstr "打开"
+
+msgctxt "@action"
+msgid "Profiles"
+msgstr "预设"
+
+msgctxt "@label"
+msgid "No profiles available"
+msgstr "没有可用的预设"
+
+msgctxt "@action"
+msgid "Quit"
+msgstr "退出"
+
+# === Error messages ===
+
+msgctxt "@label"
+msgid "An error occured: %1"
+msgstr "发生错误：%1"
+
+# === Info messages ===
+
+msgctxt "@message"
+msgid "<b>Adding more profiles</b><br>Just open the folder and place your WAV files there. You can find hundreds of these files in the <a href=\"https://airtable.com/appayGNkn3nSuXkaz/shruimhjdSakUPg2m/tbloLjoZKWJDnLtTc\">HRTF Database<a/>."
+msgstr "<b>添加更多预设</b><br>打开文件夹，把你的 WAV 文件放进去即可。你可以在 <a href=\"https://airtable.com/appayGNkn3nSuXkaz/shruimhjdSakUPg2m/tbloLjoZKWJDnLtTc\">HRTF 数据库<a/> 中找到数百个此类文件。"
+
+msgctxt "@message"
+msgid "<b>Using with EasyEffects</b><br>Exclude applications in EasyEffects that use surround sound. Apply your effects on this program instead."
+msgstr "<b>与 EasyEffects 配合使用</b><br>在 EasyEffects 中排除使用环绕声的应用，改为在本程序上应用你的效果。"
